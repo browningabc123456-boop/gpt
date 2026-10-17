@@ -1,2 +1,4 @@
 # Bundled shader template strings preserve upstream GLSL whitespace.
 hamster-3d.html linguist-generated=true whitespace=-blank-at-eol
+forest-village.html linguist-generated=true whitespace=-blank-at-eol
+sky-city.html linguist-generated=true whitespace=-blank-at-eol
