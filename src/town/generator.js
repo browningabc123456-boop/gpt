@@ -1,0 +1,9 @@
+import {PALETTE,THEMES} from './model.js';
+export function generateVillage(theme,seed=Math.floor(Math.random()*2**32)){if(!THEMES[theme])throw new Error('Unknown theme');let state=seed>>>0;const random=()=>{state=(state+0x6d2b79f5)>>>0;let n=Math.imul(state^state>>>15,1|state);n^=n+Math.imul(n^n>>>7,61|n);return((n^n>>>14)>>>0)/4294967296;};const radius=2+Math.floor(random()*3),cells=new Map(),palette={forest:[1,2,4],sky:[0,2,6],snow:[1,3,7],garden:[3,8,9],sea:[0,2,6],city:[0,3,7],ants:[1,2,4]}[theme];
+ const add=(x,z,kind,h=1)=>{const color=PALETTE[palette[Math.floor(random()*palette.length)]];cells.set(`${x},${z}`,{x,z,colors:Array(h).fill(color),kinds:Array(h).fill(kind),bridge:'auto',floating:false});};
+ // A continuous pedestrian spine, two plazas, a taller rear skyline and low front gardens.
+ for(let x=-radius;x<=radius;x++){add(x,0,'platform');if(x%2===0)add(x,1,'garden');}
+ for(let x=-radius;x<=radius;x++)for(let z=-radius;z<=radius;z++){if(cells.has(`${x},${z}`)||Math.abs(x)+Math.abs(z)>radius+1||random()<.26)continue;if(z<0){const h=1+Math.floor(random()*(z===-radius?6:4));add(x,z,'house',h);}else if(random()<.52)add(x,z,'house',1+Math.floor(random()*3));else add(x,z,random()<.55?'garden':'platform',1+Math.floor(random()*3));}
+ for(const cell of [...cells.values()])for(let z=cell.z;z!==0;z-=Math.sign(z))if(!cells.has(`${cell.x},${z}`))add(cell.x,z,'platform');
+ add(0,-1,'house',3+Math.floor(random()*4));add(-1,1,'platform');add(0,1,'platform');add(-1,2,'platform');add(0,2,'platform');const turn=Math.floor(random()*4);return[...cells.values()].map(c=>({...c,x:turn===1?-c.z:turn===2?-c.x:turn===3?c.z:c.x,z:turn===1?c.x:turn===2?-c.z:turn===3?-c.x:c.z}));}
+export function applyVillage(town,data){const before=town.snapshot();if(!town.load(data))return false;town.undoStack.push(before);if(town.undoStack.length>60)town.undoStack.shift();town.redoStack=[];return true;}

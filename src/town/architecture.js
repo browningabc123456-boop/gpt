@@ -1,9 +1,10 @@
+import {thirdHouse} from './third-worlds.js';
 import * as T from 'three';
 import {facadeDesign,groupFor} from './combinations.js';
 const H=1.04;
 export const FORM_NAMES={cottage:'单层小屋',loft:'双层 Loft',clock:'钟楼',library:'无窗守望塔',observatory:'观星塔',beacon:'风铃灯塔'};
 export function buildingForm(cell,level=cell.kinds.lastIndexOf('house')){if(level<0||cell.kinds[level]!=='house')return {kind:null,name:'平台',height:0,start:level,end:level};let start=level,end=level;while(start>0&&cell.kinds[start-1]==='house')start--;while(end+1<cell.kinds.length&&cell.kinds[end+1]==='house')end++;const height=end-start+1,kind=['cottage','loft','clock','library','observatory','beacon'][Math.min(height,6)-1];return {kind,name:FORM_NAMES[kind],height,start,end};}
-export const STYLE_NAMES={forest:'木构树屋',sky:'云端拱廊',snow:'雪顶木屋',garden:'蘑菇花屋'};
+export const STYLE_NAMES={sea:'航海木船屋',city:'红砖城市公寓',ants:'根须地下洞屋',forest:'木构树屋',sky:'云端拱廊',snow:'雪顶木屋',garden:'蘑菇花屋'};
 function roundWindow(v,g,y,r=.22,color='#d2e4dc'){
  const rim=v.cylinder(g,r+.04,r+.04,.035,[0,y,.024],'#e0d3ae',36,true);rim.rotation.x=Math.PI/2;
  const glass=v.cylinder(g,r,r,.040,[0,y,.047],color,36);glass.rotation.x=Math.PI/2;
@@ -129,7 +130,7 @@ function floorOrnament(v,g,theme,floor){const metal=theme==='sky'?'#d4b064':them
  if(floor===4){v.cylinder(g,.012,.02,.33,[-.51,.38,.10],metal,8);v.sphere(g,[.10,.045,.06],[-.51,.58,.1],theme==='snow'?'#d6e4ed':'#d5bb73');v.line(g,[[-.63,.62,.1],[-.51,.66,.1],[-.39,.62,.1]],metal,.009);}
  if(floor===5)for(const x of [-.51,.51]){v.line(g,[[x,.83,.05],[x,.60,.08]],metal,.01);v.cylinder(g,.032,.045,.14,[x,.53,.08],theme==='garden'?'#e7b9cd':'#edcf8d',8);}
 }
-export function buildHouse(v,g,c,level,seed){const theme=v.theme,form=buildingForm(c,level),start=level===form.start,end=level===form.end,top=level===c.kinds.length-1,color=c.colors[form.start],story=new T.Group();story.position.y=level*H;story.userData.form=`${theme}:${form.kind}:${level-form.start}`;g.add(story);
+export function buildHouse(v,g,c,level,seed){if(['sea','city','ants'].includes(v.theme))return thirdHouse(v,g,c,level,seed);const theme=v.theme,form=buildingForm(c,level),start=level===form.start,end=level===form.end,top=level===c.kinds.length-1,color=c.colors[form.start],story=new T.Group();story.position.y=level*H;story.userData.form=`${theme}:${form.kind}:${level-form.start}`;g.add(story);
  const pigment=new T.Color(color),wallColor=(theme==='snow'?new T.Color('#d2ad85').lerp(pigment,.50):theme==='garden'?new T.Color('#e5cb8a').lerp(pigment,.69):pigment).getStyle();
  if(start){let wall;if(form.height===4)wall=v.cylinder(story,.69,.74,form.height*H,[0,form.height*H/2,0],wallColor,theme==='sky'?24:theme==='garden'?12:8,true);else wall=v.box(story,[1.48,form.height*H-.01,1.48],[0,form.height*H/2,0],wallColor,theme==='garden'?.26:theme==='sky'?.13:.035);v.pick(wall,c,'wall',level);wall.userData.multiLevel=true;
  v.box(story,[1.50,.065,1.50],[0,.035,0],theme==='snow'?'#805439':theme==='sky'?'#c4a565':theme==='garden'?'#9ba654':'#916337',.018);
