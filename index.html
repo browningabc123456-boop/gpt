@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f8f5ec">
+  <meta name="description" content="为小仓鼠搭一条回家的路。拖动木板、纸筒和弹簧，开动脑筋，探索六座温馨的玩具笼子。">
+  <title>仓鼠施工队 · 小小越狱计划</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E%3Ctext y='48' font-size='48'%3E🐹%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="仓鼠施工队首页"><span class="brand-icon">🐹</span><span>仓鼠施工队<small>HAMSTER WORKSHOP</small></span></a>
+    <div class="header-note"><i></i> 一点点巧思，一大步冒险</div>
+    <nav><button id="sound" class="icon-button" aria-label="开启音效" title="开启音效">♫<span class="sound-off"></span></button><button id="help" class="help-button"><span>?</span> 玩法指南</button></nav>
+  </header>
+  <main>
+    <section class="intro"><div><p class="eyebrow">小小越狱计划 / A LITTLE ADVENTURE</p><h1>搭一条路，去看看世界<span>。</span></h1><p class="subtitle">木板、纸筒，还有一点奇思妙想。小团子的冒险，由你来搭建。</p></div><button id="levels" class="chapter-button">⌘ <span>冒险地图</span><b id="chapter-count">01 / 06</b></button></section>
+    <div class="game-layout">
+      <section class="play-area" aria-label="游戏区域">
+        <div class="stage-top"><div><span class="chapter-pill" id="level-number">01</span><div><h2 id="level-title">午后的小木桥</h2><p id="level-theme">暖阳木屋 · 第一次开工</p></div></div><div class="stage-badges"><span id="mode-badge"><i></i> 搭建时间</span><span class="seed-count" id="seed-count">◈ <b>0</b> / 3</span></div></div>
+        <div class="canvas-wrap"><canvas id="game" width="1200" height="650" tabindex="0" aria-label="仓鼠搭建场景。选择材料后点击场景放置，可拖动调整。"></canvas><div class="scene-label"><span>☀</span> 晴 · 适合溜达</div><button id="pet" class="pet-button" title="摸摸小团子">♡ 摸摸小团子</button><div id="toast" class="toast" role="status" aria-live="polite"></div><div id="result" class="result-layer" hidden></div></div>
+        <div class="transport"><div class="transport-tip"><span id="status-icon">✦</span><span id="status-text">从下方拿起材料，给小团子搭一条路吧</span></div><div class="transport-actions"><button id="undo" class="secondary small" title="撤销（Ctrl+Z）">↶ <span>撤销</span></button><button id="reset" class="secondary small" title="清空本关搭建">↺ <span>重搭</span></button><button id="run" class="primary">▶ <span>出发试跑</span></button></div></div>
+        <section class="toolbox"><div class="toolbox-label"><h3>小小工具箱</h3><p>拖进场景 · 自由组合</p></div><div class="materials"><button class="material" data-type="board"><span class="tool-art board-art"></span><span><strong>木板</strong><small>搭桥 / 铺斜坡</small></span><b class="inventory">× 2</b></button><button class="material" data-type="tube"><span class="tool-art tube-art"></span><span><strong>纸筒</strong><small>连接 / 钻通道</small></span><b class="inventory">× 1</b></button><button class="material" data-type="spring"><span class="tool-art spring-art">〰</span><span><strong>弹簧垫</strong><small>蓄力 / 跳高高</small></span><b class="inventory">× 1</b></button></div></section>
+      </section>
+      <aside class="side-panel">
+        <section class="mission-card"><p class="eyebrow">TODAY’S LITTLE MISSION</p><h2>去小屋，吃点心 <span>🍪</span></h2><p id="mission-text"></p><div class="mission-divider"></div><div class="mission-item"><span class="check-circle">⌂</span><span>抵达右侧小屋<small>小团子安全到达就过关</small></span></div><div class="mission-item"><span class="check-circle seed">◈</span><span>顺路收集 3 颗瓜子<small>额外挑战，不影响过关</small></span></div><div class="difficulty"><span>思考指数</span><span id="difficulty-dots">● ○ ○ ○ ○</span></div></section>
+        <section class="inspector-card"><div class="card-heading"><h3>工作台</h3><span id="selection-tag">未选中</span></div><div id="inspector-empty"><div class="empty-drawing">✎</div><p>每一个小零件<br>都有大用处</p><small>点击场景里的材料，就能调整它</small></div><div id="inspector" hidden><div class="selected-name" id="selected-name"></div><label id="angle-label" for="angle">倾斜角度 <output id="angle-value">0°</output></label><input id="angle" type="range" min="-30" max="30" step="5" value="0"><div id="power-control" hidden><label for="power">弹跳力度 <output id="power-value">540</output></label><input id="power" type="range" min="420" max="660" step="20" value="540"></div><p id="support-status"></p><button id="remove" class="remove-button">⌫ 放回工具箱</button></div></section>
+        <button id="hint" class="hint-card"><span>💡</span><div><strong>需要一点灵感？</strong><small>看看施工小提示</small></div><b>↗</b></button>
+        <div class="cozy-note"><span>♡</span><p>失败也没关系，下面是软软的木屑。<br>好点子，往往来自再试一次。</p></div>
+      </aside>
+    </div>
+    <footer><span>为小小的勇气，搭一座桥。</span><span>拖动放置 <i>·</i> 点击调整 <i>·</i> 空格试跑 / 暂停 <i>·</i> Delete 收回</span><span>MADE WITH A LITTLE ♡</span></footer>
+  </main>
+  <dialog id="modal"><button id="close-modal" class="modal-close" aria-label="关闭">×</button><div id="modal-content"></div></dialog>
+  <script type="module" src="/src/app.js"></script>
+</body>
+</html>
