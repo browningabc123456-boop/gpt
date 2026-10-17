@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {textile,piping} from './art-materials.js';
 const mat=(color,roughness=.72)=>new T.MeshStandardMaterial({color,roughness});
 export function decorateRoom(v){
  const g=v.base,l=v.physics.level,m=v.m;
@@ -6,17 +7,19 @@ export function decorateRoom(v){
  for(let x=-20;x<24;x+=2.2)v.box(g,[.018,.012,40],[x,-1.143,0],mat('#cbaa7a'),.002);
  v.box(g,[35,17,.28],[0,7,-10.5],mat(l.wall),.06);
  v.box(g,[35,.3,.18],[0,-.8,-10.28],m.cream,.035);
+ lounge(v);
  const window=new T.Group();window.position.set(-.6,6,-10.15);g.add(window);
  const space=l.decor==='space';
- v.box(window,[8,5.7,.10],[0,0,0],mat(space?'#444c83':'#b5dcdf'),.06);
+ v.box(window,[8,5.7,.10],[0,0,0],mat(space?'#444c83':'#9dd8ec'),.06);
  // Layered distant trees, clouds and sun are real meshes beyond the window frame.
  if(space){for(let i=0;i<27;i++)v.sphere(window,[.025,.025,.014],[Math.sin(i*19)*3.7,Math.cos(i*13)*2.6,.08],new T.MeshBasicMaterial({color:'#fff3c6'}));v.sphere(window,[.75,.75,.05],[2.2,.8,.09],mat('#eee2b5'));}
- else{v.sphere(window,[.55,.55,.05],[2.2,1.35,.07],new T.MeshBasicMaterial({color:'#fff0bd'}));for(let i=0;i<8;i++)v.sphere(window,[1.1,.6,.1],[-3.8+i*1.05,-2.15+Math.sin(i)*.25,.07],mat(i%2?'#92be82':'#b6cd91'));for(const x of [-2.2,.5,2.4])v.sphere(window,[.7,.2,.06],[x,1.3+Math.sin(x),.07],mat('#fff7e7'));}
+ else{v.sphere(window,[.55,.55,.05],[2.2,1.35,.07],new T.MeshBasicMaterial({color:'#fff0bd'}));for(let i=0;i<8;i++)v.sphere(window,[1.1,.6,.1],[-3.8+i*1.05,-2.15+Math.sin(i)*.25,.07],mat(i%2?'#78b675':'#a9ce81'));for(const x of [-2.2,.5,2.4])v.sphere(window,[.7,.2,.06],[x,1.3+Math.sin(x),.07],mat('#fff7e7'));}
  for(const x of [-4.08,0,4.08])v.box(window,[.16,5.95,.25],[x,0,.18],m.cream,.025);
  for(const y of [-2.95,0,2.95])v.box(window,[8.3,.16,.25],[0,y,.18],m.cream,.025);
  v.box(window,[9,.23,.7],[0,-3.05,.2],m.lightWood,.035);
+ const curtainFabric=textile(space?'#b6a6d3':'#f2d7a2');
  for(const side of [-1,1])for(let i=0;i<6;i++){
-  const curtain=v.cylinder(window,.11,.17,6.2,[side*(4.4+i*.13),0,.25],mat(space?'#beb2dd':'#f6dfad'),8);curtain.scale.z=.7;
+  const curtain=v.cylinder(window,.11,.17,6.2,[side*(4.4+i*.13),0,.25],curtainFabric,8);curtain.scale.z=.7;
  }
  v.plant(g,[-6.5,-1.1,-8],2.7);v.plant(g,[7.8,-1.1,-7.5],2.2);
  v.box(g,[2.8,.18,.5],[7.6,5,-10.1],m.lightWood,.045);
@@ -25,7 +28,9 @@ export function decorateRoom(v){
  if(l.decor==='space'){for(const p of [[-4,7,-8.8],[3,8,-8.9],[6,6.8,-8.8]]){v.sphere(g,[.48,.48,.48],p,mat(p[0]>0?'#c6a3da':'#d8ba86'));const ring=new T.Mesh(new T.TorusGeometry(.78,.035,8,48),m.sage);ring.position.set(...p);ring.rotation.x=1.0;g.add(ring);}}
 }
 function carpet(v,x,z,r,color,paws=false){
- const g=v.base;v.cylinder(g,r,r,.04,[x,.035,z],mat(color),64);const trim=new T.Mesh(new T.TorusGeometry(r-.045,.025,6,80),mat('#fff3d5'));trim.rotation.x=Math.PI/2;trim.position.set(x,.06,z);g.add(trim);
+ const g=v.base;const fabric=textile(color);v.cylinder(g,r,r,.055,[x,.043,z],fabric,64);
+ const stitches=[];for(let i=0;i<100;i++){const a=i/100*Math.PI*2;stitches.push([x+Math.cos(a)*(r-.09),.078,z+Math.sin(a)*(r-.09)]);}piping(g,stitches,'#eee3c3',.009);
+ const tuft=new T.InstancedMesh(new T.ConeGeometry(.008,.026,3),fabric,2400),dummy=new T.Object3D();for(let i=0;i<2400;i++){const a=i*2.399963,radius=Math.sqrt((i+.5)/2400)*(r-.07);dummy.position.set(x+Math.cos(a)*radius,.075,z+Math.sin(a)*radius);dummy.rotation.z=Math.sin(i)*.25;dummy.updateMatrix();tuft.setMatrixAt(i,dummy.matrix);}g.add(tuft);const trim=new T.Mesh(new T.TorusGeometry(r-.045,.025,6,80),mat('#fff3d5'));trim.rotation.x=Math.PI/2;trim.position.set(x,.06,z);g.add(trim);
  if(paws){v.sphere(g,[.26,.009,.24],[x,.065,z+.03],mat('#fff6da'));for(const [dx,dz]of [[-.26,-.25],[-.09,-.39],[.11,-.38],[.28,-.21]])v.sphere(g,[.10,.009,.12],[x+dx,.065,z+dz],mat('#fff6da'));}
 }
 export function decorateCage(v){
@@ -85,4 +90,19 @@ export function themeStructureMesh(v,body){
  if(kind==='toy-castle'){for(const x of [-.8,0,.8])v.box(g,[.5,.35,s[2]],[p.x+x,p.y+s[1]/2+.17,p.z],mat(x===0?'#a3cabc':'#edc797'),.06);v.label(g,'TOY LAND','',[p.x,p.y,p.z+s[2]/2+.01],1.6,.35,color,'#fff2d5');}
  if(kind==='toy-block')v.label(g,'★','',[p.x,p.y,p.z+s[2]/2+.01],.7,.65,color,'#fff4db');
  mesh.userData.body=body;v.supportMeshes.push(mesh);return mesh;
+}
+
+function lounge(v){
+ const g=v.base,l=v.physics.level,m=v.m,sofa=new T.Group();sofa.position.set(5.6,-1.07,-7.1);g.add(sofa);
+ const upholstery=textile(l.decor==='space'?'#b6a8d2':'#eadbc0'),pillow=textile(l.color),ivory=textile('#fff5e0');
+ v.box(sofa,[5.4,.45,2.0],[0,.55,0],upholstery,.2);
+ v.box(sofa,[5.4,1.55,.50],[0,1.35,-.76],upholstery,.22);
+ for(const side of [-1,1]){v.box(sofa,[.55,1.1,2.0],[side*2.52,1,0],upholstery,.22);for(const z of [-.63,.63])v.cylinder(sofa,.08,.10,.45,[side*2.15,.20,z],m.wood,12);}
+ for(let i=0;i<3;i++){v.box(sofa,[1.50,.34,1.53],[(i-1)*1.54,.96,.04],ivory,.16);const points=[[-.69,0,-.65],[.69,0,-.65],[.69,0,.65],[-.69,0,.65]].map(p=>[p[0]+(i-1)*1.54,1.0,p[2]+.04]);piping(sofa,points,'#d9c5a5',.012);}
+ for(const [x,color]of [[-1.65,pillow],[.2,ivory],[1.65,pillow]]){const cushion=v.box(sofa,[1.05,.95,.30],[x,1.60,-.35],color,.19);cushion.rotation.z=x*.12;cushion.rotation.x=-.13;v.sphere(sofa,[.07,.07,.035],[x,1.6,-.15],m.cream);}
+ const rug=textile(l.decor==='space'?'#a99bc5':'#92b55e');v.cylinder(g,3.3,3.3,.035,[5.4,-1.1,-4.3],rug,64);
+ const basket=new T.Group();basket.position.set(-7.7,-1.08,-5.5);g.add(basket);v.cylinder(basket,.92,.78,.65,[0,.34,0],m.wood,40);for(let i=0;i<10;i++){const ring=new T.Mesh(new T.TorusGeometry(.79+i*.012,.025,5,48),m.lightWood);ring.rotation.x=Math.PI/2;ring.position.y=.05+i*.061;basket.add(ring);}v.sphere(basket,[.86,.19,.86],[0,.64,0],pillow);
+ for(const [x,z,color]of [[-6,-4,'#77b7be'],[7,-3,'#e3a15e'],[-6.8,-3.7,'#e8bd6c']]){v.sphere(g,[.26,.26,.26],[x,-.83,z],new T.MeshPhysicalMaterial({color,roughness:.38,clearcoat:.4}));}
+ // Small framed paw art replaces the sparse, empty wall.
+ for(let i=0;i<3;i++){const frame=new T.Group();frame.position.set(5.0+i*1.8,7.3,-10.13);frame.rotation.z=(i-1)*.04;g.add(frame);v.box(frame,[1.25,1.55,.11],[0,0,0],m.lightWood,.045);v.box(frame,[1.06,1.36,.025],[0,0,.07],m.cream,.025);v.sphere(frame,[.24,.21,.025],[0,-.15,.10],mat([l.color,l.accent,'#d89483'][i]));for(const [x,y]of [[-.27,.10],[-.10,.28],[.12,.27],[.29,.08]])v.sphere(frame,[.10,.12,.025],[x,y,.10],mat([l.color,l.accent,'#d89483'][i]));}
 }
