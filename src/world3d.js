@@ -3,6 +3,7 @@ import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 import {CAGE,LEVELS3D} from './levels3d.js';
 import {createHamster} from './hamster3d.js';
+import {decorateRoom,decorateCage,themeStructureMesh} from './scenery.js';
 const UP=new T.Vector3(0,1,0);
 function seeded(n){let s=n;return()=>{s=(s*1664525+1013904223)>>>0;return s/4294967296;};}
 function mat(color,roughness=.75,metalness=0){return new T.MeshStandardMaterial({color,roughness,metalness});}
@@ -19,10 +20,10 @@ function labelTexture(text,sub='',bg='#eee4cc',fg='#756648'){
 }
 export class CageView{
  constructor(canvas){
-  this.canvas=canvas;this.scene=new T.Scene();this.scene.background=new T.Color('#f2ecdf');this.scene.fog=new T.Fog('#f2ecdf',28,64);
-  this.renderer=new T.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'high-performance'});this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.75));this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFSoftShadowMap;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.05;this.renderer.outputColorSpace=T.SRGBColorSpace;
+  this.canvas=canvas;this.scene=new T.Scene();this.scene.background=new T.Color('#f2ecdf');this.scene.fog=new T.Fog('#f2ecdf',37,75);
+  this.renderer=new T.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'high-performance'});this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.75));this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFSoftShadowMap;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.13;this.renderer.outputColorSpace=T.SRGBColorSpace;
   this.camera=new T.PerspectiveCamera(38,1,.1,100);this.camera.position.set(14,12.5,17);
-  this.controls=new OrbitControls(this.camera,canvas);this.controls.target.set(.3,1,0);this.controls.enableDamping=true;this.controls.dampingFactor=.08;this.controls.minDistance=8;this.controls.maxDistance=32;this.controls.maxPolarAngle=Math.PI*.46;this.controls.minPolarAngle=.18;this.controls.enablePan=true;this.controls.panSpeed=.65;
+  this.controls=new OrbitControls(this.camera,canvas);this.controls.target.set(.3,1,0);this.controls.enableDamping=true;this.controls.dampingFactor=.08;this.controls.minDistance=3.8;this.controls.maxDistance=32;this.controls.maxPolarAngle=Math.PI*.46;this.controls.minPolarAngle=.18;this.controls.enablePan=true;this.controls.panSpeed=.65;
   this.controls.mouseButtons={LEFT:T.MOUSE.ROTATE,MIDDLE:T.MOUSE.DOLLY,RIGHT:T.MOUSE.PAN};
   this.scene.add(new T.HemisphereLight('#fff8e7','#b7bca3',1.6));
   const sun=new T.DirectionalLight('#fff1d8',2.8);sun.position.set(-8,16,6);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);sun.shadow.camera.left=-12;sun.shadow.camera.right=12;sun.shadow.camera.top=12;sun.shadow.camera.bottom=-12;sun.shadow.camera.far=40;sun.shadow.normalBias=.025;sun.shadow.bias=-.0002;sun.shadow.radius=4;this.scene.add(sun);
@@ -39,12 +40,12 @@ export class CageView{
   this.scene.remove(this.base);this.base.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material){for(const m of(Array.isArray(o.material)?o.material:[o.material])){if(m.map)m.map.dispose();m.dispose();}}});
   this.base=new T.Group();this.scene.add(this.base);this.meshes.clear();this.pickables=[];this.supportMeshes=[];this.particles=[];
   this.scene.background.set(level.sky);this.scene.fog.color.set(level.sky);
-  this.m={wood:new T.MeshStandardMaterial({map:texture('wood','#d6b383'),roughness:.78}),lightWood:new T.MeshStandardMaterial({map:texture('wood','#e9d4aa'),roughness:.82}),darkWood:mat('#a68156'),sage:mat(level.color),cream:mat('#f0e7d2'),metal:mat('#b6b5a0',.42,.45),paper:new T.MeshStandardMaterial({map:texture('paper','#cbb08a'),roughness:.95}),soil:mat('#99856a'),leaf:mat('#8f9b71'),leaf2:mat('#acb98b'),cloth:new T.MeshStandardMaterial({map:texture('cloth',level.color),roughness:1})};
+  this.m={wood:new T.MeshPhysicalMaterial({map:texture('wood','#d3a26b'),roughness:.65,clearcoat:.12}),lightWood:new T.MeshPhysicalMaterial({map:texture('wood','#eed3a1'),roughness:.68,clearcoat:.14}),darkWood:mat('#a17a4d'),frame:mat(level.frame),roomWood:new T.MeshStandardMaterial({map:texture('wood','#deb884'),roughness:.74}),sage:mat(level.color),cream:mat('#fff2d9'),metal:mat('#b6b5a0',.42,.45),paper:new T.MeshStandardMaterial({map:texture('paper','#cbb08a'),roughness:.95}),soil:mat('#99856a'),leaf:mat('#679655'),leaf2:mat('#9bc073'),cloth:new T.MeshStandardMaterial({map:texture('cloth',level.color),roughness:1})};
   const m=this.m,g=this.base;
-  this.box(g,[70,.4,70],[0,-1.2,0],mat(level.sky),.1);
+  decorateRoom(this);
   this.box(g,[15.8,.5,12.4],[.3,-.72,0],m.lightWood,.18);
-  this.box(g,[12.7,.38,9.7],[0,-.25,0],m.wood,.13);
-  const floorMat=new T.MeshStandardMaterial({map:texture('paper',level.floor),roughness:1});this.box(g,[12,.1,9],[0,-.04,0],floorMat,.05);
+  this.box(g,[12.7,.38,9.7],[0,-.25,0],m.frame,.13);
+  const floorMat=new T.MeshStandardMaterial({map:texture('paper',level.floor),roughness:1});const ground=this.box(g,[12,.1,9],[0,-.04,0],floorMat,.05);ground.userData.body=physics.statics.find(b=>b.meta.id==='floor');this.supportMeshes.push(ground);
   // Shavings have actual thickness, but do not obstruct the hamster's feet.
   const random=seeded(342+physics.index),shavingGeo=new T.BoxGeometry(.13,.026,.052),shavings=new T.InstancedMesh(shavingGeo,m.lightWood,620),dummy=new T.Object3D();
   for(let i=0;i<620;i++){dummy.position.set((random()-.5)*11.7,.035,(random()-.5)*8.7);dummy.rotation.set(random()*.35,random()*Math.PI,random()*.2);dummy.scale.set(.6+random(),1,1);dummy.updateMatrix();shavings.setMatrixAt(i,dummy.matrix);}shavings.receiveShadow=true;g.add(shavings);
@@ -52,14 +53,11 @@ export class CageView{
   for(const b of physics.statics){if(b.meta.wall||b.meta.hidden||b.meta.id==='floor')continue;this.staticMesh(b);}
   for(const b of physics.objects)this.objectMesh(b);
   this.hamster=createHamster();g.add(this.hamster.root);
-  this.wheel(g,[-4.9,1.08,-.6]);this.bottle(g,[-5.68,2.25,1.5]);this.bowl(g,[-2.9,0,2.5]);
-  this.bed(g,[-4.5,.05,-3.05]);
+  this.wheel(g,[-4.9,1.25,-.6]);this.bottle(g,[-5.68,2.25,1.5]);this.bowl(g,[-2.9,0,2.5]);
+  this.bed(g,[level.house[0],.05,level.house[1]]);
   if(['garden','attic'].includes(level.decor)){this.plant(g,[-5.1,.1,-1.7],1.2);this.plant(g,[4.65,.1,3.25],1.0);}
-  else{this.plant(g,[5.0,.1,3.4],.85);}
-  if(level.decor==='bakery'){this.cupcake(g,[-3.6,.05,-1.3]);this.cupcake(g,[3.8,.05,.8]);}
-  if(level.decor==='seaside'){this.lighthouse(g,[-3.8,0,-1.7]);this.lifebuoy(g,[5.75,2.4,1.1]);}
-  if(level.decor==='space'){this.rocket(g,[-3.9,0,-1.8]);for(const p of [[-1.6,3.6,-4.35],[.8,3.8,-4.35],[3,3.9,-4.35]])this.star(g,p,.2);}
-  if(level.decor==='attic'){this.toyArch(g,[-3.5,.05,-1.3]);this.toyArch(g,[3.6,.05,2.0]);}
+  else{this.plant(g,[5.25,.1,3.4],.85);}
+  decorateCage(this);
   this.label(g,level.name,level.tag,[0,4.75,-4.52],2.8,.95,'#ece2ca','#827052');
   for(const x of [-1,1])this.cylinder(g,.012,.012,.55,[x,4.45,-4.48],m.darkWood,8);
   // An exterior landing pad makes the success condition clear: go OUTSIDE.
@@ -68,16 +66,16 @@ export class CageView{
   this.label(g,'出口','EXIT · 外面的世界',[5.95,4.4,-3.72],1.4,.6,'#e3ead3','#6b7e55');
   const ring=new T.Mesh(new T.RingGeometry(.42,.47,48),new T.MeshBasicMaterial({color:level.color,transparent:true,opacity:.6,side:T.DoubleSide}));ring.rotation.x=-Math.PI/2;ring.position.set(6.65,3.49,-2.65);g.add(ring);
   this.selection=new T.Box3Helper(new T.Box3(),new T.Color('#8b9b6c'));this.selection.visible=false;g.add(this.selection);
-  this.resetCamera();this.follow=false;this.lastFollow.set(...level.start);
+  this.resetCamera();this.follow=false;this.lastFollow.set(...level.start);this.pinwheel=this.pinwheel?.parent===this.base?this.pinwheel:null;this.createNavigationMarker();
  }
  cage(g){
   const m=this.m;
-  for(const x of [-6,6])for(const z of [-4.5,4.5]){this.box(g,[.2,4.35,.2],[x,2.1,z],m.lightWood,.07);this.sphere(g,[.15,.15,.15],[x,4.33,z],m.wood);}
-  for(const z of [-4.5,4.5]){this.box(g,[12.25,.14,.17],[0,4.18,z],m.lightWood,.045);this.box(g,[12.25,.2,.15],[0,.18,z],m.wood,.035);}
-  this.box(g,[.17,.14,9.0],[-6,4.18,0],m.lightWood,.045);
-  this.box(g,[.17,.14,.85],[6,4.18,-4.1],m.lightWood,.045);this.box(g,[.17,.14,6.05],[6,4.18,1.55],m.lightWood,.045);
+  for(const x of [-6,6])for(const z of [-4.5,4.5]){this.box(g,[.2,4.35,.2],[x,2.1,z],m.frame,.07);this.sphere(g,[.15,.15,.15],[x,4.33,z],m.wood);}
+  for(const z of [-4.5,4.5]){this.box(g,[12.25,.14,.17],[0,4.18,z],m.frame,.045);this.box(g,[12.25,.2,.15],[0,.18,z],m.wood,.035);}
+  this.box(g,[.17,.14,9.0],[-6,4.18,0],m.frame,.045);
+  this.box(g,[.17,.14,.85],[6,4.18,-4.1],m.frame,.045);this.box(g,[.17,.14,6.05],[6,4.18,1.55],m.frame,.045);
   this.barMaterials=[];
-  const sideMats=Array.from({length:4},()=>new T.MeshStandardMaterial({color:'#a7aa98',metalness:.55,roughness:.4,transparent:true,opacity:.52}));this.barMaterials=sideMats;
+  const sideMats=Array.from({length:4},()=>new T.MeshStandardMaterial({color:this.physics.level.decor==='space'?'#dcd9f0':'#a3ab99',metalness:.55,roughness:.4,transparent:true,opacity:.52}));this.barMaterials=sideMats;
   const bars=[[],[],[],[]];
   for(let x=-5.7;x<5.9;x+=.42){bars[0].push([x,2.17,-4.5,3.9]);bars[1].push([x,2.17,4.5,3.9]);}
   for(let z=-4.25;z<4.4;z+=.42){bars[2].push([-6,2.17,z,3.9]);const opening=z>-3.75&&z<-1.55;bars[3].push([6,opening?1.71:2.17,z,opening?2.98:3.9]);}
@@ -85,6 +83,7 @@ export class CageView{
   bars.forEach((list,i)=>{const mesh=new T.InstancedMesh(barGeo,sideMats[i],list.length);list.forEach(([x,y,z,h],n)=>{dummy.position.set(x,y,z);dummy.scale.set(1,h,1);dummy.updateMatrix();mesh.setMatrixAt(n,dummy.matrix);});mesh.castShadow=true;mesh.receiveShadow=true;g.add(mesh);});
  }
  staticMesh(body){
+  if(body.meta.theme)return themeStructureMesh(this,body);
   const id=body.meta.id,p=body.position,s=body.meta.size,m=this.m;
   let mesh;
   if(id==='house'){
@@ -102,7 +101,7 @@ export class CageView{
   if(id==='shelf'||id==='shelf-low')for(const xx of [-1,1]){const bracket=this.box(this.base,[.09,.4,.8],[p.x+xx*s[0]*.36,p.y-.25,p.z+.3],m.darkWood,.02);bracket.rotation.x=.5;}
  }
  objectMesh(body){
-  const spec=body.meta,[w,h,d]=spec.size,m=this.m,group=new T.Group();group.userData.body=body;
+  const spec=body.meta,[w,h,d]=spec.size,m=this.m,group=new T.Group();group.userData.body=body;const itemColor=spec.color?mat(spec.color):m.sage;
   if(spec.kind==='crate'){
    this.box(group,[w-.08,h-.06,d-.08],[0,0,0],m.wood,.025);
    for(const y of [-h*.33,0,h*.33])for(const z of [-1,1])this.box(group,[w,.20,d*.08],[0,y,z*d*.48],m.lightWood,.018);
@@ -120,18 +119,18 @@ export class CageView{
   }else if(spec.kind==='cushion'){
    this.box(group,[w,h,d],[0,0,0],m.cloth,.12);for(const x of [-1,1])for(const z of [-1,1])this.sphere(group,[.04,.02,.04],[x*w*.35,h/2,z*d*.35],m.cream);
   }else if(spec.kind==='block'){
-   this.box(group,[w,h,d],[0,0,0],m.sage,.07);this.label(group,'A','',[0,0,d/2+.004],.45,.45,this.physics.level.color,'#ece9d5');
+   this.box(group,[w,h,d],[0,0,0],itemColor,.07);this.label(group,'A','',[0,0,d/2+.004],.45,.45,spec.color||this.physics.level.color,'#fff5dc');
   }else this.box(group,[w,h,d],[0,0,0],m.lightWood,.045);
   group.traverse(o=>{if(o.isMesh){o.userData.body=body;this.pickables.push(o);this.supportMeshes.push(o);}});
   this.base.add(group);this.meshes.set(body.id,group);return group;
  }
  wheel(g,p){
   const m=this.m,group=new T.Group();group.position.set(...p);group.rotation.y=Math.PI/2;
-  this.box(group,[1.5,.12,.9],[0,-.99,0],m.lightWood,.05);this.box(group,[.12,1.2,.14],[0,-.4,0],m.wood,.03);
+  this.box(group,[1.5,.12,.9],[0,-1.16,0],m.lightWood,.05);this.box(group,[.12,1.4,.14],[0,-.4,0],m.wood,.03);
   const wheel=new T.Group();group.add(wheel);const ringMat=mat(this.physics.level.color);
-  for(const z of [-.28,.28]){const ring=new T.Mesh(new T.TorusGeometry(.85,.055,10,64),ringMat);ring.position.z=z;ring.castShadow=true;wheel.add(ring);}
-  for(let i=0;i<20;i++){const a=i/20*Math.PI*2;const slat=this.box(wheel,[.19,.045,.60],[Math.sin(a)*.85,Math.cos(a)*.85,0],m.lightWood,.015);slat.rotation.z=-a;}
-  for(let i=0;i<6;i++){const spoke=this.box(wheel,[.055,1.65,.055],[0,0,-.30],m.sage,.015);spoke.rotation.z=i*Math.PI/6;}
+  for(const z of [-.28,.28]){const ring=new T.Mesh(new T.TorusGeometry(1.04,.055,10,64),ringMat);ring.position.z=z;ring.castShadow=true;wheel.add(ring);}
+  for(let i=0;i<20;i++){const a=i/20*Math.PI*2;const slat=this.box(wheel,[.19,.045,.60],[Math.sin(a)*1.04,Math.cos(a)*1.04,0],m.lightWood,.015);slat.rotation.z=-a;}
+  for(let i=0;i<6;i++){const spoke=this.box(wheel,[.055,2.02,.055],[0,0,-.30],m.sage,.015);spoke.rotation.z=i*Math.PI/6;}
   this.sphere(wheel,[.14,.14,.1],[0,0,-.32],m.lightWood);g.add(group);this.wheelMesh=wheel;
  }
  bottle(g,p){
@@ -152,12 +151,37 @@ export class CageView{
  toyArch(g,p){const group=new T.Group();group.position.set(...p);for(let i=0;i<4;i++){const arch=new T.Mesh(new T.TorusGeometry(.6-i*.12,.055,8,32,Math.PI),mat(['#bc9b86','#b9b68c','#96aa98','#d3bd98'][i]));arch.position.y=.1;group.add(arch);}g.add(group);}
  resetCamera(top=false){const damping=this.controls.enableDamping;this.controls.enableDamping=false;this.controls.update();this.controls.enableDamping=damping;const factor=this.camera.aspect<1?1.25:1;this.controls.maxDistance=this.camera.aspect<1?42:32;this.camera.position.set(...(top?[.3,23*factor,2]:[14*factor,12.5*factor,17*factor]));this.controls.target.set(.3,1,0);this.controls.update();this.follow=false;}
  setSelected(body){this.selected=body;this.selection.visible=!!body;}
+ removeObjectMesh(body){const group=this.meshes.get(body.id);if(!group)return;this.pickables=this.pickables.filter(m=>m.userData.body!==body);this.supportMeshes=this.supportMeshes.filter(m=>m.userData.body!==body);this.base.remove(group);group.traverse(m=>{if(m.geometry)m.geometry.dispose();});this.meshes.delete(body.id);if(this.selected===body)this.setSelected(null);}
+ createNavigationMarker(){
+  this.navMarker=new T.Group();const material=new T.MeshBasicMaterial({color:'#79ae49',transparent:true,opacity:.88,side:T.DoubleSide});
+  const ring=new T.Mesh(new T.RingGeometry(.19,.235,40),material);ring.rotation.x=-Math.PI/2;this.navMarker.add(ring);this.navMarker.visible=false;this.base.add(this.navMarker);
+  this.pathDots=new T.InstancedMesh(new T.SphereGeometry(.034,6,4),new T.MeshBasicMaterial({color:'#9ac968'}),80);this.pathDots.count=0;this.base.add(this.pathDots);
+ }
+ setPath(path){
+  this.pathDots.count=Math.min(80,path.length);const dummy=new T.Object3D();path.slice(0,80).forEach((p,i)=>{dummy.position.set(p.x,p.y+.07,p.z);dummy.updateMatrix();this.pathDots.setMatrixAt(i,dummy.matrix);});this.pathDots.instanceMatrix.needsUpdate=true;
+  this.navMarker.visible=path.length>0;if(path.length){const p=path[path.length-1];this.navMarker.position.set(p.x,p.y+.08,p.z);}
+ }
+ focusHamster(){
+  const target=new T.Vector3(this.physics.hamster.position.x,this.physics.hamster.position.y+.10,this.physics.hamster.position.z);
+  const direction=new T.Vector3(.8,.9,1.4).normalize().applyAxisAngle(new T.Vector3(0,1,0),this.hamster.root.rotation.y);this.controls.target.copy(target);this.camera.position.copy(target).addScaledVector(direction,3.8);this.follow=true;this.controls.update();
+ }
+ portrait(){
+  if(this.portraitURL)return this.portraitURL;
+  const scene=new T.Scene();scene.background=new T.Color('#fff0d1');const hamster=createHamster();scene.add(hamster.root);hamster.update(0,{x:0,z:0},true,false,false);
+  scene.add(new T.HemisphereLight('#fff8e5','#d1b187',2.2));const light=new T.DirectionalLight('#fff2d2',3);light.position.set(-3,5,4);scene.add(light);
+  const camera=new T.PerspectiveCamera(31,1,.1,10);camera.position.set(1.05,.83,1.58);camera.lookAt(0,.35,.04);
+  const target=new T.WebGLRenderTarget(256,256);target.texture.colorSpace=T.SRGBColorSpace;const previous=this.renderer.getRenderTarget();this.renderer.setRenderTarget(target);this.renderer.render(scene,camera);
+  const pixels=new Uint8Array(256*256*4);this.renderer.readRenderTargetPixels(target,0,0,256,256,pixels);this.renderer.setRenderTarget(previous);target.dispose();
+  const canvas=document.createElement('canvas');canvas.width=canvas.height=256;const context=canvas.getContext('2d'),data=context.createImageData(256,256);
+  for(let y=0;y<256;y++)data.data.set(pixels.subarray((255-y)*1024,(256-y)*1024),y*1024);context.putImageData(data,0,0);this.portraitURL=canvas.toDataURL();
+  const geometries=new Set(),materials=new Set();scene.traverse(o=>{if(o.geometry)geometries.add(o.geometry);if(o.material)materials.add(o.material);});geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());return this.portraitURL;
+ }
  burst(position,color='#d5ba77',count=24){for(let i=0;i<count;i++){const mesh=new T.Mesh(new T.SphereGeometry(.025+Math.random()*.025,6,4),mat(color));mesh.position.copy(position);this.base.add(mesh);this.particles.push({mesh,v:new T.Vector3((Math.random()-.5)*2,1+Math.random()*2,(Math.random()-.5)*2),life:1.3});}}
  render(dt,playing,pet=false){
   this.time+=dt;
   for(const body of this.physics.objects){const mesh=this.meshes.get(body.id);mesh.position.copy(body.position);mesh.quaternion.copy(body.quaternion);}
   const h=this.physics.hamster;this.hamster.root.position.set(h.position.x,h.position.y-.265,h.position.z);this.hamster.update(dt,h.velocity,this.physics.grounded,!!this.physics.climb,pet);
-  this.exitArrow.position.y=4.6+Math.sin(this.time*2)*.09;this.wheelMesh.rotation.z+=dt*.09;
+  this.exitArrow.position.y=4.6+Math.sin(this.time*2)*.09;this.wheelMesh.rotation.z+=dt*.09;if(this.pinwheel)this.pinwheel.rotation.z+=dt*.3;if(this.navMarker.visible)this.navMarker.scale.setScalar(1+Math.sin(this.time*4)*.07);
   if(this.selected){const mesh=this.meshes.get(this.selected.id);if(mesh){mesh.updateMatrixWorld(true);this.selection.box.setFromObject(mesh);}else this.selection.visible=false;}
   const direction=this.camera.position.clone().sub(this.controls.target);this.barMaterials[0].opacity=direction.z<0?.10:.42;this.barMaterials[1].opacity=direction.z>0?.10:.42;this.barMaterials[2].opacity=direction.x<0?.10:.42;this.barMaterials[3].opacity=direction.x>0?.10:.42;
   if(this.follow){const target=new T.Vector3(h.position.x,Math.max(1,h.position.y),h.position.z);const delta=target.clone().sub(this.controls.target).multiplyScalar(Math.min(1,dt*3));this.controls.target.add(delta);this.camera.position.add(delta);}

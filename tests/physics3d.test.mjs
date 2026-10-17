@@ -43,8 +43,8 @@ test('停留在笼内高台不算通关，落到笼外才算',()=>{
 test('爬出其他围栏也算成功，允许自己的解法',()=>{
  const p=isolated();p.hamster.position.set(-6.8,1,0);steps(p,140);assert.ok(p.won);
 });
-test('依次解锁，未完成上一关不能打开下一关',()=>{
- assert.ok(canUnlock(0,{}));assert.equal(canUnlock(1,{}),false);assert.ok(canUnlock(1,{0:{completed:true}}));assert.equal(canUnlock(2,{0:{completed:true}}),false);
+test('全部六关直接开放，非法关卡仍被拒绝',()=>{
+ for(let i=0;i<6;i++)assert.ok(canUnlock(i,{}));for(const i of [-1,6,1.5,NaN])assert.equal(canUnlock(i,{}),false);
 });
 test('跌出桌面会回到小窝，搭建物件保留',()=>{
  const p=isolated(0,['crate-a']);const b=p.objects[0];b.position.set(1,.525,1);p.hamster.position.set(10,-5,0);p.step(1/120);assert.ok(Math.abs(p.hamster.position.x-p.level.start[0])<.1);assert.ok(Math.abs(b.position.x-1)<.1);assert.ok(!p.won);
@@ -55,10 +55,10 @@ function walkTo(p,x,z,limit=1000){
 function jumpTo(p,x,z){assert.ok(p.jump(),'needs a grounded takeoff');assert.ok(walkTo(p,x,z,500),'must land at the intended platform');}
 for(let index=0;index<6;index++)test(`笼子 ${index+1} 实际通关：堆箱、攀爬、连续跳跃，最后走到笼外`,()=>{
  const p=new CagePhysics(index),object=id=>p.objects.find(b=>b.meta.id===id);
- // Only arrange the existing loose tools, just as the player can in build mode.
+ // Arrange existing tools and return unused ones through the available build actions.
  // The hamster is never teleported or given a new velocity during the route.
- // Clear the loose board from beneath the stool before making a stable stair.
- object('plank-b').position.set(3.7,.11,-.3);
+ // Clear loose tools before making a stable stair; preserve every fixed obstacle.
+ for(const b of [...p.objects])if(!['crate-a','crate-b','stool',...(index===5?['plank-a']:[])].includes(b.meta.id))p.removeObject(b);
  object('crate-a').position.set(.3,.55,-1.8);object('crate-b').position.set(.3,1.5,-1.8);
  object('stool').position.set(-1.3,object('stool').meta.size[1]/2+.02,-1.8);object('stool').quaternion.setFromEuler(0,0,0);
  if(index===5){object('plank-a').position.set(3.7,3.4,-2.65);object('plank-a').quaternion.setFromEuler(0,0,.13);}
