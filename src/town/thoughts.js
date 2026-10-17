@@ -1,0 +1,4 @@
+export const RESIDENT_LIMIT=30;
+const lines=[['这盆花比我还会摸鱼，今天又长高了一点。','我浇的是花，不是隔壁的面包。应该吧。','叶子没有回消息，可能在光合作用。'],['这封信写着“最高那间”，我的腿已经开始投诉。','今天的快递：一封信，两阵风，和一点八卦。','地址是“有窗户那栋”。这位朋友很会为难人。'],['这一章叫《明天再打扫》，我已经读了三遍。','我没有发呆，我在给知识腾位置。','这本书很好看，尤其适合假装很忙。'],['这不是画歪了，是房子在配合我的风格。','我的灵感来了，刚刚又走了。','今天画云，明天再解释为什么像土豆。'],['我只是出来散步，怎么又上了一层楼？','导航说前方到家，我觉得它在鼓励我。','这座小城的房价，可能是按台阶算的。'],['面包正在醒发，我也想申请同款待遇。','这一炉没焦，是阳光给它加了滤镜。','谁把我的小麦粉认成了飘雪？']];
+const places={forest:'树上的邻居说我太接地气。可是这里没有地。',sky:'今天离云很近，离周一很远。',snow:'温泉泡五分钟，纠结出水半小时。',garden:'花比房子高，我终于理解了蚂蚁的压力。'};
+export function residentThought(actor,theme,time=0){if(actor.to&&actor.style==='stairs')return '健身卡退了吧，这里的楼梯已经包月了。';if(actor.to&&['rope','covered','arch'].includes(actor.style))return '桥很稳。我的表情只是比较有想象力。';const index=Math.floor(time/7)+actor.seed;if(index%4===0)return places[theme];return lines[actor.role][index%lines[actor.role].length];}

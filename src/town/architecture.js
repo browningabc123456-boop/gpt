@@ -1,7 +1,7 @@
 import * as T from 'three';
 import {facadeDesign,groupFor} from './combinations.js';
 const H=1.04;
-export const FORM_NAMES={cottage:'单层小屋',loft:'双层 Loft',clock:'钟楼',library:'空中书馆',observatory:'观星塔',beacon:'风铃灯塔'};
+export const FORM_NAMES={cottage:'单层小屋',loft:'双层 Loft',clock:'钟楼',library:'无窗守望塔',observatory:'观星塔',beacon:'风铃灯塔'};
 export function buildingForm(cell,level=cell.kinds.lastIndexOf('house')){if(level<0||cell.kinds[level]!=='house')return {kind:null,name:'平台',height:0,start:level,end:level};let start=level,end=level;while(start>0&&cell.kinds[start-1]==='house')start--;while(end+1<cell.kinds.length&&cell.kinds[end+1]==='house')end++;const height=end-start+1,kind=['cottage','loft','clock','library','observatory','beacon'][Math.min(height,6)-1];return {kind,name:FORM_NAMES[kind],height,start,end};}
 export const STYLE_NAMES={forest:'木构树屋',sky:'云端拱廊',snow:'雪顶木屋',garden:'蘑菇花屋'};
 function roundWindow(v,g,y,r=.22,color='#d2e4dc'){
@@ -34,7 +34,7 @@ function cap(v,g,y,theme,seed,color,kind){
   v.cylinder(roof,.035,.055,.45,[0,.65,0],'#b79b5e',12);v.sphere(roof,[.06,.07,.06],[0,.90,0],'#e8cc82');
   for(let i=0;i<8;i++){const a=i/8*Math.PI*2;v.line(roof,[[Math.cos(a)*.73,.22,Math.sin(a)*.73],[Math.cos(a)*.48,.48,Math.sin(a)*.48],[0,.59,0]],'#c4d3ca',.009);}
  }else{
-  const old=v.roof(roof,0,1.73,1.73,seed,color);if(theme==='snow'){
+  const old=v.roof(roof,0,1.73,1.73,seed,color,kind==='cottage');if(theme==='snow'){
    old.scale.y=1.65;
    const capGeometry=v.geometry('snow-roof',()=>{const s=new T.Shape();s.moveTo(-.89,.035);s.lineTo(0,.54);s.lineTo(.89,.035);s.lineTo(.89,.11);s.lineTo(0,.62);s.lineTo(-.89,.11);s.closePath();const geo=new T.ExtrudeGeometry(s,{depth:1.82,bevelEnabled:true,bevelSize:.025,bevelThickness:.025,bevelSegments:2});geo.translate(0,0,-.91);return geo;});
    const snow=new T.Mesh(capGeometry,v.material('#f8fbff','snow'));snow.rotation.y=old.rotation.y;snow.scale.y=1.65;snow.castShadow=true;roof.add(snow);
@@ -129,21 +129,24 @@ function floorOrnament(v,g,theme,floor){const metal=theme==='sky'?'#d4b064':them
  if(floor===4){v.cylinder(g,.012,.02,.33,[-.51,.38,.10],metal,8);v.sphere(g,[.10,.045,.06],[-.51,.58,.1],theme==='snow'?'#d6e4ed':'#d5bb73');v.line(g,[[-.63,.62,.1],[-.51,.66,.1],[-.39,.62,.1]],metal,.009);}
  if(floor===5)for(const x of [-.51,.51]){v.line(g,[[x,.83,.05],[x,.60,.08]],metal,.01);v.cylinder(g,.032,.045,.14,[x,.53,.08],theme==='garden'?'#e7b9cd':'#edcf8d',8);}
 }
-export function buildHouse(v,g,c,level,seed){const theme=v.theme,form=buildingForm(c,level),atStart=level===form.start,atEnd=level===form.end,top=level===c.kinds.length-1,color=c.colors[form.start],story=new T.Group();story.position.y=level*H;story.userData.form=`${theme}:${form.kind}:${level-form.start}`;g.add(story);
- const pigment=new T.Color(c.colors[level]),wallColor=(theme==='snow'?new T.Color(atStart?'#c09a75':'#fff1db').lerp(pigment,.36):theme==='garden'?new T.Color('#f6e1b1').lerp(pigment,.52):new T.Color(color).lerp(pigment,.78)).getStyle();
- const wall=v.box(story,[1.48,H-.01,1.48],[0,H/2,0],wallColor,theme==='garden'?.26:theme==='sky'?.13:.035);v.pick(wall,c,'wall',level);
- v.box(story,[1.51,.045,1.51],[0,.035,0],theme==='snow'?'#936647':theme==='sky'?'#e5d3ab':theme==='garden'?'#c9ad6e':'#b78a57',.018);
+export function buildHouse(v,g,c,level,seed){const theme=v.theme,form=buildingForm(c,level),start=level===form.start,end=level===form.end,top=level===c.kinds.length-1,color=c.colors[form.start],story=new T.Group();story.position.y=level*H;story.userData.form=`${theme}:${form.kind}:${level-form.start}`;g.add(story);
+ const pigment=new T.Color(color),wallColor=(theme==='snow'?new T.Color('#d2ad85').lerp(pigment,.50):theme==='garden'?new T.Color('#e5cb8a').lerp(pigment,.69):pigment).getStyle();
+ if(start){let wall;if(form.height===4)wall=v.cylinder(story,.69,.74,form.height*H,[0,form.height*H/2,0],wallColor,theme==='sky'?24:theme==='garden'?12:8,true);else wall=v.box(story,[1.48,form.height*H-.01,1.48],[0,form.height*H/2,0],wallColor,theme==='garden'?.26:theme==='sky'?.13:.035);v.pick(wall,c,'wall',level);wall.userData.multiLevel=true;
+ v.box(story,[1.50,.065,1.50],[0,.035,0],theme==='snow'?'#805439':theme==='sky'?'#c4a565':theme==='garden'?'#9ba654':'#916337',.018);
+ if(form.height===4)for(const x of [-.45,.45])for(const z of [-.45,.45])v.box(story,[.065,form.height*H,.065],[x,form.height*H/2,z],theme==='snow'?'#866347':theme==='garden'?'#79984c':'#a98a50',.015);
+ }
  for(const [side,[dx,dz,rotation]]of [[0,1,0],[1,0,Math.PI/2],[0,-1,Math.PI],[-1,0,-Math.PI/2]].entries()){
   if(v.town.get(c.x+dx,c.z+dz)?.kinds[level]==='house')continue;
   const facade=new T.Group();facade.position.set(dx*.751,0,dz*.751);facade.rotation.y=rotation;story.add(facade);const access=v.opening(c,dx,dz,level);
-  if(theme==='forest'||theme==='snow')for(const x of [-.66,.66])v.box(facade,[.04,H,.025],[x,H/2,.015],theme==='snow'?'#8a6043':'#a67b4e',.007);
-  if(access)v.door(facade,seed);else if(form.kind==='clock'&&atEnd){clock(v,facade,.57,theme);if(theme==='garden')for(const x of [-.36,.36])v.sphere(facade,[.065,.10,.04],[x,.60,.08],'#d58779');}
-  else featureWindow(v,facade,theme,form.height,level-form.start,side);
-  floorOrnament(v,facade,theme,level-form.start);
-  const combo=groupFor(v.combos||[],c,level,'house');
-  if(combo&&dz===1){const w=combo.size===2?.72:.95;v.box(facade,[w,.06,.40],[0,.97,.19],theme==='forest'?'#e0b266':theme==='sky'?'#9bbbd0':theme==='snow'?'#b96053':'#d7a1b4',.035);for(let i=0;i<5;i++)v.box(facade,[w/5,.13,.06],[-w/2+w*(i+.5)/5,.89,.37],i%2?'#fff0cb':c.colors[level],.015);if(level===0)v.box(facade,[.33,.13,.05],[.43,.30,.07],combo.stage===0?'#d9b86b':combo.stage===1?'#b8ca9b':'#d7b7c2',.025);}
+  if(access)v.door(facade,seed);
+  else if(form.height===1)featureWindow(v,facade,theme,1,0,side);
+  else if(form.height===2&&start){loftWindow(v,facade,theme);v.box(facade,[.96,.045,.12],[0,1.86,.06],theme==='garden'?'#a3b860':'#c7a56a');}
+  else if(form.height===3&&end)clock(v,facade,.53,theme);
+  else if(form.height===5&&level===form.start+2){roundWindow(v,facade,.18,.48,theme==='snow'?'#dfb264':'#5e9baf');for(const x of [-.52,.52])v.box(facade,[.035,1.10,.05],[x,.18,.06],'#cfad64');}
+  else if(form.height===6&&end){for(const x of [-.33,0,.33]){v.box(facade,[.13,.61,.04],[x,.55,.035],theme==='snow'?'#e8bd70':'#6aa5a4',.055);v.box(facade,[.17,.035,.07],[x,.88,.045],'#d6ba79');}}
+  if(start)floorOrnament(v,facade,theme,form.height-1);
+  if((theme==='forest'||theme==='snow')&&start&&form.height!==4)for(const x of [-.66,.66])v.box(facade,[.035,H*form.height,.025],[x,H*form.height/2,.015],theme==='snow'?'#80563d':'#966b3e',.007);
+  const combo=groupFor(v.combos||[],c,level,'house');if(combo&&start&&dz===1&&!v.town.get(c.x,c.z+1)){const w=.72;v.box(facade,[w,.06,.28],[0,.97,.14],theme==='forest'?'#d49c48':theme==='sky'?'#6098ba':theme==='snow'?'#a64f40':'#bd6f9b',.035);}
  }
- if(top){const roof=cap(v,story,H,theme,seed,color,form.kind);roof.traverse(o=>{if(o.isMesh)v.pick(o,c,'roof',level);});
-  if(theme==='forest'||theme==='snow'){const chimney=v.box(story,[.18,.38,.21],[-.39,H+.40,-.35],theme==='snow'?'#a4866d':color,.018);v.pick(chimney,c,'roof',level);v.box(story,[.24,.07,.27],[-.39,H+.61,-.35],theme==='snow'?'#fffdf3':'#bd9063',.015);}
- }
+ if(top){let roof;if(form.height===4){roof=new T.Group();roof.position.y=H;story.add(roof);if(theme==='sky'){v.cylinder(roof,.75,.75,.12,[0,.08,0],'#c5aa6b',24,true);v.sphere(roof,[.30,.18,.30],[0,.21,0],'#658fa8');}else if(theme==='garden')v.sphere(roof,[.73,.35,.73],[0,.14,0],'#bd8499');else v.cylinder(roof,0,.75,.64,[0,.31,0],theme==='snow'?'#e7f0f3':'#a9663d',theme==='snow'?6:8,true);}else{roof=cap(v,story,H,theme,seed,color,form.kind);const scale={forest:.84,sky:.94,snow:.84,garden:.84}[theme];roof.scale.x=roof.scale.z=scale;}roof.traverse(o=>{if(o.isMesh)v.pick(o,c,'roof',level);});}
 }
