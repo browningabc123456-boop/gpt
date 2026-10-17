@@ -1,0 +1,4 @@
+import {walkLevel} from './model.js';
+export const nodeKey=(x,z,level)=>`${x},${z},${level}`;
+export function walkGraph(town){const nodes=new Map(),add=(c,level)=>{const key=nodeKey(c.x,c.z,level);if(!nodes.has(key))nodes.set(key,{key,x:c.x,z:c.z,level,house:c.kinds[level]==='house',edges:[]});return nodes.get(key);};for(const c of town.cells.values())add(c,walkLevel(c));for(const l of town.connections()){const a=add(town.get(l.x,l.z),l.a),b=add(town.get(l.x+l.dx*l.gap,l.z+l.dz*l.gap),l.b);a.edges.push({to:b.key,style:l.style,gap:l.gap});b.edges.push({to:a.key,style:l.style,gap:l.gap});}return nodes;}
+export function residentSpawn(graph,seed=0){const nodes=[...graph.values()],outside=nodes.filter(n=>!n.house),pool=outside.length?outside:nodes;return pool.length?pool[Math.abs(seed)%pool.length].key:null;}

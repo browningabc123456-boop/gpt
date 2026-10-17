@@ -18,7 +18,7 @@ export class Town{
  edit(x,z,color,erase=false,tool='house',level=null,bridge='auto',floating=false){
   if(typeof floating!=='boolean'||!Number.isInteger(x)||!Number.isInteger(z)||Math.abs(x)>7||Math.abs(z)>7||(!erase&&(!PALETTE.includes(color)||!['house','grow','platform','garden'].includes(tool)||!BRIDGES.includes(bridge)))||level!==null&&(!Number.isInteger(level)||level<0||level>5))return false;
   let c=this.get(x,z);if(erase&&!c||!erase&&!c&&this.cells.size>=180)return false;
-  const top=c?.colors.length-1,kind=topKind(c),replace=c&&(level===null||level<=top)&&((tool==='grow'||tool==='house')&&['platform','garden'].includes(kind)||tool==='garden'&&['platform','garden'].includes(kind));
+  const top=c?.colors.length-1,kind=topKind(c),replace=c&&(level===null||level<=top)&&((tool==='grow'||tool==='house')&&['platform','garden'].includes(kind)||tool==='garden'&&kind==='platform');
   const destination=replace?top:Math.max(c?.colors.length||0,level??0);if(!erase&&destination>5)return false;
   this.undoStack.push(this.snapshot());if(this.undoStack.length>60)this.undoStack.shift();this.redoStack=[];
   if(erase){c.colors.pop();c.kinds.pop();while(c.kinds.at(-1)==='support'){c.colors.pop();c.kinds.pop();}if(!c.colors.length)this.cells.delete(this.key(x,z));return true;}
