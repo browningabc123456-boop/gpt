@@ -1,11 +1,12 @@
+import {urbanDeckTop} from './urban-decks.js';
+import {seaHouse,cityHouse} from './urban-buildings.js';
+import {ocean} from './ship.js';
 import * as T from 'three';
 import {stackForm} from './combinations.js';
 const H=1.04,B=2.35;
 export function thirdEnvironment(v){const g=v.environment,t=v.theme;
  if(t==='sea'){
-  const water=v.box(g,[100,.10,100],[0,1.99,0],'#328f9f',.01,false);water.userData.animated=true;v.terrain=null;
-  for(let i=0;i<50;i++){const a=i*2.4,r=5+i%10;v.line(g,[[Math.cos(a)*r,2.06,Math.sin(a)*r],[Math.cos(a)*r+.45,2.06,Math.sin(a)*r+.08]],'#a7d8d2',.016);}
-  for(const x of [-10,10]){v.cylinder(g,.22,.4,3.5,[x,3.1,-8],'#dfc9a1',12);v.cylinder(g,.42,.46,.32,[x,4.9,-8],'#b95140',12);v.sphere(g,[.20,.22,.20],[x,5.15,-8],'#f6d17b');v.cylinder(g,0,.62,.40,[x,5.52,-8],'#405d69',12);}
+  ocean(v);
   for(let i=0;i<5;i++)v.bird(g,[-6+i*3,7+i*.2,-6],.17);
  }else if(t==='city'){
   const ground=v.box(g,[36,.6,36],[0,2,0],'#a7b5b1',.04,false);ground.userData.animated=true;v.terrain=null;v.box(g,[32,.025,1.5],[0,2.315,-8],'#728580',.01,false);v.box(g,[1.5,.025,31],[-8,2.315,0],'#728580',.01,false);for(let x=-14;x<15;x+=2)v.box(g,[.65,.014,.045],[x,2.34,-8],'#e6dcc2',.001,false);
@@ -19,7 +20,7 @@ export function thirdEnvironment(v){const g=v.environment,t=v.theme;
  }
 }
 function porthole(v,g,x,y,z,r,color){const ring=v.cylinder(g,r+.045,r+.045,.06,[x,y,z],'#e9ca85',20);ring.rotation.x=Math.PI/2;const glass=v.cylinder(g,r,r,.07,[x,y,z+.015],color,20);glass.rotation.x=Math.PI/2;}
-export function thirdHouse(v,g,c,level){const f=stackForm(c,level,v.theme);if(level!==f.start)return;const t=v.theme,h=f.height,y=f.start*H,height=h*H,color=c.colors[f.start],root=new T.Group();root.position.y=y;root.userData.form=`${t}:house:${h}`;g.add(root);
+export function thirdHouse(v,g,c,level){if(v.theme==='sea')return seaHouse(v,g,c,level);if(v.theme==='city')return cityHouse(v,g,c,level);const f=stackForm(c,level,v.theme);if(level!==f.start)return;const t=v.theme,h=f.height,y=f.start*H,height=h*H,color=c.colors[f.start],root=new T.Group();root.position.y=y;root.userData.form=`${t}:house:${h}`;g.add(root);
  const body=t==='ants'?v.cylinder(root,.66,.74,height,[0,height/2,0],new T.Color('#b89562').lerp(new T.Color(color),.45).getStyle(),16,true):v.box(root,[1.45,height,1.45],[0,height/2,0],color,.045);v.pick(body,c,'wall',f.start);body.userData.multiLevel=true;
  for(const [dx,dz]of [[0,1],[1,0],[0,-1],[-1,0]]){if(v.town.get(c.x+dx,c.z+dz)?.kinds[f.start]==='house')continue;const face=new T.Group();face.position.set(dx*.735,0,dz*.735);face.rotation.y=Math.atan2(dx,dz);root.add(face);
   if(t==='sea'){for(let k=0;k<h;k++)for(let j=0;j<4;j++)v.box(face,[1.42,.018,.02],[0,k*H+.12+j*.24,.005],'#966742',.002,false);if(h!==4){if(h===2)porthole(v,face,0,1.08,.025,.47,'#497f97');else if(h===3)porthole(v,face,0,height-.57,.025,.37,'#f4dfa3');else for(const x of h>=5?[-.34,.34]:[0])porthole(v,face,x,height-.57,.025,h>=5?.19:.25,'#467f90');}v.box(face,[.31,.47,.06],[0,.24,.025],'#547e7d',.12);v.sphere(face,[.025,.025,.025],[.10,.24,.075],'#f2d38a');}
@@ -33,6 +34,7 @@ export function thirdHouse(v,g,c,level){const f=stackForm(c,level,v.theme);if(le
 export function thirdDeck(v,g,c,level){const f=stackForm(c,level,v.theme);if(level!==f.start)return;const t=v.theme,n=f.height,root=new T.Group(),y=f.end*H;g.add(root);root.userData.form=`${t}:${f.kind}:${n}`;
  if(n>1){if(t==='ants')v.cylinder(root,.40,.65,y-f.start*H,[0,(y+f.start*H)/2,0],'#a78152',8,true);else for(const x of [-.55,.55])for(const z of [-.55,.55])v.box(root,[.085,y-f.start*H,.085],[x,(y+f.start*H)/2,z],t==='city'?'#526671':'#9f7950');if(n>=3)for(let j=0;j<n-1;j++)v.line(root,[[-.55,f.start*H+j*H,-.55],[.55,f.start*H+(j+1)*H,-.55]],t==='city'?'#687c7e':'#aa8959',.025);}
  const deck=t==='ants'?v.cylinder(root,.77,.74,.12,[0,y+.025,0],'#bc9c68',12,true):v.box(root,[1.50,.12,1.50],[0,y+.025,0],t==='sea'?'#c6a06b':'#a7b1ad',.04);v.pick(deck,c,'deck',f.end);
+ if(t==='sea'||t==='city'){urbanDeckTop(v,root,f.kind,n,y);return;}
  if(t==='sea')for(let i=0;i<7;i++)v.box(root,[.014,.01,1.45],[-.65+i*.215,y+.09,0],'#8f704c',.001,false);
  if(f.kind==='garden'){const plants=n+2;for(let i=0;i<plants;i++){const a=i/plants*Math.PI*2,x=Math.cos(a)*.48,z=Math.sin(a)*.48;v.cylinder(root,.13,.10,.17,[x,y+.18,z],t==='sea'?'#d5c8a2':t==='city'?'#ab7151':'#93764f',10);v.sphere(root,[.15,.20+(n%3)*.05,.15],[x,y+.4,z],t==='ants'?(i%2?'#e5bb6d':'#ba9fc5'):'#80a75e');}if(n>=3){v.cylinder(root,.035,.07,.65,[0,y+.4,0],'#957449');v.sphere(root,[.38,.30,.38],[0,y+.82,0],t==='ants'?'#afd2a4':'#92b765');}}
  else if(n>=2){const color=t==='sea'?'#e9c385':t==='city'?'#d79668':'#b99a72';for(const x of [-.55,.55])v.cylinder(root,.025,.04,.70,[x,y+.43,-.42],'#8f7956');if(t==='sea'){const sail=v.box(root,[1.30,.055,1.1],[0,y+.8,-.1],color);sail.rotation.x=.12;}else if(t==='city')v.box(root,[1.37,.12,1.1],[0,y+.84,-.1],color);else v.sphere(root,[.68,.18,.58],[0,y+.86,-.1],color);v.bench(root,[0,y+.12,-.35],0);if(n>=4)v.cylinder(root,.035,.05,.48,[0,y+1.10,-.2],'#a48554');if(n>=5)v.sphere(root,[.24,.28,.24],[0,y+1.45,-.2],t==='ants'?'#a9d0b2':'#edd7a0');}

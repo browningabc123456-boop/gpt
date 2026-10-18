@@ -1,0 +1,2 @@
+// Find the first actual walkable edge toward the party, without teleporting residents.
+export function festivalStep(graph,from,goal){if(from===goal||!graph.has(from)||!graph.has(goal))return null;const queue=[from],first=new Map([[from,null]]);for(let i=0;i<queue.length;i++){const key=queue[i];for(const edge of graph.get(key).edges){if(first.has(edge.to))continue;const step=first.get(key)||edge;first.set(edge.to,step);if(edge.to===goal)return step;queue.push(edge.to);}}return null;}
