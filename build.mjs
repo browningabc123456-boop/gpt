@@ -19,3 +19,5 @@ const redirect='<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta ht
 try{await copyFile(join(root,'releases/little-places-xhs.zip'),join(root,'dist/little-places-xhs.zip'));}catch(error){if(error.code!=='ENOENT')throw error;}
 
 try{await copyFile(join(root,'releases/little-places-xhs-3d-fix.zip'),join(root,'dist/little-places-xhs-3d-fix.zip'));}catch(error){if(error.code!=='ENOENT')throw error;}
+
+try{await copyFile(join(root,'releases/little-places-xhs-smooth.zip'),join(root,'dist/little-places-xhs-smooth.zip'));}catch(error){if(error.code!=='ENOENT')throw error;}

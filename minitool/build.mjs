@@ -19,8 +19,10 @@ const plugin={name:'isolated-minitool-adaptation',setup(builder){
  }
  if(name==='view.js'){
   s="import {compactWorld,finishFrame,rendererSize,watchRenderer} from '../../minitool/runtime.js';\n"+s;
-  s=s.replace("antialias:true,preserveDrawingBuffer:true,powerPreference:'high-performance'","antialias:false,preserveDrawingBuffer:true,powerPreference:'low-power'").replace('Math.min(devicePixelRatio,1.7)','Math.min(devicePixelRatio,1.5)').replace('this.renderer.shadowMap.enabled=true','this.renderer.shadowMap.enabled=false').replace('this.sun.shadow.mapSize.set(2048,2048)','this.sun.shadow.mapSize.set(512,512)');
+  s=s.replace("antialias:true,preserveDrawingBuffer:true,powerPreference:'high-performance'","antialias:true,preserveDrawingBuffer:true,powerPreference:'default'").replace('Math.min(devicePixelRatio,1.7)','Math.min(devicePixelRatio,1.5)').replace('this.renderer.shadowMap.enabled=true','this.renderer.shadowMap.enabled=false').replace('this.sun.shadow.mapSize.set(2048,2048)','this.sun.shadow.mapSize.set(512,512)');
+  s=s.replace('this.camera=new T.OrthographicCamera(-10,10,8,-8,.1,100);','this.camera=new T.OrthographicCamera(-10,10,8,-8,.5,70);');
   s=s.replace('this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));','watchRenderer(this);this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));');
+  const outlineStart=s.indexOf(' outline(mesh,color=');const outlineEnd=s.indexOf('\n box(',outlineStart);if(outlineStart<0||outlineEnd<0)throw Error('Review outline adapter');s=s.slice(0,outlineStart)+' outline(mesh){return mesh;}'+s.slice(outlineEnd);
   s=s.replace('const map=paper(color,type.length);','const map=null;').replace('new T.MeshStandardMaterial({map,roughness:','new T.MeshStandardMaterial({color,map,roughness:');
   s=s.replace('new RoundedBoxGeometry(...size,2,Math.min(r,...size.map(n=>n/3)))','r>.06?new RoundedBoxGeometry(...size,1,Math.min(r,...size.map(n=>n/3))):new T.BoxGeometry(...size)').replace('new T.SphereGeometry(1,20,14)','new T.SphereGeometry(1,10,7)').replace('new T.TubeGeometry(curve,Math.max(4,points.length*4),r,5,false)','new T.TubeGeometry(curve,Math.max(3,points.length*2),r,3,false)');
   s=s.replace('this.life.syncTown(town);this.updateNight();','this.life.syncTown(town);this.updateNight();compactWorld(this);');
@@ -57,5 +59,5 @@ css+='\n'+await readFile(join(root,'minitool/compat.css'),'utf8');
 await writeFile(join(out,'assets/style.css'),css);
 const license=await readFile(join(root,'node_modules/three/LICENSE'),'utf8');await writeFile(join(out,'assets/licenses.json'),JSON.stringify({three:license}));
 const archive=join(root,'releases/little-places-xhs.zip');await mkdir(join(root,'releases'),{recursive:true});await rm(archive,{force:true});execFileSync('python3',['-c',"import pathlib,zipfile,sys; root=pathlib.Path(sys.argv[1]); z=zipfile.ZipFile(sys.argv[2],'w',zipfile.ZIP_DEFLATED,compresslevel=9); [z.write(p,p.relative_to(root).as_posix()) for p in sorted(root.rglob('*')) if p.is_file()]; z.close()",out,archive]);
-await copyFile(archive,join(root,'releases/little-places-xhs-3d-fix.zip'));
+await copyFile(archive,join(root,'releases/little-places-xhs-smooth.zip'));
 console.log('Built isolated offline mini-tool:',archive);
