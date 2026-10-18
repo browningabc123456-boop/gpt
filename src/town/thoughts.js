@@ -8,5 +8,5 @@ for(const [i,extra]of [
  ['计划走一万步，已经完成了计划。','地图上没有这条路，看来我领先地图。','出门忘带烦恼，算了不回去拿。','再走一条小桥就休息，我上次也是这么说的。'],
  ['给面包写情书，结果它膨胀了。','可颂不是弯的，是笑得停不下来。','本店热量全靠走楼梯抵消。','烤箱今天很努力，我负责鼓掌。']
  ].entries())lines[i].push(...extra);
-const places={sea:'我晕的不是船，是明天还要早起这件事。',city:'这里的晚高峰，是面包店门口那三个人。',ants:'住地下最大的好处：没有楼上邻居跳绳。',forest:'树上的邻居说我太接地气。可是这里没有地。',sky:'今天离云很近，离周一很远。',snow:'温泉泡五分钟，纠结出水半小时。',garden:'花比房子高，我终于理解了蚂蚁的压力。'};
-export function residentThought(actor,theme,time=0){if(actor.atFestival)return ['我只是路过，怎么又吃上了？','今天的社交额度全花在这张点心桌上了。','这场晚会没有主持人，只有一群认真鼓掌的人。','说好来帮忙布置，我却只负责尝味道。'][Math.floor(time/7+actor.seed)%4];if(actor.to&&actor.style==='stairs')return '健身卡退了吧，这里的楼梯已经包月了。';if(actor.to&&['rope','covered','arch'].includes(actor.style))return '桥很稳。我的表情只是比较有想象力。';const index=Math.floor(time/7)+actor.seed;if(index%4===0)return places[theme];return lines[actor.role][index%lines[actor.role].length];}
+const places={city:'这里的晚高峰，是面包店门口那三个人。',ants:'住地下最大的好处：没有楼上邻居跳绳。',forest:'树上的邻居说我太接地气。可是这里没有地。',sky:'今天离云很近，离周一很远。',snow:'温泉泡五分钟，纠结出水半小时。',garden:'花比房子高，我终于理解了蚂蚁的压力。'};
+export function residentThought(actor,theme,time=0){if(actor.to&&actor.style==='stairs')return '健身卡退了吧，这里的楼梯已经包月了。';if(actor.to&&['rope','covered','arch'].includes(actor.style))return '桥很稳。我的表情只是比较有想象力。';const index=Math.floor(time/7)+actor.seed;if(index%4===0)return places[theme];return lines[actor.role][index%lines[actor.role].length];}

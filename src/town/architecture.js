@@ -4,7 +4,7 @@ import {facadeDesign,groupFor} from './combinations.js';
 const H=1.04;
 export const FORM_NAMES={cottage:'单层小屋',loft:'双层 Loft',clock:'钟楼',library:'无窗守望塔',observatory:'观星塔',beacon:'风铃灯塔'};
 export function buildingForm(cell,level=cell.kinds.lastIndexOf('house')){if(level<0||cell.kinds[level]!=='house')return {kind:null,name:'平台',height:0,start:level,end:level};let start=level,end=level;while(start>0&&cell.kinds[start-1]==='house')start--;while(end+1<cell.kinds.length&&cell.kinds[end+1]==='house')end++;const height=end-start+1,kind=['cottage','loft','clock','library','observatory','beacon'][Math.min(height,6)-1];return {kind,name:FORM_NAMES[kind],height,start,end};}
-export const STYLE_NAMES={sea:'航海木船屋',city:'红砖城市公寓',ants:'根须地下洞屋',forest:'木构树屋',sky:'云端拱廊',snow:'雪顶木屋',garden:'蘑菇花屋'};
+export const STYLE_NAMES={city:'红砖城市公寓',ants:'根须地下洞屋',forest:'木构树屋',sky:'云端拱廊',snow:'雪顶木屋',garden:'蘑菇花屋'};
 function roundWindow(v,g,y,r=.22,color='#d2e4dc'){
  const rim=v.cylinder(g,r+.04,r+.04,.035,[0,y,.024],'#e0d3ae',36,true);rim.rotation.x=Math.PI/2;
  const glass=v.cylinder(g,r,r,.040,[0,y,.047],color,36);glass.rotation.x=Math.PI/2;

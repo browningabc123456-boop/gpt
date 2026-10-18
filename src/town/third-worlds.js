@@ -1,14 +1,10 @@
 import {urbanDeckTop} from './urban-decks.js';
-import {seaHouse,cityHouse} from './urban-buildings.js';
-import {ocean} from './ship.js';
+import {cityHouse} from './urban-buildings.js';
 import * as T from 'three';
 import {stackForm} from './combinations.js';
 const H=1.04,B=2.35;
 export function thirdEnvironment(v){const g=v.environment,t=v.theme;
- if(t==='sea'){
-  ocean(v);
-  for(let i=0;i<5;i++)v.bird(g,[-6+i*3,7+i*.2,-6],.17);
- }else if(t==='city'){
+ if(t==='city'){
   const ground=v.box(g,[36,.6,36],[0,2,0],'#a7b5b1',.04,false);ground.userData.animated=true;v.terrain=null;v.box(g,[32,.025,1.5],[0,2.315,-8],'#728580',.01,false);v.box(g,[1.5,.025,31],[-8,2.315,0],'#728580',.01,false);for(let x=-14;x<15;x+=2)v.box(g,[.65,.014,.045],[x,2.34,-8],'#e6dcc2',.001,false);
   for(let i=0;i<12;i++){const x=-13+i*2.3,height=2+i%4;v.box(g,[1.5,height,1.4],[x,2+height/2,-12],['#a4b5bf','#8fa1ac','#b4b9b3'][i%3],.08);for(let y=0;y<height;y++)for(const dx of [-.35,.35])v.box(g,[.23,.35,.025],[x+dx,2.4+y,-11.28],'#e7d7a7');}
   for(const x of [-6.1,6.1])for(const z of [-3,3]){const prop=new T.Group();prop.position.set(x,B,z);g.add(prop);v.cylinder(prop,.035,.065,1.8,[0,.9,0],'#52636a');v.sphere(prop,[.15,.21,.15],[0,1.85,0],'#eacb82');v.box(prop,[.7,.12,.3],[.4,.32,0],'#b27f52');v.reserveScenery(prop,x,z,.7);}
@@ -20,24 +16,19 @@ export function thirdEnvironment(v){const g=v.environment,t=v.theme;
  }
 }
 function porthole(v,g,x,y,z,r,color){const ring=v.cylinder(g,r+.045,r+.045,.06,[x,y,z],'#e9ca85',20);ring.rotation.x=Math.PI/2;const glass=v.cylinder(g,r,r,.07,[x,y,z+.015],color,20);glass.rotation.x=Math.PI/2;}
-export function thirdHouse(v,g,c,level){if(v.theme==='sea')return seaHouse(v,g,c,level);if(v.theme==='city')return cityHouse(v,g,c,level);const f=stackForm(c,level,v.theme);if(level!==f.start)return;const t=v.theme,h=f.height,y=f.start*H,height=h*H,color=c.colors[f.start],root=new T.Group();root.position.y=y;root.userData.form=`${t}:house:${h}`;g.add(root);
+export function thirdHouse(v,g,c,level){if(v.theme==='city')return cityHouse(v,g,c,level);const f=stackForm(c,level,v.theme);if(level!==f.start)return;const t=v.theme,h=f.height,y=f.start*H,height=h*H,color=c.colors[f.start],root=new T.Group();root.position.y=y;root.userData.form=`${t}:house:${h}`;g.add(root);
  const body=t==='ants'?v.cylinder(root,.66,.74,height,[0,height/2,0],new T.Color('#b89562').lerp(new T.Color(color),.45).getStyle(),16,true):v.box(root,[1.45,height,1.45],[0,height/2,0],color,.045);v.pick(body,c,'wall',f.start);body.userData.multiLevel=true;
  for(const [dx,dz]of [[0,1],[1,0],[0,-1],[-1,0]]){if(v.town.get(c.x+dx,c.z+dz)?.kinds[f.start]==='house')continue;const face=new T.Group();face.position.set(dx*.735,0,dz*.735);face.rotation.y=Math.atan2(dx,dz);root.add(face);
-  if(t==='sea'){for(let k=0;k<h;k++)for(let j=0;j<4;j++)v.box(face,[1.42,.018,.02],[0,k*H+.12+j*.24,.005],'#966742',.002,false);if(h!==4){if(h===2)porthole(v,face,0,1.08,.025,.47,'#497f97');else if(h===3)porthole(v,face,0,height-.57,.025,.37,'#f4dfa3');else for(const x of h>=5?[-.34,.34]:[0])porthole(v,face,x,height-.57,.025,h>=5?.19:.25,'#467f90');}v.box(face,[.31,.47,.06],[0,.24,.025],'#547e7d',.12);v.sphere(face,[.025,.025,.025],[.10,.24,.075],'#f2d38a');}
   if(t==='city'){for(let k=0;k<h;k++)v.box(face,[1.45,.045,.045],[0,k*H+.04,.02],'#e9d6ad');if(h!==4){const columns=h===1?2:h===2?1:h===3?3:h===5?1:2;for(let j=0;j<columns;j++){const x=(j-(columns-1)/2)*.39,wy=h===2?1.1:height-.55;v.box(face,[h===2?.96:h===5?.62:.25,h===2?1.35:h===5?.72:.43,.045],[x,wy,.03],'#355c72',h===5?.25:.02);v.box(face,[h===2?1.04:.32,.06,.12],[x,wy-(h===2?.69:.24),.08],'#edd7ac');}}if(h>=3){v.box(face,[.72,.07,.30],[0,1.08,.14],'#5b6865');for(const x of [-.32,0,.32])v.box(face,[.025,.28,.025],[x,1.25,.27],'#52605e');}v.box(face,[.29,.51,.05],[0,.26,.04],'#48594e',.025);}
   if(t==='ants'){v.line(face,[[-.62,.1,.02],[-.58,height*.7,.02],[0,height+.03,.02],[.58,height*.7,.02],[.62,.1,.02]],'#745b38',.045);if(h!==4)porthole(v,face,0,h===2?1.1:height-.55,.04,h===2?.46:h===5?.39:.24,'#c0ad65');v.box(face,[.36,.44,.06],[0,.23,.07],'#705c3c',.16);for(const x of [-.42,.42])v.sphere(face,[.06,.13,.055],[x,.45,.05],'#a6d2a3');}
  }
- if(t==='sea'){v.box(root,[1.51,.10,1.51],[0,height+.04,0],'#426b70');v.cylinder(root,.025,.035,h>=3?1.1:.55,[.35,height+(h>=3?.61:.33),0],'#a4824d');const sail=v.box(root,[.43,h>=3?.68:.30,.03],[.13,height+(h>=3?.72:.36),0],h%2?'#eecb83':'#f1dfbd');sail.rotation.z=.15;if(h===4||h===6){v.cylinder(root,.32,.35,.40,[0,height+.31,0],'#f3ddb0',20);v.cylinder(root,0,.46,.34,[0,height+.68,0],'#b75443',20);}}
- else if(t==='city'){v.box(root,[1.51,.13,1.51],[0,height+.045,0],'#5a706b');for(const x of [-.68,.68])v.box(root,[.065,.19,1.46],[x,height+.17,0],'#c4b591');v.box(root,[.36,.23,.30],[.32,height+.22,-.30],'#a3acaa');if(h>=3){v.cylinder(root,.018,.025,.6,[-.35,height+.4,0],'#56616c');v.line(root,[[-.58,height+.65,0],[-.15,height+.65,0]],'#56616c',.018);}if(h===4)v.sphere(root,[.28,.22,.28],[0,height+.29,0],'#779aa0');}
+ if(t==='city'){v.box(root,[1.51,.13,1.51],[0,height+.045,0],'#5a706b');for(const x of [-.68,.68])v.box(root,[.065,.19,1.46],[x,height+.17,0],'#c4b591');v.box(root,[.36,.23,.30],[.32,height+.22,-.30],'#a3acaa');if(h>=3){v.cylinder(root,.018,.025,.6,[-.35,height+.4,0],'#56616c');v.line(root,[[-.58,height+.65,0],[-.15,height+.65,0]],'#56616c',.018);}if(h===4)v.sphere(root,[.28,.22,.28],[0,height+.29,0],'#779aa0');}
  else{v.sphere(root,[.75,.22+(h%3)*.07,.75],[0,height+.04,0],h%2?'#bda16f':'#a58a57');for(let j=0;j<5;j++)v.sphere(root,[.055,.09,.055],[Math.cos(j*2.4)*.42,height+.24,Math.sin(j*2.4)*.42],j%2?'#b4d7b0':'#e5d18f');}
 }
 export function thirdDeck(v,g,c,level){const f=stackForm(c,level,v.theme);if(level!==f.start)return;const t=v.theme,n=f.height,root=new T.Group(),y=f.end*H;g.add(root);root.userData.form=`${t}:${f.kind}:${n}`;
  if(n>1){if(t==='ants')v.cylinder(root,.40,.65,y-f.start*H,[0,(y+f.start*H)/2,0],'#a78152',8,true);else for(const x of [-.55,.55])for(const z of [-.55,.55])v.box(root,[.085,y-f.start*H,.085],[x,(y+f.start*H)/2,z],t==='city'?'#526671':'#9f7950');if(n>=3)for(let j=0;j<n-1;j++)v.line(root,[[-.55,f.start*H+j*H,-.55],[.55,f.start*H+(j+1)*H,-.55]],t==='city'?'#687c7e':'#aa8959',.025);}
  const deck=t==='ants'?v.cylinder(root,.77,.74,.12,[0,y+.025,0],'#bc9c68',12,true):v.box(root,[1.50,.12,1.50],[0,y+.025,0],t==='sea'?'#c6a06b':'#a7b1ad',.04);v.pick(deck,c,'deck',f.end);
  if(t==='sea'||t==='city'){urbanDeckTop(v,root,f.kind,n,y);return;}
- if(t==='sea')for(let i=0;i<7;i++)v.box(root,[.014,.01,1.45],[-.65+i*.215,y+.09,0],'#8f704c',.001,false);
  if(f.kind==='garden'){const plants=n+2;for(let i=0;i<plants;i++){const a=i/plants*Math.PI*2,x=Math.cos(a)*.48,z=Math.sin(a)*.48;v.cylinder(root,.13,.10,.17,[x,y+.18,z],t==='sea'?'#d5c8a2':t==='city'?'#ab7151':'#93764f',10);v.sphere(root,[.15,.20+(n%3)*.05,.15],[x,y+.4,z],t==='ants'?(i%2?'#e5bb6d':'#ba9fc5'):'#80a75e');}if(n>=3){v.cylinder(root,.035,.07,.65,[0,y+.4,0],'#957449');v.sphere(root,[.38,.30,.38],[0,y+.82,0],t==='ants'?'#afd2a4':'#92b765');}}
  else if(n>=2){const color=t==='sea'?'#e9c385':t==='city'?'#d79668':'#b99a72';for(const x of [-.55,.55])v.cylinder(root,.025,.04,.70,[x,y+.43,-.42],'#8f7956');if(t==='sea'){const sail=v.box(root,[1.30,.055,1.1],[0,y+.8,-.1],color);sail.rotation.x=.12;}else if(t==='city')v.box(root,[1.37,.12,1.1],[0,y+.84,-.1],color);else v.sphere(root,[.68,.18,.58],[0,y+.86,-.1],color);v.bench(root,[0,y+.12,-.35],0);if(n>=4)v.cylinder(root,.035,.05,.48,[0,y+1.10,-.2],'#a48554');if(n>=5)v.sphere(root,[.24,.28,.24],[0,y+1.45,-.2],t==='ants'?'#a9d0b2':'#edd7a0');}
 }
-
-export function boatFoundation(v,g){const geometry=v.geometry('boat-hull',()=>{const shape=new T.Shape();shape.moveTo(-.65,-.69);shape.lineTo(.65,-.69);shape.lineTo(.73,.38);shape.quadraticCurveTo(.40,.73,0,.76);shape.quadraticCurveTo(-.40,.73,-.73,.38);shape.closePath();const geo=new T.ExtrudeGeometry(shape,{depth:.32,bevelEnabled:true,bevelSize:.025,bevelThickness:.02,bevelSegments:1});geo.rotateX(Math.PI/2);return geo;});const mesh=new T.Mesh(geometry,v.material('#75543b'));mesh.position.y=-.10;mesh.castShadow=true;mesh.receiveShadow=true;g.add(mesh);v.outline(mesh);for(const x of [-.74,.74])v.sphere(g,[.065,.11,.065],[x,-.20,.18],'#526266');}
