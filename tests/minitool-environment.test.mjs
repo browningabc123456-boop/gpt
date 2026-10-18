@@ -1,0 +1,4 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {environmentSignature} from '../minitool/environment-key.js';
+function view(){return{theme:'forest',terrain:{uuid:'terrain-1',scale:{x:1,z:1}},scenery:[{root:{visible:true,position:{x:0,y:0,z:0}}}]};}
+test('静态缓存识别地面扩张，不能复用旧尺寸地形快照',()=>{const v=view(),before=environmentSignature(v);v.terrain.scale.x=v.terrain.scale.z=2;assert.notEqual(environmentSignature(v),before);assert.equal(environmentSignature(v),environmentSignature(v));});
+test('景物位置变化刷新快照，未变化的内部编辑继续复用',()=>{const v=view(),before=environmentSignature(v);v.scenery[0].root.position.x=3;const moved=environmentSignature(v);assert.notEqual(moved,before);v.unrelatedBuildCount=9;assert.equal(environmentSignature(v),moved);v.scenery[0].root.visible=false;assert.notEqual(environmentSignature(v),moved);});

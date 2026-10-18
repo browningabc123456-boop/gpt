@@ -59,5 +59,5 @@ css+='\n'+await readFile(join(root,'minitool/compat.css'),'utf8');
 await writeFile(join(out,'assets/style.css'),css);
 const license=await readFile(join(root,'node_modules/three/LICENSE'),'utf8');await writeFile(join(out,'assets/licenses.json'),JSON.stringify({three:license}));
 const archive=join(root,'releases/little-places-xhs.zip');await mkdir(join(root,'releases'),{recursive:true});await rm(archive,{force:true});execFileSync('python3',['-c',"import pathlib,zipfile,sys; root=pathlib.Path(sys.argv[1]); z=zipfile.ZipFile(sys.argv[2],'w',zipfile.ZIP_DEFLATED,compresslevel=9); [z.write(p,p.relative_to(root).as_posix()) for p in sorted(root.rglob('*')) if p.is_file()]; z.close()",out,archive]);
-await copyFile(archive,join(root,'releases/little-places-xhs-ui.zip'));
+await copyFile(archive,join(root,'releases/little-places-xhs-expand.zip'));
 console.log('Built isolated offline mini-tool:',archive);

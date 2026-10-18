@@ -5,11 +5,11 @@ import {stackForm} from './combinations.js';
 const H=1.04,B=2.35;
 export function thirdEnvironment(v){const g=v.environment,t=v.theme;
  if(t==='city'){
-  const ground=v.box(g,[36,.6,36],[0,2,0],'#a7b5b1',.04,false);ground.userData.animated=true;v.terrain=null;v.box(g,[32,.025,1.5],[0,2.315,-8],'#728580',.01,false);v.box(g,[1.5,.025,31],[-8,2.315,0],'#728580',.01,false);for(let x=-14;x<15;x+=2)v.box(g,[.65,.014,.045],[x,2.34,-8],'#e6dcc2',.001,false);
+  const ground=v.box(g,[36,.6,36],[0,2,0],'#a7b5b1',.04,false);ground.userData.animated=true;v.terrain=ground;ground.userData.baseRadius=18;v.box(g,[32,.025,1.5],[0,2.315,-8],'#728580',.01,false);v.box(g,[1.5,.025,31],[-8,2.315,0],'#728580',.01,false);for(let x=-14;x<15;x+=2)v.box(g,[.65,.014,.045],[x,2.34,-8],'#e6dcc2',.001,false);
   for(let i=0;i<12;i++){const x=-13+i*2.3,height=2+i%4;v.box(g,[1.5,height,1.4],[x,2+height/2,-12],['#a4b5bf','#8fa1ac','#b4b9b3'][i%3],.08);for(let y=0;y<height;y++)for(const dx of [-.35,.35])v.box(g,[.23,.35,.025],[x+dx,2.4+y,-11.28],'#e7d7a7');}
   for(const x of [-6.1,6.1])for(const z of [-3,3]){const prop=new T.Group();prop.position.set(x,B,z);g.add(prop);v.cylinder(prop,.035,.065,1.8,[0,.9,0],'#52636a');v.sphere(prop,[.15,.21,.15],[0,1.85,0],'#eacb82');v.box(prop,[.7,.12,.3],[.4,.32,0],'#b27f52');v.reserveScenery(prop,x,z,.7);}
  }else{
-  const land=v.cylinder(g,7.5,6.6,1.1,[0,1.73,0],'#a97f55',64,true);land.userData.animated=true;v.terrain=land;
+  const land=v.cylinder(g,7.5,6.6,1.1,[0,1.73,0],'#a97f55',64,true);land.userData.animated=true;v.terrain=land;land.userData.baseRadius=7.5;
   for(let i=0;i<17;i++){const a=i/16*Math.PI,x=Math.cos(a)*9.5,z=-5-Math.sin(a)*3;v.sphere(g,[1.2,1.3,1.2],[x,2.6,z],i%2?'#b18c60':'#c5a476',1);if(i%3===0){v.line(g,[[x,5,z],[x*.93,4.2,z-.2],[x*.9,3.3,z+.2]],'#705639',.08);v.sphere(g,[.18,.35,.18],[x*.9,3.15,z+.2],'#9ad4b4');}}
   for(const x of [-5.8,5.8]){const tunnel=new T.Group();tunnel.position.set(x,B,-3.3);g.add(tunnel);const arch=new T.Mesh(new T.TorusGeometry(.72,.20,10,24),v.material('#b49360'));arch.position.y=.78;tunnel.add(arch);const dark=v.cylinder(tunnel,.69,.69,.08,[0,.78,-.1],'#50452f',24);dark.rotation.x=Math.PI/2;v.sphere(tunnel,[.12,.20,.10],[.55,.60,.13],'#a8cfac');v.reserveScenery(tunnel,x,-3.3,1.05);}
   for(const [x,z]of [[-5,2],[5,2],[-4,-4],[4,-4]]){const prop=new T.Group();prop.position.set(x,B,z);g.add(prop);for(let j=0;j<3;j++){v.cylinder(prop,.06,.09,.6+j*.22,[j*.3-.3,.3+j*.11,0],'#e0c89b');v.sphere(prop,[.35,.14,.30],[j*.3-.3,.65+j*.22,0],['#b886a8','#e0bd6a','#a8c19b'][j]);}v.reserveScenery(prop,x,z,.85);}

@@ -1,0 +1,1 @@
+export function environmentSignature(view){return JSON.stringify([view.theme,view.terrain?.uuid,view.terrain?.scale.x,view.terrain?.scale.z,view.scenery.map(s=>[s.root.visible,s.root.position.x,s.root.position.y,s.root.position.z])]);}

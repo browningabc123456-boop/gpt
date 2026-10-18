@@ -1,3 +1,4 @@
+import {environmentSignature} from './environment-key.js';
 import {TownInstances} from './instances.js';
 import {showFallback} from './fallback.js';
 import {FrameQuality} from './quality.js';
@@ -6,7 +7,8 @@ let stopped=false,hidden=false,lost=false,losses=0,frame=0,last=0,lastDraw=0,env
 export function fallback(reason){stopped=true;clearTimeout(restoreTimer);cancelAnimationFrame(frame);game?.view?.controls?.dispose();showFallback(reason,game);const app=document.getElementById('app');if(app)app.style.display='none';document.dispatchEvent(new Event('minitool-fallback'));game?.view?.renderer?.dispose();}
 export function watchRenderer(view){view.renderer.debug.onShaderError=()=>fallback('设备无法绘制三维材质');}
 export function rendererSize(view,width,height){const cap=quality.pixelCap,ratio=Math.min(window.devicePixelRatio||1,quality.dpr,Math.sqrt(cap/Math.max(1,width*height)));view.renderer.setPixelRatio(ratio);}
-export function compactWorld(view){const key=view.theme+':'+view.scenery.map(s=>s.root.visible?'1':'0').join('');if(environment&&environmentKey===key)return;if(environment){environment.dispose();view.scene.remove(environment.root);}environmentKey=key;view.environment.visible=true;environment=new TownInstances(view.scene);environment.add(view.environment,false);environment.flush();view.environment.visible=false;view.mobileEnvironment=environment;const night=!!(view.life.settings.lights||view.life.settings.backdrop===2);view.instances.setNight(night);environment.setNight(night);}
+
+export function compactWorld(view){const key=environmentSignature(view);if(environment&&environmentKey===key)return;if(environment){environment.dispose();view.scene.remove(environment.root);}environmentKey=key;view.environment.visible=true;environment=new TownInstances(view.scene);environment.add(view.environment,false);environment.flush();view.environment.visible=false;view.mobileEnvironment=environment;const night=!!(view.life.settings.lights||view.life.settings.backdrop===2);view.instances.setNight(night);environment.setNight(night);}
 export function finishFrame(view){if(!view.life?.settings||!view.town)return;const night=!!(view.life.settings.lights||view.life.settings.backdrop===2);view.instances.setNight(night);environment?.setNight(night);}
 
 function lower(view){view.renderer.shadowMap.enabled=false;view.life.snow.visible=false;view.life.rain.visible=false;for(const bird of view.birds)bird.mesh.visible=false;for(const particle of view.sway)particle.mesh.visible=false;const r=view.canvas.getBoundingClientRect();rendererSize(view,r.width,r.height);view.renderer.setSize(r.width,r.height,false);}
