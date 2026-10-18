@@ -1,0 +1,6 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {speechPlacement} from '../src/town/speech.js';
+const bounds={left:0,top:200,right:390,bottom:620},size={width:146,height:58};
+test('手机容器预留96px后，气泡只转换一次坐标，尾巴指向人物',()=>{const p=speechPlacement({x:195,y:400},bounds,size,{left:0,top:96});assert.equal(p.left,122);assert.equal(p.top,237);assert.equal(p.rect.bottom+9,400);assert.equal(p.left+p.tail,195);});
+test('镜头移动时气泡随人物移动；人物离开画面后不保留悬浮气泡',()=>{const a=speechPlacement({x:150,y:400},bounds,size,{left:0,top:96}),b=speechPlacement({x:175,y:420},bounds,size,{left:0,top:96});assert.equal(b.left-a.left,25);assert.equal(b.top-a.top,20);assert.equal(speechPlacement({x:-10,y:400},bounds,size,{left:0,top:96}),null);});
+test('靠近场景顶边时放到人物下方，避免越界或遮住页头',()=>{const p=speechPlacement({x:100,y:212},bounds,size,{left:0,top:96});assert.equal(p.below,true);assert.equal(p.rect.top,221);assert.ok(p.rect.bottom<=bounds.bottom);});
+test('人物邻近边缘时保留指向，并避让已显示的另一位居民气泡',()=>{const first=speechPlacement({x:12,y:400},bounds,size,{left:0,top:96});assert.equal(first.rect.left,5);const second=speechPlacement({x:12,y:400},bounds,size,{left:0,top:96},[first.rect]);assert.equal(second.below,true);assert.ok(second.rect.top>first.rect.bottom);});

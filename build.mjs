@@ -21,3 +21,5 @@ try{await copyFile(join(root,'releases/little-places-xhs.zip'),join(root,'dist/l
 try{await copyFile(join(root,'releases/little-places-xhs-3d-fix.zip'),join(root,'dist/little-places-xhs-3d-fix.zip'));}catch(error){if(error.code!=='ENOENT')throw error;}
 
 try{await copyFile(join(root,'releases/little-places-xhs-smooth.zip'),join(root,'dist/little-places-xhs-smooth.zip'));}catch(error){if(error.code!=='ENOENT')throw error;}
+
+try{await copyFile(join(root,'releases/little-places-xhs-ui.zip'),join(root,'dist/little-places-xhs-ui.zip'));}catch(error){if(error.code!=='ENOENT')throw error;}

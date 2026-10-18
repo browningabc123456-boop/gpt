@@ -11,3 +11,6 @@ html:not(.supports-flex-gap) .theme-nav>button+button,html:not(.supports-flex-ga
 
 /* Reserve space for the host's status bar, back/profile/share controls. */
 @media(max-width:900px){:root{--xhs-top:96px}#app{margin-top:var(--xhs-top);height:calc(var(--app-height,100vh) - var(--xhs-top));min-height:0}#simple-world{top:var(--xhs-top);padding-top:12px}#modal{top:var(--xhs-top);bottom:12px;max-height:calc(var(--app-height,100vh) - 124px)}#modal-content{max-height:calc(var(--app-height,100vh) - 126px)}}
+
+/* Host reserve and the navigation header are a single cream surface. */
+:root,body,body[data-theme],body.night-mode{background:#fffdf5}
