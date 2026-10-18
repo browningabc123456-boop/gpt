@@ -1,0 +1,14 @@
+// Local fallbacks for APIs actually used by the game and its renderer.
+if(typeof globalThis==='undefined')window.globalThis=window;
+if(!Array.prototype.at)Object.defineProperty(Array.prototype,'at',{value:function(i){i=Math.trunc(i)||0;if(i<0)i+=this.length;return this[i];}});
+if(!Array.prototype.flat)Object.defineProperty(Array.prototype,'flat',{value:function(depth=1){const out=[];const add=(list,d)=>list.forEach(v=>{if(Array.isArray(v)&&d>0)add(v,d-1);else out.push(v);});add(this,depth);return out;}});
+if(!Array.prototype.flatMap)Object.defineProperty(Array.prototype,'flatMap',{value:function(fn,ctx){return this.map(fn,ctx).flat();}});
+if(!Object.fromEntries)Object.fromEntries=function(entries){const result={};for(const [key,value]of entries)Object.defineProperty(result,key,{value,writable:true,enumerable:true,configurable:true});return result;};
+if(!Object.hasOwn)Object.hasOwn=(o,k)=>Object.prototype.hasOwnProperty.call(o,k);
+if(!String.prototype.replaceAll)Object.defineProperty(String.prototype,'replaceAll',{value:function(find,value){return this.split(find).join(value);}});
+if(!Element.prototype.replaceChildren)Element.prototype.replaceChildren=function(...nodes){while(this.firstChild)this.removeChild(this.firstChild);for(const node of nodes)this.appendChild(typeof node==='string'?document.createTextNode(node):node);};
+if(!window.ResizeObserver)window.ResizeObserver=class{constructor(fn){this.fn=fn;this.event=()=>fn([]);}observe(){window.addEventListener('resize',this.event);}disconnect(){window.removeEventListener('resize',this.event);}};
+if(!window.IntersectionObserver)window.IntersectionObserver=class{constructor(fn){this.fn=fn;this.nodes=new Set();this.event=()=>{const list=[];for(const node of this.nodes){const r=node.getBoundingClientRect();if(r.bottom>=0&&r.top<=innerHeight)list.push({target:node,isIntersecting:true});}if(list.length)this.fn(list);};}observe(node){this.nodes.add(node);window.addEventListener('scroll',this.event,true);setTimeout(this.event,0);}unobserve(node){this.nodes.delete(node);}disconnect(){this.nodes.clear();window.removeEventListener('scroll',this.event,true);}};
+if(window.HTMLDialogElement&&!HTMLDialogElement.prototype.showModal){HTMLDialogElement.prototype.showModal=function(){this.setAttribute('open','');};HTMLDialogElement.prototype.close=function(){this.removeAttribute('open');this.dispatchEvent(new Event('close'));};}
+const probe=document.createElement('div');probe.style.cssText='display:flex;flex-direction:column;row-gap:1px;position:absolute;visibility:hidden';probe.appendChild(document.createElement('div'));probe.appendChild(document.createElement('div'));document.body.appendChild(probe);if(probe.scrollHeight===1)document.documentElement.classList.add('supports-flex-gap');probe.remove();
+function height(){document.documentElement.style.setProperty('--app-height',innerHeight+'px');}height();window.addEventListener('resize',height);

@@ -1,5 +1,5 @@
 import {build} from 'esbuild';
-import {readFile,mkdir,writeFile,rm} from 'node:fs/promises';
+import {readFile,mkdir,writeFile,rm,copyFile} from 'node:fs/promises';
 import {join} from 'node:path';
 const root=import.meta.dirname;await rm(join(root,'dist'),{recursive:true,force:true});await mkdir(join(root,'dist'),{recursive:true});
 async function standalone(template,entry,stylesheet,licenses){
@@ -14,3 +14,6 @@ const hamster=await standalone('hamster-source.html','src/game3d.js','src/game.c
 console.log('Built six standalone worlds: forest, sky, snow, garden, city and ants; preserved hamster game. No external runtime assets.');
 
 const redirect='<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=./index.html"><title>返回小小造景家</title><p>海上船屋已移除。<a href="./index.html">进入其他场景</a></p></html>';await Promise.all([writeFile(join(root,'sea-village.html'),redirect),writeFile(join(root,'dist/sea-village.html'),redirect)]);
+
+// The separate upload package never changes the standalone game URLs.
+try{await copyFile(join(root,'releases/little-places-xhs.zip'),join(root,'dist/little-places-xhs.zip'));}catch(error){if(error.code!=='ENOENT')throw error;}
