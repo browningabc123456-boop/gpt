@@ -8,3 +8,6 @@ html:not(.supports-flex-gap) .theme-nav>button+button,html:not(.supports-flex-ga
 @supports(aspect-ratio:280/230){.atlas-picture img{height:auto;aspect-ratio:280/230}}
 
 @supports(padding-top:env(safe-area-inset-top)){@media(max-width:600px){header{padding-top:var(--safe-area-inset-top,env(safe-area-inset-top,12px))}footer{padding-bottom:var(--safe-area-inset-bottom,env(safe-area-inset-bottom,8px))}}}
+
+/* Reserve space for the host's status bar, back/profile/share controls. */
+@media(max-width:900px){:root{--xhs-top:96px}#app{margin-top:var(--xhs-top);height:calc(var(--app-height,100vh) - var(--xhs-top));min-height:0}#simple-world{top:var(--xhs-top);padding-top:12px}#modal{top:var(--xhs-top);bottom:12px;max-height:calc(var(--app-height,100vh) - 124px)}#modal-content{max-height:calc(var(--app-height,100vh) - 126px)}}
