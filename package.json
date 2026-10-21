@@ -10,7 +10,9 @@
     "test": "node --test tests/*.test.mjs",
     "build:minitool": "node minitool/build.mjs",
     "build:island": "node island/build.mjs",
-    "test:island": "node island/tests.mjs"
+    "test:island": "node island/tests.mjs",
+    "build:island:xhs": "node island/xhs/build.mjs",
+    "test:island:xhs": "node island/tests.mjs && node island/xhs/tests.mjs"
   },
   "dependencies": {
     "cannon-es": "0.20.0",

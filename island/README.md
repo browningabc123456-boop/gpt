@@ -55,6 +55,10 @@ GitHub 离线下载：[网页包](https://github.com/browningabc123456-boop/gpt/
 - 装饰：石灯、纸灯笼、长椅、蘑菇、许愿井、野餐桌、花盆、路牌、花车、喷泉、风铃。
 - 地形水域 11 种、居民动物 10 种、氛围光影 4 种。
 
+## 小红书上传包
+
+[下载独立上传 ZIP](https://github.com/browningabc123456-boop/gpt/raw/refs/heads/main/releases/island-sketchbook-xhs.zip)，平台适配、验证结果和待完成事项见 [xhs/README.md](xhs/README.md)。此包是按公开文档准备的候选包，尚待上传页当前口令校验及真机预览。
+
 ## 开发
 
 仓库根目录：

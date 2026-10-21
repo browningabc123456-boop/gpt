@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-21",
+  "status": "upload-candidate-awaiting-current-platform-skill-and-device-preview",
+  "bytes": 1536198,
+  "sha256": "aa872ffcfaa1b692132eded732986d9e2586cf4457867293501776dfb45a9540",
+  "files": [
+    "assets/compat.js",
+    "assets/core.js",
+    "assets/game.js",
+    "assets/licenses.json",
+    "assets/serif-bold.woff",
+    "assets/serif-regular.woff",
+    "assets/style.css",
+    "assets/title.png",
+    "index.html"
+  ],
+  "unit_tests_passed": 40,
+  "browser": {
+    "checks": [
+      "blank new island and native storage",
+      "rich random scene",
+      "brush construction",
+      "native reload restores exact objects",
+      "text backup has all three islands",
+      "manual postcard saved through native album and island album",
+      "postcard persists after reload",
+      "night selection available",
+      "no runtime or CSP errors",
+      "no remote resources"
+    ],
+    "objects": 561,
+    "errors": [],
+    "externalRequests": []
+  },
+  "official_reference": "https://miniapp-sandbox.xiaohongshu.com/minitool/doc"
+}
