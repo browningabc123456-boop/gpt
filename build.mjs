@@ -25,3 +25,6 @@ try{await copyFile(join(root,'releases/little-places-xhs-smooth.zip'),join(root,
 try{await copyFile(join(root,'releases/little-places-xhs-ui.zip'),join(root,'dist/little-places-xhs-ui.zip'));}catch(error){if(error.code!=='ENOENT')throw error;}
 
 try{await copyFile(join(root,'releases/little-places-xhs-expand.zip'),join(root,'dist/little-places-xhs-expand.zip'));}catch(error){if(error.code!=='ENOENT')throw error;}
+
+// Publish the separately built papercraft game alongside the existing worlds.
+await copyFile(join(root,'island.html'),join(root,'dist/island.html'));
