@@ -22,4 +22,4 @@ css='@font-face{font-family:"Island Serif";font-style:normal;font-weight:100 600
 await writeFile(join(out,'assets/style.css'),(await transform(css,{loader:'css',target:'chrome61',minify:true})).code);
 for(let file of ['title.png','serif-regular.woff','serif-bold.woff'])await copyFile(join(dir,'assets',file),join(out,'assets',file));
 await writeFile(join(out,'assets/licenses.json'),JSON.stringify({three:await readFile(join(dir,'assets/THREE-LICENSE.txt'),'utf8'),font:await readFile(join(dir,'assets/FONT-LICENSE.txt'),'utf8')}));
-const archive=join(root,'releases/island-sketchbook-xhs.zip');await zipFiles(out,archive);await copyFile(archive,join(root,'releases/island-sketchbook-xhs-v6.zip'));
+const archive=join(root,'releases/island-sketchbook-xhs.zip');await zipFiles(out,archive);await copyFile(archive,join(root,'releases/island-sketchbook-xhs-v7.zip'));

@@ -1,9 +1,9 @@
 {
   "date": "2026-10-24",
-  "version": 6,
+  "version": 7,
   "status": "upload-candidate-awaiting-current-platform-skill-and-device-preview",
-  "bytes": 1533420,
-  "sha256": "2c0384924be9faf0a88fd038b2408f61d7e43155ebe80368d98f3ee9c2ae3ede",
+  "bytes": 1534261,
+  "sha256": "9ba67f4e45ace586377aa2a25ca0a77a73e098cbca14f33e88a8d318c628fb9d",
   "files": [
     "assets/compat.js",
     "assets/core.js",
@@ -15,7 +15,7 @@
     "assets/title.png",
     "index.html"
   ],
-  "unit_tests_passed": 44,
+  "unit_tests_passed": 47,
   "browser": {
     "checks": [
       "startup shows library and new-island choice",
@@ -32,14 +32,22 @@
       "save image uses native photo path without island album",
       "deleting saved work preserves editing draft",
       "clockwise pinch rotation follows fingers without drawing",
-      "single-finger orbit mode visibly selected",
-      "single-finger rotation changes view without adding scenery",
+      "right camera controls and floating view labels removed",
+      "direction toolbar wording",
+      "brush drawer reserves space below canvas",
+      "collapse increases canvas height without hiding reopening handle",
+      "collapsed drawer can actually reopen by tapping its handle",
+      "swiping brush row scrolls tools without drawing on island",
+      "two fingers on sea tilt without drawing",
+      "same vertical gesture beginning on island pans without tilting or drawing",
+      "pinch enlarges view without editing scenery",
+      "narrow phone keeps a separate horizontal drawer and seven usable tools",
       "only day and night available",
       "deleted work stays deleted on reopen",
       "no runtime or CSP errors",
       "no remote resources"
     ],
-    "objects": 1037,
+    "objects": 1240,
     "errors": [],
     "externalRequests": []
   },

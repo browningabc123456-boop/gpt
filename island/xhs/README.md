@@ -1,10 +1,10 @@
-# 小红书小工具 · 孤岛绘境第六版上传候选包
+# 小红书小工具 · 孤岛绘境第七版上传候选包
 
-[下载 island-sketchbook-xhs-v6.zip](https://github.com/browningabc123456-boop/gpt/raw/refs/heads/main/releases/island-sketchbook-xhs-v6.zip)
+[下载 island-sketchbook-xhs-v7.zip](https://github.com/browningabc123456-boop/gpt/raw/refs/heads/main/releases/island-sketchbook-xhs-v7.zip)
 
 直接上传 ZIP 本身，不解压、不再次套文件夹。根目录只有一个 index.html；assets 是独立经典脚本、样式、图片、字体和许可。没有原试玩域名依赖，没有外部 SDK 或 CDN。
 
-本版：更高纸材对比、15%–400% 疏密度、12 种随机主题及多种道路 / 水域 / 聚落布局；进入时选择已有作品或新建，手动保存 / 覆盖 / 另存为 / 删除；移除相册、天气、流星、地图和冗余文案，仅留昼夜。旋转支持双指自然扭转和单指旋转模式。旧岛迁移为独立存档，工作草稿和手动存档隔离。
+本版：更高纸材对比、15%–400% 疏密度、12 种随机主题及多种道路 / 水域 / 聚落布局；进入时选择已有作品或新建，手动保存 / 覆盖 / 另存为 / 删除；移除相册、天气、流星、地图和冗余文案，仅留昼夜。手机使用底部独立笔刷抽屉；移除右侧镜头按钮和悬浮文字。「方向」调整物件朝向，双指自然扭转旋转；双指都从岛外海面开始的平行上下拖动才触发俯仰，岛内同样动作只平移。旧岛迁移为独立存档，工作草稿和手动存档隔离。
 
 ## 平台适配
 
@@ -18,7 +18,7 @@
 
 ## 验证状态
 
-37 项规则、随机布局、存档迁移与快照隔离测试，7 项桥接 / 分片存储 / 打包测试；本地 Chromium 在严格 CSP 和模拟平台接口下检查手机游戏流程。结果见 [validation.json](../../releases/island-sketchbook-xhs-validation.json)。本地模拟不代表真实小红书客户端验证。
+40 项规则、随机布局、存档迁移、快照隔离与手势测试，7 项桥接 / 分片存储 / 打包测试；本地 Chromium 在严格 CSP 和模拟平台接口下检查手机游戏流程。结果见 [validation.json](../../releases/island-sketchbook-xhs-validation.json)。本地模拟不代表真实小红书客户端验证。
 
 按[官方能力清单](https://miniapp-sandbox.xiaohongshu.com/minitool/doc)准备（最近已核对文档版本为 2026-10-13）。用户仍未提供上传页当前完整改写口令，尚未加载该口令指定的官方 Skill，也未执行官方当次校验或平台审核。因此交付的是上传候选包，不能宣称直接审核通过或已上线。
 
@@ -29,4 +29,4 @@
     npm run build:island:xhs
     npm run test:island:xhs
 
-上传适配独立在 xhs/adapt.mjs，普通浏览器版不依赖平台桥接。原 Sites 演示未作为本次发布目标；新版通过 GitHub 下载交付。
+上传适配独立在 xhs/adapt.mjs，普通浏览器版不依赖平台桥接。手机试玩入口为 GitHub Pages 的 island.html；同时通过 GitHub 下载交付上传候选包。

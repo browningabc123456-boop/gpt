@@ -1,6 +1,6 @@
 # 小小造景家 · 六个手绘立体小世界
 
-小红书上传候选包：[下载孤岛绘境 ZIP](releases/island-sketchbook-xhs-v6.zip) · [上传说明与验证状态](island/xhs/README.md)。
+小红书上传候选包：[下载孤岛绘境 ZIP](releases/island-sketchbook-xhs-v7.zip) · [上传说明与验证状态](island/xhs/README.md)。
 
 新增独立游戏：[孤岛绘境](island.html) · 剪纸三维大岛自由造景：70 种笔刷、12 种随机主题、真实地形编辑、拓建、自然旋转与可管理的作品存档。开发和小红书接入状态见 [island/README.md](island/README.md)。运行 `npm run build:island` 构建，`npm run test:island` 检查。
 
