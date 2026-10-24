@@ -1,37 +1,32 @@
-# 孤岛绘境 · 小红书小工具上传候选包
+# 小红书小工具 · 孤岛绘境第六版上传候选包
 
-下载：[island-sketchbook-xhs.zip](https://github.com/browningabc123456-boop/gpt/raw/refs/heads/main/releases/island-sketchbook-xhs.zip)
+[下载 island-sketchbook-xhs-v6.zip](https://github.com/browningabc123456-boop/gpt/raw/refs/heads/main/releases/island-sketchbook-xhs-v6.zip)
 
-上传时选择这个 ZIP 本身，不要再次套文件夹，不要使用之前的 web.zip 或源码 ZIP。包根目录有 index.html，assets 中是独立脚本、纸艺图片、字体和许可；游戏不依赖原试玩域名，也不需要自行引入 SDK。
+直接上传 ZIP 本身，不解压、不再次套文件夹。根目录只有一个 index.html；assets 是独立经典脚本、样式、图片、字体和许可。没有原试玩域名依赖，没有外部 SDK 或 CDN。
 
-## 当前验证状态
+本版：更高纸材对比、15%–400% 疏密度、12 种随机主题及多种道路 / 水域 / 聚落布局；进入时选择已有作品或新建，手动保存 / 覆盖 / 另存为 / 删除；移除相册、天气、流星、地图和冗余文案，仅留昼夜。旋转支持双指自然扭转和单指旋转模式。旧岛迁移为独立存档，工作草稿和手动存档隔离。
 
-- 对照小红书[官方容器能力清单](https://miniapp-sandbox.xiaohongshu.com/minitool/doc)，文档最后更新 2026-10-13，本包准备日期 2026-10-21。
-- 仅有一个 HTML 入口，经典外置脚本，编译目标 ES2017 / Chrome 61；现代 CSS 有基础声明，补齐 Array.at / flat / flatMap、Object.fromEntries、Promise.finally、对话框等实际使用能力。
-- 素材、字体、Three.js 和原创合成音乐均在包内。没有外部资源、联网请求、动态执行代码、WASM、Worker、XR、外链或浏览器文件下载。
-- 图片通过平台 writeTempFile / saveImageToPhotosAlbum 主动保存。无宿主 API 或授权失败时明确提示，不伪报保存成功。
-- 按客户端版本选择 Storage API。大存档分片，每个 key 写入合法 JSON 且低于 1 MB；串行写入、校验恢复、写完后切换索引，读取失败时保护原数据。总容量不足会提示，不假装永久保存。
-- 岛屿相册最多 16 张且序列化大小不超过 3.5 MB，平台总缓存限制仍会进一步约束可存数量。仅用户主动保存图片后收藏；失败会回滚收藏。
-- JSON 文件选择、Blob 下载改为文本备份和粘贴恢复，避免小工具只允许选择图片 / 视频的限制。备份不含风景卡。
-- 手机布局为宿主顶部按钮预留空间；WebGL 上下文丢失时暂停绘制并尝试保存，恢复后继续显示。
+## 平台适配
 
-33 项原游戏规则测试、7 项上传构建 / 平台桥接测试通过。当前 Chromium 在严格 CSP（不允许内联脚本和联网）与模拟平台 API 下的 10 项流程验证通过，含 561 个物件场景、造景、原生模拟存档重开、相册保存和夜晚切换。没有拿到真实小红书容器，不将模拟结果宣称为真机验证。
+- ES2017 / Chrome 61 语法，经典外置脚本；现代 CSS 提供基础声明，按实际用到的能力补齐 Array.at / flat、Object.fromEntries、对话框等。
+- 无 fetch / XHR / WebSocket / Worker / WASM / eval / new Function / XR / 外链 / 文件下载等禁用能力。页面不联网。
+- 图片主动调用 writeTempFile / saveImageToPhotosAlbum 保存到系统相册，不再写入岛屿相册。未授权、未注入平台 API 或保存失败会明确提示。
+- 根据客户端版本启用 Storage API，不满足时使用有异常处理的设备临时存储。大存档拆为每 key 小于 1 MB 的 JSON 分片，串行写入、校验恢复、完成后切换索引；失败不替换原完整数据。空间不足提示删除旧存档。
+- 最多 40 个作品存档，实际数量受平台 10 MB 总缓存约束。作品缩略图为低分辨率 JPEG；不永久存储大截图。旧版相册不再加载或新增，但不会自动清除旧数据。
+- 文本备份 / 恢复替代 JSON 文件选择和 Blob 下载；不调用剪贴板 API。
+- WebGL 上下文丢失时暂停并尝试暂存，恢复后重绘。设备需支持 WebGL 2；没有将纸艺场景替换为精度更低的二维版本。
 
-## 上传与审核
+## 验证状态
 
-1. 在小红书小工具上传页第一步复制**当前完整改写口令**，交给助手执行对应版本 Skill 和官方校验。
-2. 选择本 ZIP 上传，在平台模拟器中检查纸艺渲染、操作栏、缩放旋转、存档与相册。
-3. 使用 Android / iOS 真机预览，重点检查复杂岛屿性能、WebGL 2 支持、音乐、相册授权和重新打开后的存档。
-4. 填写后台要求的名称、图标等资料，再按平台流程提交审核。
+37 项规则、随机布局、存档迁移与快照隔离测试，7 项桥接 / 分片存储 / 打包测试；本地 Chromium 在严格 CSP 和模拟平台接口下检查手机游戏流程。结果见 [validation.json](../../releases/island-sketchbook-xhs-validation.json)。本地模拟不代表真实小红书客户端验证。
 
-官方文档明确要求使用上传页当次口令，能力清单不能代替口令。目前用户尚未提供该口令，因而本文件是按公开文档准备的**上传候选包**，并非已执行官方 Skill 校验、已通过平台验证或审核的正式上线包。若平台报错，需要以当次口令 / 预览结果继续修正，不能保证直接审核通过。
+按[官方能力清单](https://miniapp-sandbox.xiaohongshu.com/minitool/doc)准备（最近已核对文档版本为 2026-10-13）。用户仍未提供上传页当前完整改写口令，尚未加载该口令指定的官方 Skill，也未执行官方当次校验或平台审核。因此交付的是上传候选包，不能宣称直接审核通过或已上线。
 
-## 本地构建
+在上传页按当前口令完成官方校验，再上传 ZIP 做 Android / iOS 真机预览，检查密集场景帧率、保存 / 删除 / 重开、缩放旋转、音乐和系统相册授权后提交审核。
 
-在仓库根目录：
+## 构建
 
-    npm ci
     npm run build:island:xhs
     npm run test:island:xhs
 
-输出目录为 island-xhs-dist（不入 Git），发布包在 releases/island-sketchbook-xhs.zip。xhs/adapt.mjs 只在上传构建时改写，不改变网页版和既有试玩站点。
+上传适配独立在 xhs/adapt.mjs，普通浏览器版不依赖平台桥接。原 Sites 演示未作为本次发布目标；新版通过 GitHub 下载交付。

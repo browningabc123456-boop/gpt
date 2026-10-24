@@ -1,51 +1,53 @@
 const {random,kind,distanceSegment,CX,CY}=globalThis.IslandCore;
 export const landscapeThemes=[
- {id:'meadow',name:'风车花谷',note:'暖金屋顶 · 野花曲径',colors:['#d7ad55','#d9a6b1','#698749'],trees:['oak','birch','tree'],flowers:['flower','cosmos','poppy'],houses:['windmill','cottage','greenhouse']},
- {id:'sakura',name:'樱眠水庭',note:'粉樱倒影 · 竹影纸灯',colors:['#e4b6bd','#9ebc76','#78c4bf'],trees:['cherry','bamboo','willow'],flowers:['hydrangea','cosmos','flower'],houses:['cottage','gazebo','house']},
- {id:'forest',name:'森间来信',note:'层叠杉林 · 溪边木屋',colors:['#527650','#d9a15b','#9dba6b'],trees:['tree','birch','oak'],flowers:['flower','lavender','hydrangea'],houses:['house','cottage','tent']},
- {id:'coast',name:'海风假日',note:'白沙弯湾 · 玻璃花房',colors:['#e6d5a0','#71bfba','#b6ce74'],trees:['palm','oak','willow'],flowers:['tulip','flower','cosmos'],houses:['cottage','greenhouse','gazebo']},
- {id:'autumn',name:'橘子山丘',note:'红枫麦色 · 田野小径',colors:['#c9864e','#e3bc60','#8c9e54'],trees:['maple','oak','birch'],flowers:['sunflower','poppy','flower'],houses:['windmill','house','cottage']},
- {id:'lavender',name:'紫色慢时光',note:'紫色花田 · 欧式庭园',colors:['#a18cb5','#d6a8b6','#9cbb71'],trees:['birch','oak','cherry'],flowers:['lavender','rose','hydrangea'],houses:['cottage','greenhouse','gazebo']}
+ {id:'meadow',name:'风车花谷',colors:['#e2a649','#df7386','#548645'],trees:['oak','birch','tree'],flowers:['flower','cosmos','poppy','sunflower'],houses:['windmill','cottage','greenhouse'],layouts:['farm','river','village']},
+ {id:'sakura',name:'樱眠水庭',colors:['#e994b5','#6c9b50','#49b9ba'],trees:['cherry','bamboo','willow'],flowers:['hydrangea','cosmos','rose'],houses:['cottage','gazebo','house'],layouts:['ponds','garden','canal']},
+ {id:'forest',name:'森间来信',colors:['#346a46','#d58c42','#95b947'],trees:['tree','birch','oak'],flowers:['flower','lavender','hydrangea'],houses:['house','cottage','tent'],layouts:['river','camp','terrace']},
+ {id:'coast',name:'海风假日',colors:['#f1d18d','#29aeb5','#8fb94e'],trees:['palm','oak','willow'],flowers:['tulip','flower','cosmos'],houses:['cottage','greenhouse','gazebo'],layouts:['lagoon','coast','village']},
+ {id:'autumn',name:'橘子山丘',colors:['#cb653b','#e6b337','#7f8e38'],trees:['maple','oak','birch'],flowers:['sunflower','poppy','cosmos'],houses:['windmill','house','cottage'],layouts:['terrace','farm','village']},
+ {id:'lavender',name:'紫色慢时光',colors:['#8060b5','#d37da0','#679b51'],trees:['birch','oak','cherry'],flowers:['lavender','rose','hydrangea'],houses:['cottage','greenhouse','gazebo'],layouts:['farm','garden','ponds']},
+ {id:'bamboo',name:'竹影灯街',colors:['#427f51','#e5b452','#ba7150'],trees:['bamboo','willow','cherry'],flowers:['flower','hydrangea','rose'],houses:['house','gazebo','cottage'],layouts:['canal','garden','ponds']},
+ {id:'rose',name:'玫瑰庄园',colors:['#c2526e','#f0d0a0','#477a48'],trees:['oak','cherry','birch'],flowers:['rose','hydrangea','tulip'],houses:['cottage','greenhouse','gazebo'],layouts:['garden','village','lagoon']},
+ {id:'camp',name:'星野营地',colors:['#397655','#d7a35f','#88b6ba'],trees:['tree','birch','maple'],flowers:['flower','cosmos','poppy'],houses:['tent','house','gazebo'],layouts:['camp','river','ponds']},
+ {id:'wetland',name:'荷塘栈道',colors:['#337a6a','#e59bad','#4db8bc'],trees:['willow','bamboo','palm'],flowers:['hydrangea','flower','cosmos'],houses:['gazebo','house','cottage'],layouts:['ponds','canal','lagoon']},
+ {id:'orchard',name:'金色田园',colors:['#e7ad29','#64903b','#cf7749'],trees:['oak','maple','cherry'],flowers:['sunflower','poppy','flower'],houses:['windmill','house','greenhouse'],layouts:['farm','terrace','village']},
+ {id:'highland',name:'山间石院',colors:['#647988','#3d7450','#ddc085'],trees:['tree','birch','bamboo'],flowers:['lavender','flower','rose'],houses:['house','gazebo','cottage'],layouts:['terrace','river','garden']}
 ];
 export function composeIsland(game,id,seed=Date.now()){
- const rng=random(seed),theme=landscapeThemes.find(t=>t.id===id)||landscapeThemes[Math.floor(rng()*landscapeThemes.length)],before=game.snapshot(),e=game.expansion,flip=rng()>.5?-1:1,angle=(rng()-.5)*.24,ca=Math.cos(angle),sa=Math.sin(angle),buildings=[],paths=[];
+ const rng=random(seed),pick=a=>a[Math.floor(rng()*a.length)],theme=landscapeThemes.find(t=>t.id===id)||pick(landscapeThemes),layout=pick(theme.layouts),before=game.snapshot(),e=game.expansion,angle=(rng()-.5)*1.2,flip=rng()<.5?-1:1,ca=Math.cos(angle),sa=Math.sin(angle),buildings=[],waters=[],paths=[];
  game.objects=[];game.native=false;game.revision++;
  const world=(x,y)=>({x:CX+(x*ca-y*sa)*e*flip,y:CY+(x*sa+y*ca)*e});
- const put=(type,x,y,s=1,extra={})=>{let p=world(x,y);if(!game.contains(p.x,p.y,.065))return null;let o={type,...p,s,v:rng(),rot:(rng()-.5)*.08,yaw:(rng()-.5)*.5,...extra};game.objects.push(o);return o;};
- const circle=(type,x,y,r)=>put(type,x,y,1,{r:r*e});
- const line=(type,points,width=40)=>{let q=[];for(let i=1;i<points.length;i++){let [ax,ay]=points[i-1],[bx,by]=points[i],n=Math.ceil(Math.hypot(bx-ax,by-ay)/35);for(let j=0;j<n;j++){let t=j/n,x=ax+(bx-ax)*t,y=ay+(by-ay)*t;circle(type,x,y,width*(.95+rng()*.10));q.push(world(x,y));}}q.push(world(...points.at(-1)));if(type==='terrain_path')paths.push(q);};
- const clear=(x,y,margin=30)=>{let p=world(x,y);return game.contains(p.x,p.y,.12)&&!game.objects.some(o=>o.type==='water'&&Math.hypot(o.x-p.x,o.y-p.y)<o.r+margin)&&!buildings.some(o=>Math.hypot(o.x-p.x,o.y-p.y)<145*(o.s||1))&&!paths.some(path=>path.some((a,i)=>i&&distanceSegment(p,path[i-1],a)<40*e));};
- // Unequal background and foreground masses frame one calm central water shape.
- for(let [x,y,r] of [[-740,-390,350],[460,-510,320],[-100,-630,300]])circle('terrain_mound',x,y,r);
- if(theme.id==='coast'){for(let [x,y,r] of [[570,70,320],[650,300,330],[450,460,230]])circle('terrain_sand',x,y,r);}
- const bend=(rng()-.5)*120,style=theme.id;
- const streams={
- meadow:[[150,-700],[260,-490],[170+bend,-290],[280,-90],[190,120],[340,310],[240,480],[500,650]],
- sakura:[[400,-650],[420,-490],[170,-290],[210,-80],[320,80],[370,300],[600,500]],
- forest:[[50,-650],[210,-490],[170,-290],[90,-100],[220,110],[140,310],[360,460],[270,650]],
- coast:[[0,-600],[140,-430],[250,-290],[370,0],[410,200],[590,390],[850,540]],
- autumn:[[370,-670],[280,-510],[210,-290],[340,-80],[200,140],[340,320],[190,620]],
- lavender:[[220,-650],[180,-440],[225,-290],[300,-120],[310,80],[250,280],[420,490],[400,620]]};
- line('water',streams[style],style==='coast'?105:style==='forest'?48:65);
- let lakeX=style==='coast'?380:style==='forest'?190:250,lakeY=style==='coast'?200:style==='forest'?100:60,lakeRX=style==='coast'?255:style==='forest'?115:style==='lavender'?170:220,lakeRY=style==='forest'?100:style==='coast'?170:145;
- for(let i=0;i<70;i++){let a=i/70*Math.PI*2,r=Math.sqrt(rng());circle('water',lakeX+Math.cos(a)*lakeRX*r,lakeY+Math.sin(a)*lakeRY*r,style==='forest'?52+rng()*22:74+rng()*26);}
- const spots={meadow:[[-460,40,1.10],[-680,370,.87],[680,-300,.86]],sakura:[[-650,210,1.05],[640,80,.95],[-600,-300,.88]],forest:[[-600,90,1.1],[680,-180,.93],[-780,380,.96]],coast:[[-430,80,1.05],[-740,350,.95],[580,-320,.95]],autumn:[[-550,-300,1.15],[-680,300,.90],[650,140,.88]],lavender:[[-600,80,1.08],[650,-230,.95],[-700,400,.96]]};
- const houseSpots=spots[style];houseSpots[0][0]+=(rng()-.5)*70;houseSpots[0][1]+=(rng()-.5)*50;
- const hub=[-280,80];line('terrain_path',[[-720,560],[-600,460],[-420,290],hub,[-120,-60],[80,-220]],34);
- for(let [i,[x,y,s]] of houseSpots.entries()){line('terrain_path',[[x,y+85],[(x+hub[0])*.5,(y+hub[1])*.5+60],hub],i===0?33:26);let o=put(theme.houses[i],x,y,s,{yaw:(flip>0?0:Math.PI/9)+(rng()-.5)*.25});if(o)buildings.push(o);put('flowerpot',x-90,y+90,.9);put('lantern',x+100,y+55,.95);}
- // One bridge crosses the stream rather than ending at the bank.
- let a=world(90,-290),b=world(style==='coast'?390:350,-290),n=Math.ceil(Math.hypot(b.x-a.x,b.y-a.y)/32);for(let i=0;i<n;i++)game.objects.push({type:'bridge',x:a.x+(b.x-a.x)*i/n,y:a.y+(b.y-a.y)*i/n,ex:a.x+(b.x-a.x)*(i+1)/n,ey:a.y+(b.y-a.y)*(i+1)/n,s:1.25,v:rng()});
- for(let side of [-1,1]){let pts=side<0?[[-800,490],[-580,530],[-370,490]]:[[-800,-290],[-610,-390],[-470,-380]];for(let i=1;i<pts.length;i++){let aa=world(...pts[i-1]),bb=world(...pts[i]),nn=Math.ceil(Math.hypot(bb.x-aa.x,bb.y-aa.y)/35);for(let j=0;j<nn;j++)game.objects.push({type:theme.id==='lavender'?'stonewall':'fence',x:aa.x+(bb.x-aa.x)*j/nn,y:aa.y+(bb.y-aa.y)*j/nn,ex:aa.x+(bb.x-aa.x)*(j+1)/nn,ey:aa.y+(bb.y-aa.y)*(j+1)/nn,s:1,v:rng()});}}
- const groves=[[-850,-380,240,180,14],[50,-560,270,130,12],[820,-210,180,230,13],[-1050,150,150,180,6],[830,440,200,150,6]];
- for(let [gx,gy,rx,ry,n] of groves)for(let i=0;i<n;i++){let a=rng()*Math.PI*2,r=Math.sqrt(rng()),x=gx+Math.cos(a)*rx*r,y=gy+Math.sin(a)*ry*r;if(clear(x,y,48))put(theme.trees[Math.floor(rng()*theme.trees.length)],x,y,.82+rng()*.37);}
- const fields=[[-120,390,260,140,60],[-690,-130,230,110,36],[670,270,190,110,38],[-1060,-130,130,170,22]];
- for(let [fi,[gx,gy,rx,ry,n]] of fields.entries())for(let i=0;i<n;i++){let a=rng()*Math.PI*2,r=Math.sqrt(rng()),x=gx+Math.cos(a)*rx*r,y=gy+Math.sin(a)*ry*r;if(clear(x,y,26))put(theme.flowers[fi%3],x,y,.90+rng()*.45);}
- if(style==='lavender'){for(let row=0;row<5;row++)for(let j=0;j<15;j++){let x=-150+row*62+(rng()-.5)*12,y=280+j*20+(rng()-.5)*10;if(clear(x,y,25))put('lavender',x,y,1.05);}}
- for(let i=0;i<38;i++){let a=rng()*Math.PI*2,x=Math.cos(a)*(520+rng()*650),y=Math.sin(a)*(340+rng()*300);if(clear(x,y,35))put(i%4===0?'rock':i%3===0?'fern':'bush',x,y,.65+rng()*.40);}
- for(let [x,y,type] of [[-330,180,'bench'],[-580,120,'flowerpot'],[-510,135,'flowerpot'],[-700,260,'cart'],[-270,-60,'sign'],[-740,-250,'picnic'],[-400,300,'well'],[480,170,'lamp'],[-360,30,'lantern'],[-570,310,'lantern'],[580,-200,'lantern'],[-820,-60,'mushroom'],[-890,-90,'mushroom']])if(clear(x,y,5))put(type,x,y,.90+rng()*.15);
- for(let i=0;i<22;i++){let a=rng()*Math.PI*2,x=lakeX+Math.cos(a)*lakeRX*.8,y=lakeY+Math.sin(a)*lakeRY*.8,p=world(x,y);if(game.waterAt(p.x,p.y))put(i%3===0?'lotus':'reed',x,y,.85+rng()*.25);}
- for(let [x,y,type] of [[-250,420,'person'],[-570,240,'child'],[-650,420,'cat'],[-70,300,'rabbit'],[720,400,'deer'],[-900,-230,'sheep'],[-850,20,'dog'],[-220,390,'butterfly'],[400,-420,'bird']])if(clear(x,y,5))put(type,x,y,1);
- for(let i=0;i<2;i++){let x=lakeX-40+i*75,y=lakeY,p=world(x,y);if(game.waterAt(p.x,p.y))put('duck',x,y,1);}
- for(let [x,y] of [[-50,270],[420,170],[-670,-210]])circle('firefly',x,y,55);
- game.revision++;game.checkpoint(before);return{...theme,seed,count:game.objects.length};
+ const put=(type,x,y,s=1,extra={})=>{let p=world(x,y);if(!game.contains(p.x,p.y,.06))return null;let o={type,...p,s,v:rng(),rot:(rng()-.5)*.08,yaw:(rng()-.5)*.7,...extra};game.objects.push(o);return o;};
+ const circle=(type,x,y,r)=>{let o=put(type,x,y,1,{r:r*e});if(o&&type==='water')waters.push(o);return o;};
+ const wet=(x,y,margin=0)=>{let p=world(x,y);return waters.some(o=>Math.hypot(o.x-p.x,o.y-p.y)<o.r+margin*e);};
+ const line=(type,points,width=30)=>{let path=[];for(let i=1;i<points.length;i++){let [ax,ay]=points[i-1],[bx,by]=points[i],n=Math.ceil(Math.hypot(bx-ax,by-ay)/38);for(let j=0;j<=n;j++){let t=j/n,x=ax+(bx-ax)*t,y=ay+(by-ay)*t;circle(type,x,y,width);path.push(world(x,y));}}if(type==='terrain_path')paths.push(path);};
+ const pond=(x,y,rx,ry)=>{for(let i=0;i<62;i++){let a=i*2.39996,r=Math.sqrt((i+.5)/62);circle('water',x+Math.cos(a)*rx*r,y+Math.sin(a)*ry*r,60+rng()*24);}};
+ const rail=(type,points)=>{for(let i=1;i<points.length;i++){let a=world(...points[i-1]),b=world(...points[i]),n=Math.ceil(Math.hypot(b.x-a.x,b.y-a.y)/34);for(let j=0;j<n;j++){let x=a.x+(b.x-a.x)*j/n,y=a.y+(b.y-a.y)*j/n,ex=a.x+(b.x-a.x)*(j+1)/n,ey=a.y+(b.y-a.y)*(j+1)/n;if(game.contains(x,y,.04)&&game.contains(ex,ey,.04))game.objects.push({type,x,y,ex,ey,s:type==='bridge'?1.3:1,v:rng()});}}};
+ const clear=(x,y,margin=25)=>{let p=world(x,y);return game.contains(p.x,p.y,.10)&&!wet(x,y,margin)&&!buildings.some(o=>Math.hypot(o.x-p.x,o.y-p.y)<(120+margin)*o.s)&&!paths.some(path=>path.some((v,i)=>i&&distanceSegment(p,path[i-1],v)<38*e));};
+ const bend=(rng()-.5)*300,hub=[-210+(rng()-.5)*170,40+(rng()-.5)*160], lake=[250+bend,100,200,150];let spots;
+ if(layout==='river'){let shift=bend*.7;line('water',[[shift,-780],[shift+240,-480],[shift+100,-160],[shift+320,180],[shift+100,460],[shift+400,700]],55+rng()*26);rail('bridge',[[shift+20,-160],[shift+190,-160]]);spots=[[-570,-350],[-700,270],[640,-250],[650,410]];}
+ if(layout==='lagoon'){lake.splice(0,4,250+bend,160,330,230);pond(...lake);line('water',[[lake[0]+170,250],[700,380],[1100,540]],90);rail('bridge',[[lake[0]-110,-100],[lake[0]+180,-100]]);spots=[[-650,-260],[-700,300],[520,-400],[-300,470]];}
+ if(layout==='ponds'){pond(-80,-350,210,100);pond(380,120,240,170);pond(-460,400,155,90);line('water',[[-40,-330],[230,-190],[380,120]],45);rail('bridge',[[110,-160],[340,-160]]);rail('bridge',[[-600,390],[-300,390]]);spots=[[-650,-250],[-550,120],[680,-320],[700,470],[-80,600]];lake.splice(0,4,380,120,240,170);}
+ if(layout==='canal'){line('water',[[100,-770],[100,-350],[220,-150],[220,650]],65);line('water',[[-690,120],[220,120],[780,120]],55);rail('bridge',[[90,-120],[350,-120]]);rail('bridge',[[-470,20],[-470,220]]);spots=[[-630,-390],[-230,-430],[640,-320],[-680,420],[620,430]];lake.splice(0,4,220,120,70,65);}
+ if(layout==='garden'){pond(420,-330,210,125);circle('terrain_gravel',-180,120,370);put('fountain',-180,120,1.4);for(let side of [-1,1])for(let j=0;j<3;j++){let x=-180+side*230,y=-110+j*220;circle('terrain_meadow',x,y,93);for(let i=0;i<15;i++){let a=i/15*Math.PI*2;put('hedge',x+Math.cos(a)*85,y+Math.sin(a)*60,.75);}}spots=[[-780,-350],[760,-100],[-750,350],[620,450]];lake.splice(0,4,420,-330,210,125);}
+ if(layout==='terrace'){for(let i=0;i<4;i++){circle('terrain_terrace',-700+i*280,-350+i*40,370-i*30);circle('terrain_path',-700+i*280,-240+i*40,110);}line('water',[[450,-700],[650,-410],[500,-110],[750,260],[570,600]],50);rail('bridge',[[430,-110],[590,-110]]);spots=[[-820,-390],[-420,-180],[-750,390],[80,400],[820,110]];}
+ if(layout==='farm'){pond(650,-280,140,160);line('water',[[780,-500],[650,-280],[840,90],[780,560]],45);for(let block=0;block<3;block++){let x=-380+block*330,y=320;circle('terrain_sand',x,y,200);for(let row=0;row<4;row++)for(let j=0;j<13;j++)put(theme.flowers[block%theme.flowers.length],x-90+row*56+(rng()-.5)*9,y-120+j*20,.9+rng()*.2);rail('fence',[[x-135,y-170],[x-135,y+165],[x+150,y+165]]);}spots=[[-850,-300],[-350,-360],[180,-380],[-950,360],[850,300]];lake.splice(0,4,650,-280,140,160);}
+ if(layout==='village'){pond(420,320,250,150);put('well',-100,20,1.3);circle('terrain_gravel',-100,20,240);spots=[[-700,-400],[-200,-400],[450,-450],[-820,150],[-580,500],[800,70]];lake.splice(0,4,420,320,250,150);}
+ if(layout==='camp'){pond(360,160,200,150);line('water',[[520,-650],[480,-290],[360,160],[550,630]],46);circle('terrain_gravel',-360,170,200);spots=[[-780,-340],[-400,-360],[-760,370],[-270,490],[740,-300]];put('picnic',-360,170,1.3);put('lantern',-420,160,1.2);rail('bridge',[[370,-290],[590,-290]]);lake.splice(0,4,360,160,200,150);}
+ if(layout==='coast'){for(let [x,y,r]of [[700,0,420],[900,300,430],[460,530,300]])circle('terrain_sand',x,y,r);pond(640,350,220,150);rail('bridge',[[480,120],[840,120]]);spots=[[-800,-300],[-440,-400],[-760,300],[100,430],[500,-330]];lake.splice(0,4,640,350,220,150);}
+ // Roads connect an asymmetric village; branch count and building order vary with the seed.
+ line('terrain_path',[[-850,620],[-520,380],hub,[120,-120]],32);spots=spots.map(([x,y])=>[x+(rng()-.5)*110,y+(rng()-.5)*85]);
+ for(let [i,[x,y]]of spots.entries()){if(wet(x,y,125))continue;let type=theme.houses[i%theme.houses.length],s=.83+rng()*.32;if(layout==='camp'&&i%2===0)type='tent';line('terrain_path',[[x,y+90],[(x+hub[0])*.5,(y+hub[1])*.5+60],hub],25);let o=put(type,x,y,s,{yaw:(rng()-.5)*.9});if(o)buildings.push(o);put('flowerpot',x-80,y+80,.9);put(pick(['lamp','lantern','windchime']),x+90,y+60,.9);if(rng()>.4)rail('fence',[[x-125,y-50],[x-125,y+100]]);}
+ if(layout!=='terrace')for(let i=0;i<3;i++)circle('terrain_mound',-800+i*720,-600+(rng()-.5)*200,260+rng()*110);
+ // Tree masses, little clearings and themed flower beds have different sizes and focal points each time.
+ let groves=5+Math.floor(rng()*4);for(let j=0;j<groves;j++){let a=j/groves*Math.PI*2+rng()*.4,gx=Math.cos(a)*(750+rng()*350),gy=Math.sin(a)*(450+rng()*220),rx=120+rng()*220,ry=90+rng()*170,n=9+Math.floor(rng()*17);for(let i=0;i<n;i++){let a=rng()*Math.PI*2,r=Math.sqrt(rng()),x=gx+Math.cos(a)*rx*r,y=gy+Math.sin(a)*ry*r;if(clear(x,y,45))put(pick(theme.trees),x,y,.7+rng()*.55);}}
+ for(let j=0;j<7;j++){let gx=(rng()-.5)*2000,gy=(rng()-.5)*1100,rx=100+rng()*200,ry=70+rng()*100,type=theme.flowers[j%theme.flowers.length];for(let i=0;i<38+rng()*20;i++){let a=rng()*Math.PI*2,r=Math.sqrt(rng()),x=gx+Math.cos(a)*rx*r,y=gy+Math.sin(a)*ry*r;if(clear(x,y,25))put(type,x,y,.8+rng()*.45);}}
+ for(let i=0;i<90;i++){let x=(rng()-.5)*2500,y=(rng()-.5)*1500;if(clear(x,y,35))put(pick(theme.id==='highland'?['slate','rock','basalt','fern']:['bush','fern','rock','pebble','mushroom']),x,y,.6+rng()*.4);}
+ const ornaments=theme.id==='bamboo'||theme.id==='sakura'?['lantern','lamp','bench','windchime']:theme.id==='camp'?['picnic','bench','lantern','mushroom','sign']:['cart','flowerpot','bench','picnic','lamp','well','sign'];
+ for(let i=0;i<25;i++){let x=(rng()-.5)*1900,y=(rng()-.5)*1250;if(clear(x,y,10))put(pick(ornaments),x,y,.8+rng()*.35);}
+ for(let i=0;i<32;i++){let a=rng()*Math.PI*2,x=lake[0]+Math.cos(a)*lake[2]*.8,y=lake[1]+Math.sin(a)*lake[3]*.8;if(wet(x,y))put(i%3?'reed':'lotus',x,y,.75+rng()*.3);}
+ let visitors=0;for(let i=0;i<90&&visitors<12;i++){let x=(rng()-.5)*1900,y=(rng()-.5)*1200;if(clear(x,y,5)){put(pick(['person','child','cat','dog','rabbit','deer','sheep','butterfly','bird']),x,y,.95);visitors++;}}
+ for(let i=0;i<3;i++){let x=lake[0]+(rng()-.5)*80,y=lake[1]+(rng()-.5)*60;if(wet(x,y))put('duck',x,y,1);}
+ for(let i=0;i<4;i++)circle('firefly',(rng()-.5)*1400,(rng()-.5)*800,55);
+ game.revision++;game.checkpoint(before);return{...theme,layout,seed,count:game.objects.length};
 }
