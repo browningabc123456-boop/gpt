@@ -1,0 +1,13 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#eae5d9"><title>我在末日前囤物资</title><link rel="stylesheet" href="assets/style.css"></head><body>
+<div id="viewport"></div><div id="loading">正在打开你的大仓库…</div>
+<header><div class="logo">⌂</div><div><small>MY APOCALYPSE STOCKPILE</small><h1>我在末日前囤物资</h1></div><button id="help" aria-label="操作说明">?</button></header>
+<div class="summary"><b id="qty">0 件物资</b><span id="kinds">0 种</span><span id="fcount">6 件家具</span><span id="saved">自动保存</span></div>
+<aside id="catalog"><div class="catalog-title"><h2>慢慢，把安心囤满。</h2><button id="furntab">＋ 储物家具</button></div><input id="search" placeholder="搜索物资，例如：药、手电、大米" aria-label="搜索物资"><nav id="tabs"></nav><div id="products"></div><footer id="selected">选择物资，开始收纳</footer></aside>
+<section id="toptools"><button id="overview">▦ 全仓库</button><button id="focus">⌕ 近看家具</button><button id="zoomIn">＋</button><button id="zoomOut">−</button><button id="night">☾ 夜晚</button><button id="sound">♫ 音效开</button><button id="immersive">▧ 欣赏</button></section>
+<section id="rackbar"><span>我的储物区</span><div id="racks"></div></section>
+<section id="camera-controls"><button id="panCamera" class="active">✥ 平移</button><button id="orbitCamera">↻ 环绕</button><button id="topView">俯视</button><button id="frontView">正面</button><button id="turnCameraLeft">左45°</button><button id="turnCameraRight">右45°</button><button id="heightUp">↑ 视点</button><button id="heightDown">↓ 视点</button></section><div id="hint">长按摆纵列 · 横拖铺横排 · 双指缩放移镜头</div>
+<div id="placement"><b id="placementname"></b><span>点击仓库空地放置，或拖动已有家具</span><button id="cancelplace">取消新增</button></div>
+<div id="fcontrols"><span id="furnname"></span><button id="rotateLeft">↶ 转15°</button><button id="rotateRight">↷ 转15°</button><button id="rotate90">转90°</button><button id="deletef">移除家具</button></div>
+<section id="tools"><button data-mode="stock" class="active">▤ 收纳</button><button data-mode="furniture">▦ 移家具</button><button data-mode="camera">✥ 镜头</button><button data-mode="erase">⌫ 收回</button><button id="undo">↶ 撤销</button><button id="demo">✧ 灵感</button></section>
+<div id="toast" role="status"></div><dialog id="modal"><button id="close" aria-label="关闭">×</button><div id="modalbody"></div></dialog>
+<script src="assets/game.js"></script></body></html>

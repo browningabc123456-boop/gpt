@@ -28,3 +28,6 @@ try{await copyFile(join(root,'releases/little-places-xhs-expand.zip'),join(root,
 
 // Publish the separately built papercraft game alongside the existing worlds.
 await copyFile(join(root,'island.html'),join(root,'dist/island.html'));
+
+// Publish the independent, self-contained warehouse game under its own URL.
+await (await import('node:fs/promises')).cp(new URL('./apocalypse-stockpile/', import.meta.url), new URL('./dist/apocalypse-stockpile/', import.meta.url), {recursive:true});
