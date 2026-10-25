@@ -1,0 +1,80 @@
+{
+  "scope": "one rack and eight supplies: visual approval sample",
+  "assets": [
+    {
+      "id": "water",
+      "meshes": 5,
+      "vertices": 6273,
+      "triangles": 11264
+    },
+    {
+      "id": "rice",
+      "meshes": 3,
+      "vertices": 6856,
+      "triangles": 12284
+    },
+    {
+      "id": "fish",
+      "meshes": 2,
+      "vertices": 2716,
+      "triangles": 5148
+    },
+    {
+      "id": "honey",
+      "meshes": 4,
+      "vertices": 2053,
+      "triangles": 2816
+    },
+    {
+      "id": "apple",
+      "meshes": 3,
+      "vertices": 3221,
+      "triangles": 6196
+    },
+    {
+      "id": "towel",
+      "meshes": 2,
+      "vertices": 8794,
+      "triangles": 16448
+    },
+    {
+      "id": "pot",
+      "meshes": 4,
+      "vertices": 3663,
+      "triangles": 6848
+    },
+    {
+      "id": "lantern",
+      "meshes": 6,
+      "vertices": 4497,
+      "triangles": 8380
+    },
+    {
+      "id": "rack",
+      "meshes": 6,
+      "vertices": 23312,
+      "triangles": 46508
+    },
+    {
+      "id": "room",
+      "meshes": 7,
+      "vertices": 9006,
+      "triangles": 16360
+    }
+  ],
+  "browser_checks": [
+    "8 new asset models, rack and room load at authored scale",
+    "demo arrangement follows game occupancy and support rules",
+    "single-finger rotation changes the actual 3D camera",
+    "two-finger zoom works in the detailed model view",
+    "touch placement and undo use real game state",
+    "approved reference image opens for side-by-side comparison",
+    "sample does not write the original game save",
+    "strict offline CSP loads with no missing or external requests"
+  ],
+  "browser_errors": [],
+  "actual_screenshot": "assets/preview.png",
+  "source_glb_sha256": "03d52297b43d6c16ca03d7a13d9ea3590bf767ca4f83709a1e4124ac77215e88",
+  "sample_js_sha256": "592efcfc70b55ec04826349af6672466e96efdc05f4726b273d75b962b822b1e",
+  "validation_limit": "Chromium touch simulation and offline CSP; visual prototype, no real-device or official Xiaohongshu acceptance."
+}
