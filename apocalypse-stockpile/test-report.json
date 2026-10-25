@@ -1,178 +1,186 @@
 {
-  "version": "0.5.0",
-  "date": "2026-10-24",
-  "environment": "Chromium headless + CDP真实触摸事件模拟 + 软件WebGL；不是Android/iOS真机",
-  "newPlayerGroupsPassed": 20,
-  "oldProblemsReproduced": 4,
-  "findings": [
+  "version": "0.6.0",
+  "updated_utc": "2026-10-25T13:51:49.270955+00:00",
+  "build_sha256": "e1cf377e4339a8b973ba9daf8342b517f0424c28bd2be8e79065625296cd86bc",
+  "passed_groups": 28,
+  "suites": [
     {
-      "issue": "主画面操作条占空间",
-      "fix": "删掉截图标出的顶栏、方向角度栏和场景下方提示条。保留储物区、底部模式栏；音效/昼夜收进“？”设置。",
-      "evidence": "在360×780、390×844、430×932、844×390横屏、1280×800检查工作区与控件边界。"
+      "name": "手机核心交互",
+      "passed": 10,
+      "tests": [
+        {
+          "name": "new single GPU context starts",
+          "status": "pass",
+          "ms": 8257
+        },
+        {
+          "name": "unsupported 3D shows recovery instead of infinite loading",
+          "status": "pass",
+          "ms": 658
+        },
+        {
+          "name": "marked UI physically removed and responsive workspace",
+          "status": "pass",
+          "ms": 14739
+        },
+        {
+          "name": "category and search always agree with selected object",
+          "status": "pass",
+          "ms": 9640
+        },
+        {
+          "name": "two fingers pan, pinch and twist without editing items or selection",
+          "status": "pass",
+          "ms": 16385
+        },
+        {
+          "name": "tap, horizontal paint, grouped undo, long column, touch cancel",
+          "status": "pass",
+          "ms": 18877
+        },
+        {
+          "name": "one erase swipe removes only one item per stack",
+          "status": "pass",
+          "ms": 16196
+        },
+        {
+          "name": "failed long press does not consume undo",
+          "status": "pass",
+          "ms": 105160
+        },
+        {
+          "name": "settings, sound switch, night, immersive exit, reload and saved piles",
+          "status": "pass",
+          "ms": 24866
+        },
+        {
+          "name": "demo and every furniture geometry fit and remain valid",
+          "status": "pass",
+          "ms": 23808
+        }
+      ]
     },
     {
-      "issue": "相机无法全靠手势完成",
-      "fix": "单指环绕和俯仰；双指屏幕平面平移（包括高度）、张合缩放、扭转朝向。双击聚焦；双指轻点两次回到全仓库。",
-      "evidence": "使用浏览器真实触摸事件路径执行单指、双指联合手势；双指操作不增减物资、不改变选中家具；复位后的画面与原全景一致。"
+      "name": "音效与平台存储",
+      "passed": 10,
+      "tests": [
+        {
+          "name": "furniture add, touch move loaded stack, rotate, delete and undo",
+          "status": "pass"
+        },
+        {
+          "name": "boundary rotation is rejected without corrupting furniture",
+          "status": "pass"
+        },
+        {
+          "name": "native storage: drag coalesces writes and persists the final state",
+          "status": "pass"
+        },
+        {
+          "name": "corrupt save is protected after trial interaction",
+          "status": "pass"
+        },
+        {
+          "name": "audio decoded on actual touch placement, mute prevents subsequent playback",
+          "status": "pass"
+        },
+        {
+          "name": "low graphics starts and small-height search remains usable",
+          "status": "pass"
+        },
+        {
+          "name": "empty warehouse can add furniture again and does not fake a demo",
+          "status": "pass"
+        },
+        {
+          "name": "fallback dialog blocks actual shelf taps behind its backdrop",
+          "status": "pass"
+        },
+        {
+          "name": "each of ten categories plays its own placement audio",
+          "status": "pass"
+        },
+        {
+          "name": "single-finger orbit and two-finger double tap return to overview",
+          "status": "pass"
+        }
+      ]
     },
     {
-      "issue": "切分类后仍拿着上一类物品",
-      "fix": "旧版切到洗护清洁时，底部仍是矿泉水。现在分类选中该类首件，搜索结果与实际选物一致。",
-      "evidence": "旧版问题已复现；新版切类、搜索、实际选中高亮检查通过。"
-    },
-    {
-      "issue": "一次滑动可能反复收走同一摞",
-      "fix": "旧版俯视反复经过一摞4件物品，剩余变为0。现在按物品堆记录本次手势已经过的位置，同一次滑动只取顶部1件。",
-      "evidence": "旧版整摞收回已复现；新版以带间隔的连续触摸移动回归，剩余3件，撤销恢复4件。"
-    },
-    {
-      "issue": "失败长按占用撤销",
-      "fix": "旧版旋转15°后，在满架上无效长按，再撤销仍停留在15°。现在首次成功改变物资后才创建撤销记录。",
-      "evidence": "旧版已复现；新版撤销直接恢复到0°，无效动作不占历史。"
-    },
-    {
-      "issue": "连续铺货逐格重建、逐格写档",
-      "fix": "同一触摸事件内的数据先合并，按帧刷新场景，连续动作结束后保存；保留整组撤销。",
-      "evidence": "模拟小红书存档接口，一次横拖的写入次数少于新增件数，刷新后最终数量一致。没有用这项测试宣称真机帧率。"
-    },
-    {
-      "issue": "低资源环境第二个3D上下文导致卡加载",
-      "fix": "旧版缩略图创建第二个WebGL绘图上下文；仅允许一个时不能启动。现在缩略图复用主绘图上下文。",
-      "evidence": "旧版限制环境问题已复现；新版单上下文启动通过。完全没有WebGL时，显示重试和低画质入口，不再无限等待。"
-    },
-    {
-      "issue": "搜索键盘与小高度适配",
-      "fix": "点搜索结果后主动收起输入焦点，缩小窗口时保护绘图尺寸；设置弹层的降级模式也阻止误点背后货架。",
-      "evidence": "360×500小高度、低画质启动、搜索结果选择、无原生弹窗能力的背景货架点击检查通过。"
+      "name": "新增家具手势与画面验证",
+      "passed": 8,
+      "tests": [
+        {
+          "name": "two-finger furniture rotation",
+          "status": "pass"
+        },
+        {
+          "name": "single undo for whole gesture",
+          "status": "pass"
+        },
+        {
+          "name": "stack travels with furniture",
+          "status": "pass"
+        },
+        {
+          "name": "cancel gesture protects save",
+          "status": "pass"
+        },
+        {
+          "name": "warm night lighting",
+          "status": "pass"
+        },
+        {
+          "name": "360px small phone through desktop layout",
+          "status": "pass"
+        },
+        {
+          "name": "no external assets or missing resources",
+          "status": "pass"
+        },
+        {
+          "name": "idle rendering stops",
+          "status": "pass"
+        }
+      ]
     }
   ],
-  "results": [
+  "geometry": "120种模型的外形边界、材质分组覆盖、贴图坐标有效性及15类家具、物品堆叠/支撑/高度/移动规则通过Node测试。",
+  "fixes": [
     {
-      "name": "reproduce old category mismatch",
-      "status": "pass",
-      "ms": 4137,
-      "label": "旧版分类错选复现"
+      "problem": "物资包装相似，材质缺少区别",
+      "change": "120种物资使用独立中文包装与插画，区分玻璃、金属、塑料、陶瓷和布料；修正袜子、冬季手套、扳手等造型。"
     },
     {
-      "name": "old second WebGL context prevents startup",
-      "status": "pass",
-      "ms": 1745,
-      "label": "旧版第二绘图上下文启动失败复现"
+      "problem": "家具菜单使用相似的货架图标",
+      "change": "15类家具改为实际3D模型预览，统一橡木、森林绿钢架、奶油白冷柜、透明柜与藤编材质。"
     },
     {
-      "name": "new single GPU context starts",
-      "status": "pass",
-      "ms": 1094,
-      "label": "新版单绘图上下文启动"
+      "problem": "夜景仍然过亮，暖灯效果弱",
+      "change": "单独调节夜间环境反射、窗色与冷暖照明，让雨窗和局部暖灯形成对比。"
     },
     {
-      "name": "unsupported 3D shows recovery instead of infinite loading",
-      "status": "pass",
-      "ms": 638,
-      "label": "不支持3D时提供恢复入口"
+      "problem": "慢速连续拖放反复写入存档",
+      "change": "同一次拖放结束时合并保存；切后台、取消操作时正确收尾。"
     },
     {
-      "name": "marked UI physically removed and responsive workspace",
-      "status": "pass",
-      "ms": 3447,
-      "label": "删除标记控件与五种窗口布局"
+      "problem": "静止画面持续重绘",
+      "change": "仅在镜头、摆放、动画、灯光或窗口尺寸变化时重绘；验证静止时渲染帧计数停止。"
     },
     {
-      "name": "category and search always agree with selected object",
-      "status": "pass",
-      "ms": 2411,
-      "label": "分类/搜索/选物一致"
+      "problem": "按需重绘后镜头回全景偶发不刷新",
+      "change": "全景复位显式触发重绘，并重测单指转向、双指双击复位。"
     },
     {
-      "name": "two fingers pan, pinch and twist without editing items or selection",
-      "status": "pass",
-      "ms": 5301,
-      "label": "双指平移缩放扭转且不改物资"
+      "problem": "家具转向依赖按钮",
+      "change": "移家具模式支持双指扭转与移动，保留按钮；手势支持整组撤销和取消恢复，物资堆叠随家具移动。"
     },
     {
-      "name": "tap, horizontal paint, grouped undo, long column, touch cancel",
-      "status": "pass",
-      "ms": 8634,
-      "label": "点击、横排、纵列、整组撤销、触摸取消"
-    },
-    {
-      "name": "one erase swipe removes only one item per stack",
-      "status": "pass",
-      "ms": 5549,
-      "label": "同一滑动每堆只收一件"
-    },
-    {
-      "name": "failed long press does not consume undo",
-      "status": "pass",
-      "ms": 12606,
-      "label": "无效长按不消耗撤销"
-    },
-    {
-      "name": "settings, sound switch, night, immersive exit, reload and saved piles",
-      "status": "pass",
-      "ms": 5414,
-      "label": "设置、静音、昼夜、欣赏退出、存档刷新"
-    },
-    {
-      "name": "demo and every furniture geometry fit and remain valid",
-      "status": "pass",
-      "ms": 7001,
-      "label": "15类家具与大批量示范有效性"
-    },
-    {
-      "name": "furniture add, touch move loaded stack, rotate, delete and undo",
-      "status": "pass",
-      "label": "新增家具、带堆叠拖动、旋转、删除和恢复"
-    },
-    {
-      "name": "boundary rotation is rejected without corrupting furniture",
-      "status": "pass",
-      "label": "边界旋转拒绝且数据不损坏"
-    },
-    {
-      "name": "native storage: drag coalesces writes and persists the final state",
-      "status": "pass",
-      "label": "模拟宿主合并存档及写入失败提示"
-    },
-    {
-      "name": "corrupt save is protected after trial interaction",
-      "status": "pass",
-      "label": "损坏原存档不被覆盖"
-    },
-    {
-      "name": "audio decoded on actual touch placement, mute prevents subsequent playback",
-      "status": "pass",
-      "label": "触摸放置音成功播放、静音阻止后续声音"
-    },
-    {
-      "name": "low graphics starts and small-height search remains usable",
-      "status": "pass",
-      "label": "低画质与小高度搜索"
-    },
-    {
-      "name": "empty warehouse can add furniture again and does not fake a demo",
-      "status": "pass",
-      "label": "空仓库可重新布置，空示范不虚报成功"
-    },
-    {
-      "name": "fallback dialog blocks actual shelf taps behind its backdrop",
-      "status": "pass",
-      "label": "降级弹层阻止背后货架误触"
-    },
-    {
-      "name": "each of ten categories plays its own placement audio",
-      "status": "pass",
-      "label": "十类实际放置分别播放独立音频"
-    },
-    {
-      "name": "single-finger orbit and two-finger double tap return to overview",
-      "status": "pass",
-      "label": "单指环绕、双指双击精确回全景"
+      "problem": "小屏场景空间不足",
+      "change": "重排手机界面，减少装饰栏，验证360×500、390×844、横屏及桌面布局。"
     }
   ],
-  "limits": [
-    "未进行Android/iOS实体手机及小红书真实容器验收。",
-    "示范压力场景约963件；不是全部24件家具无限满仓的性能保证。",
-    "音效已在测试浏览器成功解码播放，仍受真实设备媒体音量和宿主自动播放策略影响。"
-  ]
+  "scope": "Chromium手机尺寸与触控模拟、严格CSP离线环境、模拟小红书Storage接口；未进行Android/iOS或小红书真实容器验收。",
+  "performance_note": "939件物资样例的局部视图为67次绘制，场景静止时停止持续重绘；这不是手机实测帧率。",
+  "art_note": "采用已确认总览图的配色、材质、雨窗和暖灯方向，运行时为可交互3D模型。"
 }
