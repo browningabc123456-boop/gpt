@@ -1,309 +1,174 @@
 {
-  "version": "0.7.0",
-  "updated_utc": "2026-10-26T04:39:47.825357+00:00",
-  "art": "120种物资、15类储物家具均从Blender资产库加载，八种样板为扩展起点；包含近看和远景共270个模型版本。模型由Blender脚本制作，不是照片自动变成3D或外购扫描模型。",
-  "sha256": "32bd541f05e3db68ac22d6bdcf772bfc42e4e6ee5bfcf951eff4ac274bf63a72",
-  "checks": [
+  "version": "0.8.0",
+  "updated_utc": "2026-10-26T10:52:43.947124+00:00",
+  "sha256": "84e1138e8a89ea59595b5f322bedc4db53843defdafaaed94ba28c78747479b0",
+  "food_count": 192,
+  "item_count": 260,
+  "furniture_types": 15,
+  "rule_checks": 8,
+  "mobile_checks": [
     {
-      "label": "120 supplies and 15 authored storage furniture load",
+      "name": "24 photo food icons load for a food category",
+      "pass": true
+    },
+    {
+      "name": "horizontal finger swipe adds one layer across all 12 existing stacks",
       "pass": true,
       "detail": {
-        "models": 135,
-        "metrics": {
-          "calls": 18,
-          "triangles": 402790,
-          "geometries": 27,
-          "textures": 6,
-          "cpuRenderMs": 1821.5,
-          "pixelRatio": 1.25,
-          "nearMode": true,
-          "stockNearMode": false
-        },
-        "valid": 10,
-        "images": true
+        "count": 24
       }
     },
     {
-      "label": "cancel clear changes nothing",
-      "pass": true
-    },
-    {
-      "label": "clear removes all shelf and container items",
-      "pass": true
-    },
-    {
-      "label": "clear preserves all furniture",
-      "pass": true
-    },
-    {
-      "label": "undo restores entire warehouse exactly",
-      "pass": true
-    },
-    {
-      "label": "undo survives save and reload",
-      "pass": true
-    },
-    {
-      "label": "clear confirmation counts stack layers",
-      "pass": true
-    },
-    {
-      "label": "clear and undo restore individual stack order",
-      "pass": true
-    },
-    {
-      "label": "find a reachable shelf cell",
+      "name": "second horizontal swipe creates the third full row layer",
       "pass": true,
       "detail": {
-        "clientX": 174.5811634739891,
-        "clientY": 375.7497961985614
+        "count": 36
       }
     },
     {
-      "label": "physical touch places one item, not a long-press column",
-      "pass": true,
-      "detail": {
-        "total": 1
-      }
-    },
-    {
-      "label": "long press places a depth column",
-      "pass": true,
-      "detail": {
-        "column": 10
-      }
-    },
-    {
-      "label": "one undo removes the entire long-press column",
+      "name": "a full shelf rejects overflow without changing other piles",
       "pass": true
     },
     {
-      "label": "single finger rotates camera",
+      "name": "one undo removes exactly one swipe layer",
       "pass": true
     },
     {
-      "label": "two finger pan and pinch move camera",
+      "name": "clear removes every layer on a normal rack",
       "pass": true
     },
     {
-      "label": "full warehouse uses shared materials, instances and distant LOD",
-      "pass": true,
-      "detail": {
-        "items": "939 件物资",
-        "metrics": {
-          "calls": 122,
-          "triangles": 550134,
-          "geometries": 158,
-          "textures": 6,
-          "cpuRenderMs": 2.7000000001862645,
-          "pixelRatio": 1.25,
-          "nearMode": false,
-          "stockNearMode": false
-        }
-      }
-    },
-    {
-      "label": "all 15 furniture cards are available",
+      "name": "clear undo restores the exact layered arrangement",
       "pass": true
     },
     {
-      "label": "search finds different-size supplies across categories",
+      "name": "layer adjustment rebuilds the visible shelf and preserves all stock",
       "pass": true
     },
     {
-      "label": "no JS/shader errors or missing/external resources under offline CSP",
+      "name": "layer adjustment can be undone exactly",
+      "pass": true
+    },
+    {
+      "name": "short tap on an existing pile adds a single item",
+      "pass": true
+    },
+    {
+      "name": "long press stocks depth and stacks existing depth cells",
+      "pass": true
+    },
+    {
+      "name": "depth gesture undoes as one group",
+      "pass": true
+    },
+    {
+      "name": "compressed v5 storage survives reload with stack order intact",
+      "pass": true
+    },
+    {
+      "name": "one finger still rotates the warehouse camera",
+      "pass": true
+    },
+    {
+      "name": "two-finger camera pan and zoom do not place stock",
+      "pass": true
+    },
+    {
+      "name": "search finds a newly added food across all eight food categories",
+      "pass": true
+    },
+    {
+      "name": "small portrait viewport keeps the warehouse reachable",
+      "pass": true
+    },
+    {
+      "name": "strict offline CSP has no shader errors, missing assets or external requests",
       "pass": true,
       "detail": {
         "errors": [],
-        "consoleErrors": [],
         "missing": [],
         "external": []
       }
     }
   ],
-  "flow_checks": [
+  "platform_checks": [
     {
-      "name": "furniture add, touch move loaded stack, rotate, delete and undo",
-      "status": "pass"
-    },
-    {
-      "name": "boundary rotation is rejected without corrupting furniture",
-      "status": "pass"
-    },
-    {
-      "name": "native storage: drag coalesces writes and persists the final state",
-      "status": "pass"
-    },
-    {
-      "name": "corrupt save is protected after trial interaction",
-      "status": "pass"
-    },
-    {
-      "name": "audio decoded on actual touch placement, mute prevents subsequent playback",
-      "status": "pass"
-    },
-    {
-      "name": "low graphics starts and small-height search remains usable",
-      "status": "pass"
-    },
-    {
-      "name": "empty warehouse can add furniture again and does not fake a demo",
-      "status": "pass"
-    },
-    {
-      "name": "fallback dialog blocks actual shelf taps behind its backdrop",
-      "status": "pass"
-    },
-    {
-      "name": "each of ten categories plays its own placement audio",
-      "status": "pass"
-    }
-  ],
-  "compatibility": {
-    "pass": true,
-    "cases": [
-      {
-        "low": false,
+      "name": "WebGL1顶点属性、v4迁移、原生保存及旧档保护",
+      "pass": true,
+      "gpu": {
         "webgl2": false,
-        "hardwareSlots": 16,
-        "programs": [
-          {
-            "name": "",
-            "slots": 4
-          },
-          {
-            "name": "",
-            "slots": 8
-          },
-          {
-            "name": "",
-            "slots": 2
-          },
-          {
-            "name": "",
-            "slots": 1
-          },
-          {
-            "name": "",
-            "slots": 6
-          },
-          {
-            "name": "",
-            "slots": 6
-          },
-          {
-            "name": "",
-            "slots": 2
-          }
-        ],
-        "metrics": {
-          "calls": 18,
-          "triangles": 402790,
-          "geometries": 27,
-          "textures": 6,
-          "cpuRenderMs": 2052.2999999998137,
-          "pixelRatio": 1,
-          "nearMode": true,
-          "stockNearMode": false
-        },
-        "shadows": true
+        "shadows": true,
+        "pixelRatio": 1,
+        "slots": [
+          4,
+          3,
+          2,
+          7,
+          2,
+          1,
+          7,
+          2
+        ]
       },
-      {
-        "low": true,
+      "storageBytes": 628
+    },
+    {
+      "name": "省电画质、WebGL1、原生存储重开",
+      "pass": true,
+      "gpu": {
         "webgl2": false,
-        "hardwareSlots": 16,
-        "programs": [
-          {
-            "name": "",
-            "slots": 4
-          },
-          {
-            "name": "",
-            "slots": 8
-          },
-          {
-            "name": "",
-            "slots": 2
-          },
-          {
-            "name": "",
-            "slots": 1
-          },
-          {
-            "name": "",
-            "slots": 6
-          },
-          {
-            "name": "",
-            "slots": 2
-          }
-        ],
-        "metrics": {
-          "calls": 24,
-          "triangles": 383895,
-          "geometries": 40,
-          "textures": 5,
-          "cpuRenderMs": 1.2999999998137355,
-          "pixelRatio": 1,
-          "nearMode": false,
-          "stockNearMode": false
-        },
-        "shadows": false
-      }
-    ],
-    "errors": [],
-    "scope": "WebGL1, <=8 vertex attribute slots including instancing, low quality startup, clear/undo. Software GPU; no actual phone FPS."
-  },
-  "fixes": [
-    {
-      "problem": "样板的渲染负担较重",
-      "change": "详细模型与远景模型分开；重复物品实例化，合并实体材质；玻璃保留透明与反射，取消整场景折射；移除全屏多遍后期处理，只保留局部阴影。"
-    },
-    {
-      "problem": "切换分类时现场生成缩略图",
-      "change": "135个新模型提前渲染为一张缩略图表，手机切换分类、搜索和滚动不再调用GPU截图。"
-    },
-    {
-      "problem": "模型数据偏大",
-      "change": "压缩顶点和索引数据，按需解压当前使用的模型。图册数据由约19.3MB降为8.6MB，运行脚本约9MB；传输大小取决于网站压缩。"
-    },
-    {
-      "problem": "延迟输入可能把短点按当成长按",
-      "change": "等待点按判定时延后重绘；按事件原始时间戳区分短点按，避免缓冲中的短按留下整列物品。"
-    },
-    {
-      "problem": "缺少一键清空",
-      "change": "顶部垃圾桶可清空所有货架物资、容器内堆叠和待恢复物资。确认数量包含每一层，保留家具、位置、方向和设置，可整组撤销。"
-    },
-    {
-      "problem": "容器结构和取景不够清楚",
-      "change": "重新制作冰箱内胆、门封、门篮、抽屉、铰链；冷柜有内胆、开盖、胶条、温控和散热孔；木柜、衣柜、玻璃柜、收纳箱等分别制作。深箱改用较高视角，取景包括掀起的盖子。"
-    },
-    {
-      "problem": "前排家具遮住正在查看的储物柜",
-      "change": "近看时将挡住目标的前排家具暂时隐藏，移动家具模式恢复全部家具，物资和布局数据保持不变。"
-    },
-    {
-      "problem": "锅盖和部分薄面被单面裁剪",
-      "change": "按原Blender材质保留双面表面，修复从上方看不见锅盖等薄面的问题。"
-    },
-    {
-      "problem": "低配置兼容和静止画面",
-      "change": "场景按变化重绘、降低手机像素倍率，并保留省电画质。实体材质的数据打包后，实例化绘制只需8个顶点属性位置，另测WebGL1启动。"
+        "shadows": false,
+        "pixelRatio": 1,
+        "slots": [
+          4,
+          3,
+          2,
+          7,
+          2,
+          1
+        ]
+      },
+      "storageBytes": 628
     }
   ],
-  "performance": {
-    "items": "939 件物资",
+  "smoke": {
+    "errors": [],
     "metrics": {
-      "calls": 122,
-      "triangles": 550134,
-      "geometries": 158,
-      "textures": 6,
-      "cpuRenderMs": 2.7000000001862645,
+      "calls": 29,
+      "triangles": 16880,
+      "geometries": 143,
+      "textures": 15,
+      "cpuRenderMs": 3.099999999627471,
       "pixelRatio": 1.25,
-      "nearMode": false,
+      "nearMode": true,
       "stockNearMode": false
     }
   },
-  "limits": "Chromium手机尺寸和触控模拟、软件GPU、严格离线CSP、模拟小红书Storage接口。未进行Android/iOS真实手机帧率或小红书真实容器、正式上架审核。绘制数量为记录时的局部视角，不能当作全设备FPS承诺。"
+  "fixes": [
+    {
+      "problem": "食物种类不足",
+      "change": "食品扩充至192种，8个食品分类；加上68种原有生活物资，共260种可放置物资。"
+    },
+    {
+      "problem": "食物几何造型偏离确认图册",
+      "change": "192种食物改用透明写实图片，作为场景和菜单的实际运行素材；仓库增加暖木、雨窗和绿架背景。食物采用2.5D方式，家具仍为可操作的3D物件。"
+    },
+    {
+      "problem": "食物与家具大小失衡、层高浪费",
+      "change": "按实物宽高深度设置尺寸，重设15类家具尺寸并按实际层高重建层板。普通架柜可调3–8层；默认钢架支持三层罐头或两层常见干粮袋接近填满。"
+    },
+    {
+      "problem": "只有箱体能堆叠，横划无法增加一层",
+      "change": "所有15类储物家具共用堆叠规则；划过已有一排即整排加一层，长按继续纵列摆放。检查支撑面积与层高，满层不会穿过层板。整次手势可一次撤销。"
+    },
+    {
+      "problem": "旧存档尺寸变更与保存体积",
+      "change": "v3/v4迁移至v5保留位置、方向、物品及堆叠；暂时放不下的留在待恢复区。压缩并校验v5存档，旧档键保持可回退。"
+    },
+    {
+      "problem": "手机卡片和图片边缘问题",
+      "change": "修复图集相邻单元的碎片、SVG留白露出邻图、手机名称被裁切；预制缩略图带版本缓存，食品实例化与局部重绘减少几何负担。"
+    }
+  ],
+  "limits": "测试为Chromium手机触控模拟、软件GPU、WebGL1、严格离线CSP及模拟小红书Storage接口。未进行Android/iOS真机FPS、真实小红书容器验收或官方审核。食物是写实图片构成的2.5D资产，不是全角度写实3D模型；远处背景物资属于装饰图片。"
 }
