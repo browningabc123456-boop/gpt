@@ -17,3 +17,9 @@ dialog{border:1px solid var(--line);border-radius:12px;background:var(--paper);c
 
 @media(pointer:coarse),(max-width:1000px){#products .product .thumb{width:70px;height:56px}#products .furniture-card .thumb{width:68px;height:60px}}
 @media(pointer:coarse) and (max-height:600px),(max-width:1000px) and (max-height:600px){#products .product .thumb{width:40px;height:40px}#products .furniture-card .thumb{width:50px;height:44px}}
+
+/* First visit has one quiet loading state. Recovery actions appear only on trouble. */
+.boot-actions{display:none}.boot-failed .boot-actions,.boot-slow .boot-actions{display:flex}
+#scenes{flex-shrink:0;white-space:nowrap;font-size:11px;padding:7px 10px;min-height:38px;background:#e5e7d7;border-color:transparent;margin-right:7px}
+.scene-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.scene-option{display:flex;flex-direction:column;text-align:left;gap:4px;padding:7px;overflow:hidden;min-width:0}.scene-option b{font-size:13px}.scene-option small{font-size:10px;opacity:.8}.scene-swatch{display:block;width:100%;height:84px;border-radius:4px;background-size:cover;background-position:center}.scene-granary{background-color:#b79265;background-image:url(scene-granary.webp)}.scene-rain{background-color:#748d91;background-image:url(scene-rain.webp)}.scene-forest{background-color:#8f9c77;background-image:url(scene-forest.webp)}.scene-coast{background-color:#b0c7c2;background-image:url(scene-coast.webp)}
+@media(pointer:coarse),(max-width:1000px){#rackbar{gap:0}#scenes{min-height:36px;padding:5px 9px;margin-right:6px}}@media(pointer:coarse) and (max-height:600px),(max-width:1000px) and (max-height:600px){#scenes{min-height:30px;padding:4px 9px;font-size:10px}.scene-swatch{height:65px}}
