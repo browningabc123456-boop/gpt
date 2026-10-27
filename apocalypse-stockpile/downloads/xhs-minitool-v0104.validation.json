@@ -1,0 +1,80 @@
+{
+  "version": "0.10.4",
+  "skill": {
+    "name": "minitool-zip-builder",
+    "version": "1.8.0",
+    "installed_path": "/workspace/work/shelter/.codex/skills/minitool-zip-builder",
+    "archive_sha256": "05acf32fb278a0016e6c52a2449eb86784848b644c3c9256df45833cdad9384f",
+    "SKILL_read": true,
+    "official_auditor_executed": true
+  },
+  "online_contract": {
+    "url": "https://miniapp-sandbox.xiaohongshu.com/minitool/doc",
+    "verified": false,
+    "reason": "Managed egress proxy HTTP 403 after network access grant",
+    "fallback": "SKILL workflow step 2: bundled 2026-09-23 js-api baseline; no claimed API additions"
+  },
+  "package": "/workspace/work/shelter/releases/xhs-minitool-v0104.zip",
+  "stage": "/workspace/work/shelter/xhs-official-dist",
+  "bytes": 4827557,
+  "file_count": 24,
+  "sha256": "a4eea1aa7151545ea8eecd509f1a5580d7607b7e3f3db47aa61508e7162c59e8",
+  "checks": {
+    "allowed_extensions": true,
+    "root_index_single_html": true,
+    "classical_scripts_only": true,
+    "no_forbidden_api_residue": true,
+    "no_data_or_blob_media": true,
+    "licenses_preserved": true,
+    "largest_decoded_base64_bytes": 104061,
+    "chrome61_target": "es2017/chrome61",
+    "css_baseline_reviewed": true,
+    "storage_json_and_size_guard": true,
+    "gpu_degradation_and_static_fallback": true
+  },
+  "audits": [
+    {
+      "target": "/workspace/work/shelter/xhs-official-dist",
+      "exit_code": 0,
+      "output": "PASS: 24 file(s), 0 warning(s)\n"
+    },
+    {
+      "target": "/workspace/work/shelter/releases/xhs-minitool-v0104.zip",
+      "exit_code": 0,
+      "output": "WARN: xhs-minitool-v0104.zip: zip is 4.60 MiB; recommended target is 2 MiB\nPASS: 24 file(s), 1 warning(s)\n"
+    }
+  ],
+  "performance_design": {
+    "default_pixel_cap": 2000000,
+    "low_pixel_cap": 1000000,
+    "food_texture_max_edge": 1024,
+    "low_texture_max_edge": 1024,
+    "pcm_clip_count": 33,
+    "pcm_max_decoded_bytes": 11494,
+    "notes": "near steel rack uses authored far mesh; food/detail model loading remains incremental; no FPS claim"
+  },
+  "pending_user_validation": [
+    "创服平台模拟器完整验证",
+    "Android真机扫码验证同一ZIP",
+    "iOS真机扫码验证同一ZIP",
+    "Chrome61 CSS实际验证",
+    "真实设备首屏/FPS/内存表现"
+  ],
+  "status": "official_static_audit_passed_using_local_baseline_online_unverified",
+  "changes": [
+    "新用户默认第四个场景「海边物资站」，白天浅色仓库。",
+    "首次进入0件物资，所有货架、柜子、冰箱和箱子均为空。",
+    "初始12件常用家具分三列紧凑排列在左半边，右半边留空；仍可自由新增、移动、转向家具。",
+    "全仓库镜头正面俯视，避免初始布局斜向挤占右侧空间。",
+    "右上角垃圾桶图标改为「清空」文字；清空确认与撤销功能保留。",
+    "初始布局自动保存；已有玩家库存、堆叠、位置和场景不因本次默认值调整而重置。"
+  ],
+  "code_debug": {
+    "core_tests_passed": 18,
+    "storage_bridge_tests_passed": 3,
+    "browser_checks_passed": 23,
+    "zip_debug_checks_passed": 16,
+    "used_for_platform_acceptance": false
+  },
+  "limits": "普通浏览器仅用于代码调试，不能作为小红书功能、兼容性或交付验收。当前在线规范仍HTTP403，按skill随包基线保守适配。待用户用同一ZIP完成创服模拟器完整验证、Android扫码、iOS扫码；Chrome61 CSS和真实设备性能未实测。"
+}

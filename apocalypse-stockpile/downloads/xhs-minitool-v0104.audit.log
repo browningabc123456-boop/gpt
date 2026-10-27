@@ -1,0 +1,4 @@
+PASS: 24 file(s), 0 warning(s)
+
+WARN: xhs-minitool-v0104.zip: zip is 4.60 MiB; recommended target is 2 MiB
+PASS: 24 file(s), 1 warning(s)
