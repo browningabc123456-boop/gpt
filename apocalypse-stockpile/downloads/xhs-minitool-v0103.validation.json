@@ -1,0 +1,114 @@
+{
+  "version": "0.10.3",
+  "skill": {
+    "name": "minitool-zip-builder",
+    "version": "1.8.0",
+    "installed_path": "/workspace/work/shelter/.codex/skills/minitool-zip-builder",
+    "archive_sha256": "05acf32fb278a0016e6c52a2449eb86784848b644c3c9256df45833cdad9384f",
+    "SKILL_read": true,
+    "official_auditor_executed": true
+  },
+  "online_contract": {
+    "url": "https://miniapp-sandbox.xiaohongshu.com/minitool/doc",
+    "verified": false,
+    "reason": "Managed egress proxy HTTP 403 after network access grant",
+    "fallback": "SKILL workflow step 2: bundled 2026-09-23 js-api baseline; no claimed API additions"
+  },
+  "package": "/workspace/work/shelter/releases/xhs-minitool-v0103.zip",
+  "stage": "/workspace/work/shelter/xhs-official-dist",
+  "bytes": 4827395,
+  "file_count": 24,
+  "sha256": "1a99ad2fbe0512cd53edcb27d12d467c7ed5fffd637f33aea0dee0cd0c55d7e2",
+  "checks": {
+    "allowed_extensions": true,
+    "root_index_single_html": true,
+    "classical_scripts_only": true,
+    "no_forbidden_api_residue": true,
+    "no_data_or_blob_media": true,
+    "licenses_preserved": true,
+    "largest_decoded_base64_bytes": 104061,
+    "chrome61_target": "es2017/chrome61",
+    "css_baseline_reviewed": true,
+    "storage_json_and_size_guard": true,
+    "gpu_degradation_and_static_fallback": true
+  },
+  "audits": [
+    {
+      "target": "/workspace/work/shelter/xhs-official-dist",
+      "exit_code": 0,
+      "output": "PASS: 24 file(s), 0 warning(s)\n"
+    },
+    {
+      "target": "/workspace/work/shelter/releases/xhs-minitool-v0103.zip",
+      "exit_code": 0,
+      "output": "WARN: xhs-minitool-v0103.zip: zip is 4.60 MiB; recommended target is 2 MiB\nPASS: 24 file(s), 1 warning(s)\n"
+    }
+  ],
+  "performance_design": {
+    "default_pixel_cap": 2000000,
+    "low_pixel_cap": 1000000,
+    "food_texture_max_edge": 1024,
+    "low_texture_max_edge": 1024,
+    "pcm_clip_count": 33,
+    "pcm_max_decoded_bytes": 11494,
+    "notes": "near steel rack uses authored far mesh; food/detail model loading remains incremental; no FPS claim"
+  },
+  "pending_user_validation": [
+    "创服平台模拟器完整验证",
+    "Android真机扫码验证同一ZIP",
+    "iOS真机扫码验证同一ZIP",
+    "Chrome61 CSS实际验证",
+    "真实设备首屏/FPS/内存表现"
+  ],
+  "status": "official_static_audit_passed_using_local_baseline_online_unverified",
+  "fixes": [
+    {
+      "problem": "连续摆放的电流点击声",
+      "change": "网页与小工具共用PCM拟音，旧声音淡出后停止；大米袋装降低尖锐频段，瓶子音量保持原值。75次连续音效混音检查：无削波、无瞬间停止。"
+    },
+    {
+      "problem": "初始画面过暗",
+      "change": "调亮白天环境补光、墙面、地板和仓库外背景，保留暖色和原有场景切换。"
+    },
+    {
+      "problem": "双指旋转方向相反",
+      "change": "改为手指顺时针时场景同向旋转，逆时针同理；同时检查双指平移、张开放大。"
+    },
+    {
+      "problem": "物品杂线、边缘不清",
+      "change": "修复纹理接缝引发的白色杂线，降低法线噪声，改善透明边缘和远景采样；物品显示范围限制在实际占位内，俯视冷柜仍可看见。"
+    },
+    {
+      "problem": "冰箱穿模与破洞",
+      "change": "修复简化网格的缺失背板、侧板、底板和顶板，移除破损原壳体及旧抽屉与首层的冲突；门和外壳不再低于地面或超出高度。"
+    },
+    {
+      "problem": "额外发现的缩略图问题",
+      "change": "修复低档预览的旧裁切坐标以及高清图集比例变化造成的串图和空白。"
+    }
+  ],
+  "code_debug": {
+    "checks": 16,
+    "regression_checks": 16,
+    "core_tests": 18,
+    "platform_storage_tests": 3,
+    "used_for_platform_acceptance": false
+  },
+  "audio_debug": {
+    "peak": 0.24780678749084473,
+    "maxSampleJump": 0.02816894371062517,
+    "clippedSamples": 0,
+    "rms": 0.03024261016961207,
+    "stopCalls": 98,
+    "instantStops": 0,
+    "paperLevel": true,
+    "bottleLevel": true,
+    "scope": "OfflineAudioContext混音与样本连续性检查；未用真实手机扬声器验听"
+  },
+  "manual_review": {
+    "base64": "最大单条约104KiB，低于1MiB硬门禁；大于100KiB的是独立延迟模型包内的条目，已人工核对。",
+    "textures": "默认8张1024方形食物图集启用mipmap，约42.7MiB；低档仅1024×768共享预览及小型材质，其他资源沿用预算与动态降级。",
+    "performance": "本机SwiftShader渲染仅用于代码与静态资源预算调试；不代表真实手机首屏、FPS或GPU性能。",
+    "compatibility": "在线规范403，使用随包基线；Chrome61 CSS未实测。"
+  }
+}

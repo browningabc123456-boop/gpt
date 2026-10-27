@@ -1,0 +1,112 @@
+{
+  "checks": [
+    {
+      "name": "代码回归：20家具与完整初始库存",
+      "pass": true
+    },
+    {
+      "name": "代码回归：8张纹理补载",
+      "pass": true
+    },
+    {
+      "name": "默认资源预算调试记录",
+      "pass": true,
+      "detail": {
+        "calls": 83,
+        "triangles": 49548,
+        "geometries": 174,
+        "textures": 14,
+        "cpuRenderMs": 411.70000000018626,
+        "pixelRatio": 1.25,
+        "nearMode": false,
+        "stockNearMode": false,
+        "pixels": 300479,
+        "low": false
+      }
+    },
+    {
+      "name": "代码回归：场景切换",
+      "pass": true
+    },
+    {
+      "name": "代码回归：袋装摆放",
+      "pass": true
+    },
+    {
+      "name": "收纳声使用PCM音频缓冲，不使用data媒体源",
+      "pass": true
+    },
+    {
+      "name": "瓶子音量保持0.48",
+      "pass": true
+    },
+    {
+      "name": "代码回归：清空撤销",
+      "pass": true
+    },
+    {
+      "name": "代码回归：存档恢复",
+      "pass": true
+    },
+    {
+      "name": "图形兜底静态界面存在",
+      "pass": true
+    },
+    {
+      "name": "手动恢复会先进入低档并替换精细几何",
+      "pass": true
+    },
+    {
+      "name": "低档资源预算调试记录",
+      "pass": true,
+      "detail": {
+        "calls": 33,
+        "triangles": 33836,
+        "geometries": 145,
+        "textures": 6,
+        "cpuRenderMs": 0.8000000002793968,
+        "pixelRatio": 1,
+        "nearMode": false,
+        "stockNearMode": false,
+        "pixels": 192660,
+        "low": true
+      }
+    },
+    {
+      "name": "尺寸变化回归 844×390",
+      "pass": true,
+      "detail": {
+        "bottom": 390,
+        "y": 258,
+        "viewBottom": 216
+      }
+    },
+    {
+      "name": "尺寸变化回归 360×640",
+      "pass": true,
+      "detail": {
+        "bottom": 640,
+        "y": 450,
+        "viewBottom": 402
+      }
+    },
+    {
+      "name": "没有WebGL时显示本地静态兜底",
+      "pass": true
+    },
+    {
+      "name": "本地调试无CSP资源错误或外部请求",
+      "pass": true,
+      "detail": {
+        "errors": [],
+        "missing": [],
+        "external": []
+      }
+    }
+  ],
+  "errors": [],
+  "missing": [],
+  "external": [],
+  "zip_sha256": "1a99ad2fbe0512cd53edcb27d12d467c7ed5fffd637f33aea0dee0cd0c55d7e2",
+  "scope": "仅用于代码调试；普通浏览器直运行不能作为小工具功能、兼容性或交付验收依据；平台模拟器、Android/iOS扫码与Chrome61 CSS均未实测"
+}

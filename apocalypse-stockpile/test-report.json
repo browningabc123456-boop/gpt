@@ -1,346 +1,252 @@
 {
-  "version": "0.10.0",
-  "updated_utc": "2026-10-26T14:34:20.682626+00:00",
-  "sha256": "39acf599db33d12f1738407c237f24d932c4a4452c99f2a57d89fb99c6132830",
-  "zip_sha256": "f742aceef22a0bb7e8d25d328d8fdfd5b2aadbf165664f27327cd1f387ce0a25",
-  "rule_checks": 18,
-  "checks_total": 67,
-  "mobile_checks": [
-    {
-      "name": "24 photo food icons load for a food category",
-      "pass": true
-    },
-    {
-      "name": "horizontal finger swipe adds one layer across all 12 existing stacks",
-      "pass": true,
-      "detail": {
-        "count": 24
-      }
-    },
-    {
-      "name": "row placement triggers an exact-count humorous prompt",
-      "pass": true
-    },
-    {
-      "name": "second horizontal swipe creates the third full row layer",
-      "pass": true,
-      "detail": {
-        "count": 36
-      }
-    },
-    {
-      "name": "a full shelf rejects overflow without changing other piles",
-      "pass": true
-    },
-    {
-      "name": "one undo removes exactly one swipe layer",
-      "pass": true
-    },
-    {
-      "name": "clear removes every layer on a normal rack",
-      "pass": true
-    },
-    {
-      "name": "clear undo restores the exact layered arrangement",
-      "pass": true
-    },
-    {
-      "name": "layer adjustment rebuilds the visible shelf and preserves all stock",
-      "pass": true
-    },
-    {
-      "name": "layer adjustment can be undone exactly",
-      "pass": true
-    },
-    {
-      "name": "short tap on an existing pile adds a single item",
-      "pass": true
-    },
-    {
-      "name": "long press stocks depth and stacks existing depth cells",
-      "pass": true
-    },
-    {
-      "name": "depth gesture undoes as one group",
-      "pass": true
-    },
-    {
-      "name": "compressed v5 storage survives reload with stack order intact",
-      "pass": true
-    },
-    {
-      "name": "one finger still rotates the warehouse camera",
-      "pass": true
-    },
-    {
-      "name": "two-finger camera pan and zoom do not place stock",
-      "pass": true
-    },
-    {
-      "name": "search finds a newly added food across all eight food categories",
-      "pass": true
-    },
-    {
-      "name": "small portrait viewport keeps the warehouse reachable",
-      "pass": true
-    },
-    {
-      "name": "strict offline CSP has no shader errors, missing assets or external requests",
-      "pass": true,
-      "detail": {
-        "errors": [],
-        "missing": [],
-        "external": []
-      }
-    }
-  ],
-  "platform_checks": [
-    {
-      "name": "WebGL1顶点属性、v4迁移、原生保存及旧档保护",
-      "pass": true,
-      "gpu": {
-        "webgl2": false,
-        "shadows": true,
-        "pixelRatio": 1,
-        "slots": [
-          4,
-          3,
-          2,
-          7,
-          2,
-          1,
-          2,
-          7
-        ]
-      },
-      "storageBytes": 644
-    },
-    {
-      "name": "省电画质、WebGL1、原生存储重开",
-      "pass": true,
-      "gpu": {
-        "webgl2": false,
-        "shadows": false,
-        "pixelRatio": 1,
-        "slots": [
-          4,
-          3,
-          2,
-          7,
-          2,
-          1
-        ]
-      },
-      "storageBytes": 644
-    }
-  ],
-  "release_checks": [
-    {
-      "name": "正常开场不显示重新加载和省电选项",
-      "pass": true
-    },
-    {
-      "name": "首屏无需高清食品图或额外模型包",
-      "pass": true
-    },
-    {
-      "name": "初始20件家具按行列整齐摆放",
-      "pass": true
-    },
-    {
-      "name": "场景切换保留物资与布局：rain",
-      "pass": true
-    },
-    {
-      "name": "场景切换保留物资与布局：forest",
-      "pass": true
-    },
-    {
-      "name": "场景切换保留物资与布局：coast",
-      "pass": true
-    },
-    {
-      "name": "场景切换保留物资与布局：granary",
-      "pass": true
-    },
-    {
-      "name": "场景偏好重新打开后保留",
-      "pass": true
-    },
-    {
-      "name": "高清补载后每个物品的纹理坐标仍准确",
-      "pass": true,
-      "detail": {
-        "bad": 0,
-        "n": 7842
-      }
-    },
-    {
-      "name": "菜单图标同步变清晰，无额外大图下载",
-      "pass": true
-    },
-    {
-      "name": "生活物资模型按需加载",
-      "pass": true
-    },
-    {
-      "name": "横竖屏底部物资栏保持可用 844×390",
-      "pass": true,
-      "detail": {
-        "v": {
-          "x": 0,
-          "w": 844,
-          "b": 216
-        },
-        "d": {
-          "x": 0,
-          "w": 844,
-          "y": 258,
-          "b": 390
-        }
-      }
-    },
-    {
-      "name": "横竖屏底部物资栏保持可用 932×430",
-      "pass": true,
-      "detail": {
-        "v": {
-          "x": 0,
-          "w": 932,
-          "b": 256
-        },
-        "d": {
-          "x": 0,
-          "w": 932,
-          "y": 298,
-          "b": 430
-        }
-      }
-    },
-    {
-      "name": "横竖屏底部物资栏保持可用 820×1180",
-      "pass": true,
-      "detail": {
-        "v": {
-          "x": 0,
-          "w": 820,
-          "b": 942
-        },
-        "d": {
-          "x": 0,
-          "w": 820,
-          "y": 990,
-          "b": 1180
-        }
-      }
-    },
-    {
-      "name": "横竖屏底部物资栏保持可用 360×640",
-      "pass": true,
-      "detail": {
-        "v": {
-          "x": 0,
-          "w": 360,
-          "b": 402
-        },
-        "d": {
-          "x": 0,
-          "w": 360,
-          "y": 450,
-          "b": 640
-        }
-      }
-    },
-    {
-      "name": "高清图失败不阻止进入和使用仓库",
-      "pass": true
-    },
-    {
-      "name": "轻量图片模式仍可清空并操作物资",
-      "pass": true
-    },
-    {
-      "name": "2Mbps冷缓存首屏明显快于上一版",
-      "pass": true,
-      "detail": {
-        "elapsedMs": 9541,
-        "previousMs": 33898,
-        "bytes": 1669171,
-        "full": 0,
-        "scope": "模拟限速与软件GPU，不是真机FPS"
-      }
-    },
-    {
-      "name": "玻璃瓶与塑料瓶声音文件保持原样",
-      "pass": true
-    },
-    {
-      "name": "袋装声音波形单独增大",
-      "pass": true
-    },
-    {
-      "name": "正常操作无脚本或着色器错误",
-      "pass": true,
-      "detail": {
-        "errors": []
-      }
-    }
-  ],
-  "package_checks": [
-    {
-      "name": "压缩包解压后可独立进入20家具仓库",
-      "pass": true
-    },
-    {
-      "name": "压缩包内的8张高清食品图均能补载",
-      "pass": true
-    },
-    {
-      "name": "压缩包内四个场景预览齐备",
-      "pass": true
-    },
-    {
-      "name": "压缩包内场景切换可用",
-      "pass": true
-    },
-    {
-      "name": "压缩包内生活物资与精细家具模型齐备",
-      "pass": true
-    },
-    {
-      "name": "严格离线CSP下无缺失文件、外部请求或脚本错误",
-      "pass": true
-    },
-    {
-      "name": "压缩包包含音效和3D引擎许可",
-      "pass": true
-    }
-  ],
-  "smoke": {
-    "errors": [],
-    "missing": []
-  },
+  "version": "0.10.3",
   "fixes": [
     {
-      "problem": "开场选项多、等待高清资源太久",
-      "change": "正常加载只显示进度。首屏仅载入轻量食品图、家具模型和材质；高清食品图逐步补载，生活物资和精细模型按需准备。高清图失败仍可继续收纳。"
+      "problem": "连续摆放的电流点击声",
+      "change": "网页与小工具共用PCM拟音，旧声音淡出后停止；大米袋装降低尖锐频段，瓶子音量保持原值。75次连续音效混音检查：无削波、无瞬间停止。"
     },
     {
-      "problem": "初始家具散乱",
-      "change": "新仓库20件家具按5行4列排开，包含木架、钢架、透明柜、网架、冰箱、冷柜等；有全仓库入口和一键规整，旧自定义布局保留。"
+      "problem": "初始画面过暗",
+      "change": "调亮白天环境补光、墙面、地板和仓库外背景，保留暖色和原有场景切换。"
     },
     {
-      "problem": "袋装声音太小",
-      "change": "袋装拟音波形和播放音量单独提高；玻璃瓶、塑料瓶声音文件及播放音量保持原样。"
+      "problem": "双指旋转方向相反",
+      "change": "改为手指顺时针时场景同向旋转，逆时针同理；同时检查双指平移、张开放大。"
     },
     {
-      "problem": "缺少场景变化",
-      "change": "新增暖木粮仓、雨夜仓库、林间储藏室、海边物资站，切换墙面、窗景、地面和光色；物资与家具保留，场景偏好自动保存。"
+      "problem": "物品杂线、边缘不清",
+      "change": "修复纹理接缝引发的白色杂线，降低法线噪声，改善透明边缘和远景采样；物品显示范围限制在实际占位内，俯视冷柜仍可看见。"
     },
     {
-      "problem": "小红书小工具压缩包",
-      "change": "根目录单一index.html入口，assets内资源本地齐备，包含高清补载与额外模型包，无需远程图片、字体或API。候选包尚待真实平台接收与审核。"
+      "problem": "冰箱穿模与破洞",
+      "change": "修复简化网格的缺失背板、侧板、底板和顶板，移除破损原壳体及旧抽屉与首层的冲突；门和外壳不再低于地面或超出高度。"
+    },
+    {
+      "problem": "额外发现的缩略图问题",
+      "change": "修复低档预览的旧裁切坐标以及高清图集比例变化造成的串图和空白。"
     }
   ],
-  "limits": "验证为Chromium触控模拟、软件GPU、WebGL1、严格离线CSP和模拟小红书Storage接口；非Android/iOS真机FPS或官方小红书审核。食物为写实2.5D图片，储物家具与仓库空间为3D。"
+  "debug": {
+    "checks": [
+      {
+        "name": "代码回归：20家具与完整初始库存",
+        "pass": true
+      },
+      {
+        "name": "代码回归：8张纹理补载",
+        "pass": true
+      },
+      {
+        "name": "默认资源预算调试记录",
+        "pass": true,
+        "detail": {
+          "calls": 83,
+          "triangles": 49548,
+          "geometries": 174,
+          "textures": 14,
+          "cpuRenderMs": 411.70000000018626,
+          "pixelRatio": 1.25,
+          "nearMode": false,
+          "stockNearMode": false,
+          "pixels": 300479,
+          "low": false
+        }
+      },
+      {
+        "name": "代码回归：场景切换",
+        "pass": true
+      },
+      {
+        "name": "代码回归：袋装摆放",
+        "pass": true
+      },
+      {
+        "name": "收纳声使用PCM音频缓冲，不使用data媒体源",
+        "pass": true
+      },
+      {
+        "name": "瓶子音量保持0.48",
+        "pass": true
+      },
+      {
+        "name": "代码回归：清空撤销",
+        "pass": true
+      },
+      {
+        "name": "代码回归：存档恢复",
+        "pass": true
+      },
+      {
+        "name": "图形兜底静态界面存在",
+        "pass": true
+      },
+      {
+        "name": "手动恢复会先进入低档并替换精细几何",
+        "pass": true
+      },
+      {
+        "name": "低档资源预算调试记录",
+        "pass": true,
+        "detail": {
+          "calls": 33,
+          "triangles": 33836,
+          "geometries": 145,
+          "textures": 6,
+          "cpuRenderMs": 0.8000000002793968,
+          "pixelRatio": 1,
+          "nearMode": false,
+          "stockNearMode": false,
+          "pixels": 192660,
+          "low": true
+        }
+      },
+      {
+        "name": "尺寸变化回归 844×390",
+        "pass": true,
+        "detail": {
+          "bottom": 390,
+          "y": 258,
+          "viewBottom": 216
+        }
+      },
+      {
+        "name": "尺寸变化回归 360×640",
+        "pass": true,
+        "detail": {
+          "bottom": 640,
+          "y": 450,
+          "viewBottom": 402
+        }
+      },
+      {
+        "name": "没有WebGL时显示本地静态兜底",
+        "pass": true
+      },
+      {
+        "name": "本地调试无CSP资源错误或外部请求",
+        "pass": true,
+        "detail": {
+          "errors": [],
+          "missing": [],
+          "external": []
+        }
+      }
+    ],
+    "errors": [],
+    "missing": [],
+    "external": [],
+    "zip_sha256": "1a99ad2fbe0512cd53edcb27d12d467c7ed5fffd637f33aea0dee0cd0c55d7e2",
+    "scope": "仅用于代码调试；普通浏览器直运行不能作为小工具功能、兼容性或交付验收依据；平台模拟器、Android/iOS扫码与Chrome61 CSS均未实测"
+  },
+  "regression": {
+    "checks": [
+      {
+        "name": "xhs-official-dist 明亮暖色初始背景",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist 冰箱背板逐格遮挡完整",
+        "pass": true,
+        "detail": {
+          "rays": 176,
+          "misses": []
+        }
+      },
+      {
+        "name": "xhs-official-dist 冰箱门和外壳不穿地面或超出高度",
+        "pass": true,
+        "detail": {
+          "min": 0,
+          "max": 4.099999904632568
+        }
+      },
+      {
+        "name": "dist 明亮暖色初始背景",
+        "pass": true
+      },
+      {
+        "name": "dist 冰箱背板逐格遮挡完整",
+        "pass": true,
+        "detail": {
+          "rays": 176,
+          "misses": []
+        }
+      },
+      {
+        "name": "dist 冰箱门和外壳不穿地面或超出高度",
+        "pass": true,
+        "detail": {
+          "min": 0,
+          "max": 4.099999904632568
+        }
+      },
+      {
+        "name": "双指顺时针扭转，场景跟随顺时针",
+        "pass": true
+      },
+      {
+        "name": "双指逆时针扭转，场景跟随逆时针",
+        "pass": true
+      },
+      {
+        "name": "双指张开可放大，方向保持",
+        "pass": true,
+        "detail": 8.750003667975735
+      },
+      {
+        "name": "双指平移跟手，手势不会误放物品",
+        "pass": true,
+        "detail": -0.8385296688332993
+      },
+      {
+        "name": "手机横划连续摆放大米",
+        "pass": true,
+        "detail": 9
+      },
+      {
+        "name": "同一排再次横划可以堆叠",
+        "pass": true,
+        "detail": {
+          "before": 9,
+          "after": 18
+        }
+      },
+      {
+        "name": "长按连续摆纵列大米",
+        "pass": true,
+        "detail": 5
+      },
+      {
+        "name": "连续摆放、叠放后占位和存档仍合法",
+        "pass": true
+      },
+      {
+        "name": "低档图册缩略图不会串图或出现空白",
+        "pass": true,
+        "detail": {
+          "box": "4 3.9999999999999964 55 56",
+          "aspect": "none"
+        }
+      },
+      {
+        "name": "上述手机操作没有脚本或资源错误",
+        "pass": true,
+        "detail": []
+      }
+    ],
+    "errors": [],
+    "scope": "本机 Chromium 代码回归；不等同小红书容器、真实 Android/iOS 或 Chrome61 验收"
+  },
+  "audio": {
+    "peak": 0.24780678749084473,
+    "maxSampleJump": 0.02816894371062517,
+    "clippedSamples": 0,
+    "rms": 0.03024261016961207,
+    "stopCalls": 98,
+    "instantStops": 0,
+    "paperLevel": true,
+    "bottleLevel": true,
+    "scope": "OfflineAudioContext混音与样本连续性检查；未用真实手机扬声器验听"
+  },
+  "limits": "本机普通浏览器回归仅用于代码调试，不作为小红书小工具功能、兼容性或交付验收依据。小红书当前在线规范返回403，采用官方skill随包基线。待验证：同一ZIP在创服平台模拟器完整验证、Android扫码、iOS扫码；Chrome61 CSS、真实手机性能和扬声器未实测。"
 }
