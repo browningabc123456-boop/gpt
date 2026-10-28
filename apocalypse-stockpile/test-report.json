@@ -1,370 +1,712 @@
 {
-  "version": "0.11.0",
+  "version": "0.12.0",
   "changes": [
-    "初始300,000金币，首次进入物资商店；逐件设置数量，可用加减、输入和+5/+10快捷键。",
-    "购买后单独展示购物清单：商品、件数、购入单价、小计、总支出、结算后余额。刷新清单不重复扣款。",
-    "购买物资进入待摆库存；仓库卡片显示待摆和总拥有数量。摆放消耗库存，收回、清空和移除家具返还库存。",
-    "邻居求购，页面只显示购入单价、实际售价和成交金额。拖动绝对价格条，客人可能接受或拒绝；一次降价重谈机会，无倒计时。",
-    "架上出售需明确许可，只从堆叠顶端取物。买卖提交后清除旧摆放撤销记录，防止恢复已出售物资或复制金币。",
-    "家具可自定义名字、搜索并定位；不再限制24件。60件空家具存档正常进入，远景家具和接触阴影采用实例合批。",
-    "顶部竖屏至少预留48px、横屏至少36px，采用更大的宿主安全区，清空文字按钮避开状态栏。",
-    "旧仓库和已存物资保留，仅首次接入新经济系统时发放初始金币。批量收纳只用已购库存，金币与物资均不足时提供应急补给。"
+    "取消商店、购买和结算页面，直接进入仓库，自由摆放不扣金币；旧存档的金币、库存和家具名字保留。",
+    "邻居采购仅为前台闲置时的随机事件；无手动来客按钮。首位在进入后25–45秒尝试到访，库存不足20件时等待补货。",
+    "黄白订单卡片突出物资、20–200件批量、可拖动单价及实时总价；一屏操作，可拒绝或关闭。",
+    "报价偏高可被拒绝，一次重新报价机会；只有成交才扣除真实可取库存并入账，架上取货从堆叠顶部开始。",
+    "启动拆分音效包、按需加载高清食物，取消无用法线纹理下载，将旧隔板清理前移到构建阶段，避免手机启动重复处理模型。",
+    "订单弹出后切换横竖屏会重绘背景，关闭订单保留浏览视角。"
   ],
-  "checks": {
+  "browser": {
     "checks": [
       {
-        "name": "dist 初次进入商店并发300000金币",
+        "name": "dist starts empty directly in warehouse",
         "pass": true
       },
       {
-        "name": "dist 商品照片使用独立裁切，隐藏仓库不会遮掉图片",
+        "name": "dist has no shop or manual customer entry",
+        "pass": true
+      },
+      {
+        "name": "dist touch places rice without buying or deducting money",
+        "pass": true
+      },
+      {
+        "name": "dist no arrival during boot",
+        "pass": true
+      },
+      {
+        "name": "foreground random timer opens order without a button",
+        "pass": true
+      },
+      {
+        "name": "dist bulk quantities and higher unit prices",
+        "pass": true
+      },
+      {
+        "name": "dist total equals unit price times quantity",
+        "pass": true
+      },
+      {
+        "name": "dist full order fits one screen 390x844",
         "pass": true,
         "detail": {
-          "clip": "foodclip-rice-69",
-          "duplicates": 1,
-          "image": "assets/food-0.webp?v=0.11.0"
+          "x": 15,
+          "y": 236.5,
+          "width": 360,
+          "height": 432
         }
       },
       {
-        "name": "dist 按件数购买、扣款和明细金额准确",
-        "pass": true
-      },
-      {
-        "name": "dist 独立结算页展示物品、件数与花费",
-        "pass": true
-      },
-      {
-        "name": "dist 刷新结算页不重复扣款",
-        "pass": true
-      },
-      {
-        "name": "dist 仓库显示已购物资库存",
-        "pass": true
-      },
-      {
-        "name": "dist 家具命名为纯文本，安全保存",
-        "pass": true
-      },
-      {
-        "name": "dist 可按自定义名字查找家具",
-        "pass": true
-      },
-      {
-        "name": "dist 手机点放扣一件待摆库存，所有权守恒",
-        "pass": true
-      },
-      {
-        "name": "dist 摆放后库存标签即时变化",
-        "pass": true
-      },
-      {
-        "name": "dist 清空返还待摆库存，不丢已购物资",
-        "pass": true
-      },
-      {
-        "name": "dist 撤销清空同时恢复库存和货架",
-        "pass": true
-      },
-      {
-        "name": "dist 来客只显示购入单价和实际售价",
-        "pass": true
-      },
-      {
-        "name": "dist 高报价可被拒绝并保留一次议价机会",
-        "pass": true
-      },
-      {
-        "name": "dist 拒绝不增减金币",
-        "pass": true
-      },
-      {
-        "name": "dist 低报价可成交，按实际售价到账",
-        "pass": true
-      },
-      {
-        "name": "dist 成交后撤销不会复制金币或售出的物资",
-        "pass": true
-      },
-      {
-        "name": "dist 清空避开安全区 390×844 inset=0",
+        "name": "dist full order fits one screen 360x640",
         "pass": true,
         "detail": {
-          "x": 286,
-          "y": 49,
-          "width": 44,
-          "height": 40
+          "x": 14,
+          "y": 155.09375,
+          "width": 332,
+          "height": 371.796875
         }
       },
       {
-        "name": "dist 清空按钮可命中 390×844",
-        "pass": true
-      },
-      {
-        "name": "dist 清空避开安全区 390×844 inset=24",
+        "name": "dist full order fits one screen 320x568",
         "pass": true,
         "detail": {
-          "x": 286,
-          "y": 49,
-          "width": 44,
-          "height": 40
+          "x": 14,
+          "y": 119.09375,
+          "width": 292,
+          "height": 371.796875
         }
       },
       {
-        "name": "dist 清空按钮可命中 390×844",
-        "pass": true
-      },
-      {
-        "name": "dist 清空避开安全区 390×844 inset=59",
+        "name": "dist full order fits one screen 844x390",
         "pass": true,
         "detail": {
-          "x": 286,
-          "y": 68,
-          "width": 44,
-          "height": 40
+          "x": 132,
+          "y": 78.40625,
+          "width": 580,
+          "height": 265.1875
         }
       },
       {
-        "name": "dist 清空按钮可命中 390×844",
+        "name": "dist rejection preserves money and permits one retry",
         "pass": true
       },
       {
-        "name": "dist 清空避开安全区 844×390 inset=0",
+        "name": "dist accepted bulk order deducts real stock and credits exact total",
+        "pass": true
+      },
+      {
+        "name": "dist returns to warehouse",
+        "pass": true
+      },
+      {
+        "name": "dist sale persists across reload without duplication",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist starts empty directly in warehouse",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist has no shop or manual customer entry",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist touch places rice without buying or deducting money",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist no arrival during boot",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist scheduled event handler opens with adequate stock",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist bulk quantities and higher unit prices",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist total equals unit price times quantity",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist full order fits one screen 390x844",
         "pass": true,
         "detail": {
-          "x": 745,
-          "y": 36,
-          "width": 44,
-          "height": 30
+          "x": 15,
+          "y": 236.5,
+          "width": 360,
+          "height": 432
         }
       },
       {
-        "name": "dist 清空按钮可命中 844×390",
-        "pass": true
-      },
-      {
-        "name": "dist 清空避开安全区 360×640 inset=0",
+        "name": "xhs-official-dist full order fits one screen 360x640",
         "pass": true,
         "detail": {
-          "x": 260,
-          "y": 49,
-          "width": 44,
-          "height": 40
+          "x": 14,
+          "y": 155.09375,
+          "width": 332,
+          "height": 371.796875
         }
       },
       {
-        "name": "dist 清空按钮可命中 360×640",
-        "pass": true
-      },
-      {
-        "name": "dist 名称、成交余额和库存跨刷新保存",
-        "pass": true
-      },
-      {
-        "name": "xhs-official-dist 初次进入商店并发300000金币",
-        "pass": true
-      },
-      {
-        "name": "xhs-official-dist 商品照片使用独立裁切，隐藏仓库不会遮掉图片",
+        "name": "xhs-official-dist full order fits one screen 320x568",
         "pass": true,
         "detail": {
-          "clip": "foodclip-rice-39",
-          "duplicates": 1,
-          "image": "assets/food-0.webp?v=0.11.0"
+          "x": 14,
+          "y": 119.09375,
+          "width": 292,
+          "height": 371.796875
         }
       },
       {
-        "name": "xhs-official-dist 按件数购买、扣款和明细金额准确",
-        "pass": true
-      },
-      {
-        "name": "xhs-official-dist 独立结算页展示物品、件数与花费",
-        "pass": true
-      },
-      {
-        "name": "xhs-official-dist 刷新结算页不重复扣款",
-        "pass": true
-      },
-      {
-        "name": "xhs-official-dist 仓库显示已购物资库存",
-        "pass": true
-      },
-      {
-        "name": "xhs-official-dist 家具命名为纯文本，安全保存",
-        "pass": true
-      },
-      {
-        "name": "xhs-official-dist 可按自定义名字查找家具",
-        "pass": true
-      },
-      {
-        "name": "xhs-official-dist 手机点放扣一件待摆库存，所有权守恒",
-        "pass": true
-      },
-      {
-        "name": "xhs-official-dist 摆放后库存标签即时变化",
-        "pass": true
-      },
-      {
-        "name": "xhs-official-dist 清空返还待摆库存，不丢已购物资",
-        "pass": true
-      },
-      {
-        "name": "xhs-official-dist 撤销清空同时恢复库存和货架",
-        "pass": true
-      },
-      {
-        "name": "xhs-official-dist 来客只显示购入单价和实际售价",
-        "pass": true
-      },
-      {
-        "name": "xhs-official-dist 高报价可被拒绝并保留一次议价机会",
-        "pass": true
-      },
-      {
-        "name": "xhs-official-dist 拒绝不增减金币",
-        "pass": true
-      },
-      {
-        "name": "xhs-official-dist 低报价可成交，按实际售价到账",
-        "pass": true
-      },
-      {
-        "name": "xhs-official-dist 成交后撤销不会复制金币或售出的物资",
-        "pass": true
-      },
-      {
-        "name": "xhs-official-dist 清空避开安全区 390×844 inset=0",
+        "name": "xhs-official-dist full order fits one screen 844x390",
         "pass": true,
         "detail": {
-          "x": 286,
-          "y": 49,
-          "width": 44,
-          "height": 40
+          "x": 132,
+          "y": 78.40625,
+          "width": 580,
+          "height": 265.1875
         }
       },
       {
-        "name": "xhs-official-dist 清空按钮可命中 390×844",
+        "name": "xhs-official-dist rejection preserves money and permits one retry",
         "pass": true
       },
       {
-        "name": "xhs-official-dist 清空避开安全区 390×844 inset=24",
-        "pass": true,
-        "detail": {
-          "x": 286,
-          "y": 49,
-          "width": 44,
-          "height": 40
-        }
-      },
-      {
-        "name": "xhs-official-dist 清空按钮可命中 390×844",
+        "name": "xhs-official-dist accepted bulk order deducts real stock and credits exact total",
         "pass": true
       },
       {
-        "name": "xhs-official-dist 清空避开安全区 390×844 inset=59",
-        "pass": true,
-        "detail": {
-          "x": 286,
-          "y": 68,
-          "width": 44,
-          "height": 40
-        }
-      },
-      {
-        "name": "xhs-official-dist 清空按钮可命中 390×844",
+        "name": "xhs-official-dist returns to warehouse",
         "pass": true
       },
       {
-        "name": "xhs-official-dist 清空避开安全区 844×390 inset=0",
-        "pass": true,
-        "detail": {
-          "x": 745,
-          "y": 36,
-          "width": 44,
-          "height": 30
-        }
-      },
-      {
-        "name": "xhs-official-dist 清空按钮可命中 844×390",
+        "name": "xhs-official-dist sale persists across reload without duplication",
         "pass": true
       },
       {
-        "name": "xhs-official-dist 清空避开安全区 360×640 inset=0",
-        "pass": true,
-        "detail": {
-          "x": 260,
-          "y": 49,
-          "width": 44,
-          "height": 40
-        }
-      },
-      {
-        "name": "xhs-official-dist 清空按钮可命中 360×640",
-        "pass": true
-      },
-      {
-        "name": "xhs-official-dist 名称、成交余额和库存跨刷新保存",
-        "pass": true
-      },
-      {
-        "name": ">24件家具存档可正常进入",
-        "pass": true
-      },
-      {
-        "name": "大量重复家具采用实例合批，避免逐件增加绘制调用",
-        "pass": true,
-        "detail": {
-          "calls": 10,
-          "triangles": 22090,
-          "geometries": 130,
-          "textures": 5,
-          "cpuRenderMs": 2.599999999627471,
-          "pixelRatio": 1,
-          "nearMode": false,
-          "stockNearMode": false
-        }
-      },
-      {
-        "name": "整条买卖收纳流程没有脚本错误",
+        "name": "no page exceptions",
         "pass": true,
         "detail": []
       }
     ],
     "errors": [],
-    "scope": "本机 Chromium 代码调试，不作为小红书容器、Android/iOS真机或Chrome61验收"
+    "scope": "ordinary Chromium code debugging, NOT XHS/Android/iOS/Chrome61 acceptance"
   },
-  "final_zip_debug": {
+  "final_zip": {
     "checks": [
       {
-        "name": "最终ZIP在严格本地资源策略下首次进入商店",
+        "name": "最终ZIP直接进入仓库",
         "pass": true
       },
       {
-        "name": "最终ZIP购买和结算金额一致",
+        "name": "没有商店、购买或手动来客按钮",
         "pass": true
       },
       {
-        "name": "最终ZIP结算刷新不重复扣款",
+        "name": "随机事件处理器可展示批量订单",
         "pass": true
       },
       {
-        "name": "最终ZIP库存和仓库衔接",
+        "name": "订单按批量采购",
         "pass": true
       },
       {
-        "name": "最终ZIP可进入客户报价条",
+        "name": "批量成交正确",
         "pass": true
       },
       {
-        "name": "最终ZIP没有CSP资源错误、外部请求或脚本异常",
+        "name": "成交总价与报价一致",
+        "pass": true
+      },
+      {
+        "name": "最终ZIP无CSP错误、资源缺失、外部请求或脚本异常",
         "pass": true
       }
     ],
     "errors": [],
     "missing": [],
     "external": [],
-    "zip_sha256": "223dabcbb136be631cab04d58819be91fafe68ac140dddc70650f9875fb94921",
+    "zip_sha256": "5bbde644c1b57759fcffe935b443a72fd6dd3aab0f53d7c34b69cf47474d7a59",
     "scope": "最终ZIP解压后在普通浏览器中的代码调试；不作为小红书平台、Android/iOS真机或Chrome61验收"
   },
-  "limits": "普通浏览器只作代码调试，不作为小红书功能、兼容性或交付验收。在线规范仍HTTP403，按官方skill随包基线适配，未完成在线核验。待用户用同一ZIP完成创服模拟器完整验证、Android扫码、iOS扫码；Chrome61 CSS与真实设备性能、音效未实测。"
+  "startup": {
+    "before": {
+      "profile": "390×844, cache disabled, 3Mbps down / 100ms RTT, CPU4x, Linux Chromium SwiftShader, Python HTTP without content compression; NOT real phone/XHS performance",
+      "runs": [
+        {
+          "readyMs": 8751,
+          "resources": [
+            {
+              "name": "style.css?v=0.11.0",
+              "bytes": 31235,
+              "end": 415
+            },
+            {
+              "name": "thumbs.css?v=0.11.0",
+              "bytes": 5278,
+              "end": 350
+            },
+            {
+              "name": "boot.js?v=0.11.0",
+              "bytes": 3613,
+              "end": 342
+            },
+            {
+              "name": "game.js?v=0.11.0",
+              "bytes": 1629018,
+              "end": 4976
+            },
+            {
+              "name": "surfaces.jpg?v=0.11.0",
+              "bytes": 26866,
+              "end": 6002
+            },
+            {
+              "name": "surface-normal.jpg?v=0.11.0",
+              "bytes": 1482,
+              "end": 5875
+            },
+            {
+              "name": "food-preview.webp?v=0.11.0",
+              "bytes": 335326,
+              "end": 6799
+            }
+          ],
+          "errors": []
+        },
+        {
+          "readyMs": 7929,
+          "resources": [
+            {
+              "name": "style.css?v=0.11.0",
+              "bytes": 31235,
+              "end": 388
+            },
+            {
+              "name": "thumbs.css?v=0.11.0",
+              "bytes": 5278,
+              "end": 322
+            },
+            {
+              "name": "boot.js?v=0.11.0",
+              "bytes": 3613,
+              "end": 322
+            },
+            {
+              "name": "game.js?v=0.11.0",
+              "bytes": 1629018,
+              "end": 4815
+            },
+            {
+              "name": "surfaces.jpg?v=0.11.0",
+              "bytes": 26866,
+              "end": 5722
+            },
+            {
+              "name": "surface-normal.jpg?v=0.11.0",
+              "bytes": 1482,
+              "end": 5567
+            },
+            {
+              "name": "food-preview.webp?v=0.11.0",
+              "bytes": 335326,
+              "end": 6498
+            }
+          ],
+          "errors": []
+        },
+        {
+          "readyMs": 8059,
+          "resources": [
+            {
+              "name": "style.css?v=0.11.0",
+              "bytes": 31235,
+              "end": 385
+            },
+            {
+              "name": "thumbs.css?v=0.11.0",
+              "bytes": 5278,
+              "end": 323
+            },
+            {
+              "name": "boot.js?v=0.11.0",
+              "bytes": 3613,
+              "end": 323
+            },
+            {
+              "name": "game.js?v=0.11.0",
+              "bytes": 1629018,
+              "end": 4783
+            },
+            {
+              "name": "surfaces.jpg?v=0.11.0",
+              "bytes": 26866,
+              "end": 5760
+            },
+            {
+              "name": "surface-normal.jpg?v=0.11.0",
+              "bytes": 1482,
+              "end": 5637
+            },
+            {
+              "name": "food-preview.webp?v=0.11.0",
+              "bytes": 335326,
+              "end": 6553
+            }
+          ],
+          "errors": []
+        }
+      ]
+    },
+    "final": {
+      "profile": "390×844, cache disabled, 3Mbps down / 100ms RTT, CPU4x, Linux Chromium SwiftShader, Python HTTP without content compression; NOT real phone/XHS performance",
+      "runs": [
+        {
+          "readyMs": 5763,
+          "resources": [
+            {
+              "name": "style.css?v=0.12.0",
+              "bytes": 23047,
+              "end": 437
+            },
+            {
+              "name": "thumbs.css?v=0.12.0",
+              "bytes": 5278,
+              "end": 337
+            },
+            {
+              "name": "game.js?v=0.12.0",
+              "bytes": 1032212,
+              "end": 3013
+            },
+            {
+              "name": "boot.js?v=0.12.0",
+              "bytes": 2547,
+              "end": 337
+            },
+            {
+              "name": "surfaces.jpg?v=0.12.0",
+              "bytes": 81075,
+              "end": 4088
+            },
+            {
+              "name": "food-preview.webp?v=0.12.0",
+              "bytes": 193552,
+              "end": 4379
+            }
+          ],
+          "errors": []
+        },
+        {
+          "readyMs": 5411,
+          "resources": [
+            {
+              "name": "style.css?v=0.12.0",
+              "bytes": 23047,
+              "end": 426
+            },
+            {
+              "name": "thumbs.css?v=0.12.0",
+              "bytes": 5278,
+              "end": 359
+            },
+            {
+              "name": "game.js?v=0.12.0",
+              "bytes": 1032212,
+              "end": 3005
+            },
+            {
+              "name": "boot.js?v=0.12.0",
+              "bytes": 2547,
+              "end": 312
+            },
+            {
+              "name": "surfaces.jpg?v=0.12.0",
+              "bytes": 81075,
+              "end": 4134
+            },
+            {
+              "name": "food-preview.webp?v=0.12.0",
+              "bytes": 193552,
+              "end": 4463
+            }
+          ],
+          "errors": []
+        },
+        {
+          "readyMs": 5858,
+          "resources": [
+            {
+              "name": "style.css?v=0.12.0",
+              "bytes": 23047,
+              "end": 456
+            },
+            {
+              "name": "thumbs.css?v=0.12.0",
+              "bytes": 5278,
+              "end": 360
+            },
+            {
+              "name": "game.js?v=0.12.0",
+              "bytes": 1032212,
+              "end": 3019
+            },
+            {
+              "name": "boot.js?v=0.12.0",
+              "bytes": 2547,
+              "end": 337
+            },
+            {
+              "name": "surfaces.jpg?v=0.12.0",
+              "bytes": 81075,
+              "end": 4166
+            },
+            {
+              "name": "food-preview.webp?v=0.12.0",
+              "bytes": 193552,
+              "end": 4457
+            }
+          ],
+          "errors": []
+        }
+      ]
+    },
+    "gzip-before": {
+      "profile": "390×844, cache disabled, 3Mbps down / 100ms RTT, CPU4x, Linux Chromium SwiftShader, HTTP with gzip JS/CSS; NOT real phone/XHS performance",
+      "runs": [
+        {
+          "readyMs": 5880,
+          "resources": [
+            {
+              "name": "style.css?v=0.11.0",
+              "bytes": 7544,
+              "end": 348
+            },
+            {
+              "name": "thumbs.css?v=0.11.0",
+              "bytes": 1296,
+              "end": 345
+            },
+            {
+              "name": "boot.js?v=0.11.0",
+              "bytes": 1813,
+              "end": 358
+            },
+            {
+              "name": "game.js?v=0.11.0",
+              "bytes": 686300,
+              "end": 2444
+            },
+            {
+              "name": "surfaces.jpg?v=0.11.0",
+              "bytes": 26866,
+              "end": 3279
+            },
+            {
+              "name": "surface-normal.jpg?v=0.11.0",
+              "bytes": 1482,
+              "end": 3161
+            },
+            {
+              "name": "food-preview.webp?v=0.11.0",
+              "bytes": 335326,
+              "end": 4084
+            }
+          ],
+          "errors": []
+        },
+        {
+          "readyMs": 5620,
+          "resources": [
+            {
+              "name": "style.css?v=0.11.0",
+              "bytes": 7544,
+              "end": 369
+            },
+            {
+              "name": "thumbs.css?v=0.11.0",
+              "bytes": 1296,
+              "end": 346
+            },
+            {
+              "name": "boot.js?v=0.11.0",
+              "bytes": 1813,
+              "end": 362
+            },
+            {
+              "name": "game.js?v=0.11.0",
+              "bytes": 686300,
+              "end": 2402
+            },
+            {
+              "name": "surfaces.jpg?v=0.11.0",
+              "bytes": 26866,
+              "end": 3302
+            },
+            {
+              "name": "surface-normal.jpg?v=0.11.0",
+              "bytes": 1482,
+              "end": 3173
+            },
+            {
+              "name": "food-preview.webp?v=0.11.0",
+              "bytes": 335326,
+              "end": 4091
+            }
+          ],
+          "errors": []
+        },
+        {
+          "readyMs": 5642,
+          "resources": [
+            {
+              "name": "style.css?v=0.11.0",
+              "bytes": 7544,
+              "end": 324
+            },
+            {
+              "name": "thumbs.css?v=0.11.0",
+              "bytes": 1296,
+              "end": 298
+            },
+            {
+              "name": "boot.js?v=0.11.0",
+              "bytes": 1813,
+              "end": 313
+            },
+            {
+              "name": "game.js?v=0.11.0",
+              "bytes": 686300,
+              "end": 2312
+            },
+            {
+              "name": "surfaces.jpg?v=0.11.0",
+              "bytes": 26866,
+              "end": 3163
+            },
+            {
+              "name": "surface-normal.jpg?v=0.11.0",
+              "bytes": 1482,
+              "end": 3029
+            },
+            {
+              "name": "food-preview.webp?v=0.11.0",
+              "bytes": 335326,
+              "end": 3982
+            }
+          ],
+          "errors": []
+        }
+      ]
+    },
+    "gzip-final": {
+      "profile": "390×844, cache disabled, 3Mbps down / 100ms RTT, CPU4x, Linux Chromium SwiftShader, HTTP with gzip JS/CSS; NOT real phone/XHS performance",
+      "runs": [
+        {
+          "readyMs": 4484,
+          "resources": [
+            {
+              "name": "style.css?v=0.12.0",
+              "bytes": 5994,
+              "end": 349
+            },
+            {
+              "name": "thumbs.css?v=0.12.0",
+              "bytes": 1296,
+              "end": 349
+            },
+            {
+              "name": "game.js?v=0.12.0",
+              "bytes": 444316,
+              "end": 1488
+            },
+            {
+              "name": "boot.js?v=0.12.0",
+              "bytes": 1449,
+              "end": 348
+            },
+            {
+              "name": "surfaces.jpg?v=0.12.0",
+              "bytes": 81075,
+              "end": 2545
+            },
+            {
+              "name": "food-preview.webp?v=0.12.0",
+              "bytes": 193552,
+              "end": 2832
+            }
+          ],
+          "errors": []
+        },
+        {
+          "readyMs": 4268,
+          "resources": [
+            {
+              "name": "style.css?v=0.12.0",
+              "bytes": 5994,
+              "end": 331
+            },
+            {
+              "name": "thumbs.css?v=0.12.0",
+              "bytes": 1296,
+              "end": 337
+            },
+            {
+              "name": "game.js?v=0.12.0",
+              "bytes": 444316,
+              "end": 1485
+            },
+            {
+              "name": "boot.js?v=0.12.0",
+              "bytes": 1449,
+              "end": 342
+            },
+            {
+              "name": "surfaces.jpg?v=0.12.0",
+              "bytes": 81075,
+              "end": 2575
+            },
+            {
+              "name": "food-preview.webp?v=0.12.0",
+              "bytes": 193552,
+              "end": 2861
+            }
+          ],
+          "errors": []
+        },
+        {
+          "readyMs": 4074,
+          "resources": [
+            {
+              "name": "style.css?v=0.12.0",
+              "bytes": 5994,
+              "end": 376
+            },
+            {
+              "name": "thumbs.css?v=0.12.0",
+              "bytes": 1296,
+              "end": 364
+            },
+            {
+              "name": "game.js?v=0.12.0",
+              "bytes": 444316,
+              "end": 1511
+            },
+            {
+              "name": "boot.js?v=0.12.0",
+              "bytes": 1449,
+              "end": 368
+            },
+            {
+              "name": "surfaces.jpg?v=0.12.0",
+              "bytes": 81075,
+              "end": 2560
+            },
+            {
+              "name": "food-preview.webp?v=0.12.0",
+              "bytes": 193552,
+              "end": 2848
+            }
+          ],
+          "errors": []
+        }
+      ]
+    }
+  },
+  "limits": "普通浏览器仅用于代码调试，不能作为小红书容器验收。在线规范HTTP403，使用官方skill随包基线，未完成在线核验。待用同一ZIP完成创服平台模拟器、Android扫码和iOS扫码验证；Chrome61 CSS、真实手机启动时间及扬声器音效待实测。"
 }

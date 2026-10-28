@@ -1,0 +1,37 @@
+{
+  "checks": [
+    {
+      "name": "最终ZIP直接进入仓库",
+      "pass": true
+    },
+    {
+      "name": "没有商店、购买或手动来客按钮",
+      "pass": true
+    },
+    {
+      "name": "随机事件处理器可展示批量订单",
+      "pass": true
+    },
+    {
+      "name": "订单按批量采购",
+      "pass": true
+    },
+    {
+      "name": "批量成交正确",
+      "pass": true
+    },
+    {
+      "name": "成交总价与报价一致",
+      "pass": true
+    },
+    {
+      "name": "最终ZIP无CSP错误、资源缺失、外部请求或脚本异常",
+      "pass": true
+    }
+  ],
+  "errors": [],
+  "missing": [],
+  "external": [],
+  "zip_sha256": "5bbde644c1b57759fcffe935b443a72fd6dd3aab0f53d7c34b69cf47474d7a59",
+  "scope": "最终ZIP解压后在普通浏览器中的代码调试；不作为小红书平台、Android/iOS真机或Chrome61验收"
+}
