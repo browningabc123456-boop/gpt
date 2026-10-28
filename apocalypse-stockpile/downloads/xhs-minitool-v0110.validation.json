@@ -1,0 +1,88 @@
+{
+  "version": "0.11.0",
+  "skill": {
+    "name": "minitool-zip-builder",
+    "version": "1.8.0",
+    "installed_path": "/workspace/work/shelter/.codex/skills/minitool-zip-builder",
+    "archive_sha256": "05acf32fb278a0016e6c52a2449eb86784848b644c3c9256df45833cdad9384f",
+    "SKILL_read": true,
+    "official_auditor_executed": true
+  },
+  "online_contract": {
+    "url": "https://miniapp-sandbox.xiaohongshu.com/minitool/doc",
+    "verified": false,
+    "reason": "Managed egress proxy HTTP 403 after network access grant",
+    "fallback": "SKILL workflow step 2: bundled 2026-09-23 js-api baseline; no claimed API additions"
+  },
+  "package": "/workspace/work/shelter/releases/xhs-minitool-v0110.zip",
+  "stage": "/workspace/work/shelter/xhs-official-dist",
+  "bytes": 4839800,
+  "file_count": 24,
+  "sha256": "223dabcbb136be631cab04d58819be91fafe68ac140dddc70650f9875fb94921",
+  "checks": {
+    "allowed_extensions": true,
+    "root_index_single_html": true,
+    "classical_scripts_only": true,
+    "no_forbidden_api_residue": true,
+    "no_data_or_blob_media": true,
+    "licenses_preserved": true,
+    "largest_decoded_base64_bytes": 104061,
+    "chrome61_target": "es2017/chrome61",
+    "css_baseline_reviewed": true,
+    "storage_json_and_size_guard": true,
+    "gpu_degradation_and_static_fallback": true
+  },
+  "audits": [
+    {
+      "target": "/workspace/work/shelter/xhs-official-dist",
+      "exit_code": 0,
+      "output": "PASS: 24 file(s), 0 warning(s)\n"
+    },
+    {
+      "target": "/workspace/work/shelter/releases/xhs-minitool-v0110.zip",
+      "exit_code": 0,
+      "output": "WARN: xhs-minitool-v0110.zip: zip is 4.62 MiB; recommended target is 2 MiB\nPASS: 24 file(s), 1 warning(s)\n"
+    }
+  ],
+  "performance_design": {
+    "default_pixel_cap": 2000000,
+    "low_pixel_cap": 1000000,
+    "food_texture_max_edge": 1024,
+    "low_texture_max_edge": 1024,
+    "pcm_clip_count": 33,
+    "pcm_max_decoded_bytes": 11494,
+    "notes": "near steel rack uses authored far mesh; food/detail model loading remains incremental; no FPS claim"
+  },
+  "pending_user_validation": [
+    "创服平台模拟器完整验证",
+    "Android真机扫码验证同一ZIP",
+    "iOS真机扫码验证同一ZIP",
+    "Chrome61 CSS实际验证",
+    "真实设备首屏/FPS/内存表现"
+  ],
+  "status": "official_static_audit_passed_using_local_baseline_online_unverified",
+  "changes": [
+    "初始300,000金币，首次进入物资商店；逐件设置数量，可用加减、输入和+5/+10快捷键。",
+    "购买后单独展示购物清单：商品、件数、购入单价、小计、总支出、结算后余额。刷新清单不重复扣款。",
+    "购买物资进入待摆库存；仓库卡片显示待摆和总拥有数量。摆放消耗库存，收回、清空和移除家具返还库存。",
+    "邻居求购，页面只显示购入单价、实际售价和成交金额。拖动绝对价格条，客人可能接受或拒绝；一次降价重谈机会，无倒计时。",
+    "架上出售需明确许可，只从堆叠顶端取物。买卖提交后清除旧摆放撤销记录，防止恢复已出售物资或复制金币。",
+    "家具可自定义名字、搜索并定位；不再限制24件。60件空家具存档正常进入，远景家具和接触阴影采用实例合批。",
+    "顶部竖屏至少预留48px、横屏至少36px，采用更大的宿主安全区，清空文字按钮避开状态栏。",
+    "旧仓库和已存物资保留，仅首次接入新经济系统时发放初始金币。批量收纳只用已购库存，金币与物资均不足时提供应急补给。"
+  ],
+  "code_debug": {
+    "rule_and_trade_tests": 31,
+    "storage_bridge_tests": 3,
+    "web_and_offline_browser_checks": 59,
+    "final_zip_csp_checks": 6,
+    "used_for_platform_acceptance": false
+  },
+  "limits": "普通浏览器只作代码调试，不作为小红书功能、兼容性或交付验收。在线规范仍HTTP403，按官方skill随包基线适配，未完成在线核验。待用户用同一ZIP完成创服模拟器完整验证、Android扫码、iOS扫码；Chrome61 CSS与真实设备性能、音效未实测。",
+  "manual_review": {
+    "base64": "最大单条104061字节，低于1MiB硬门禁；超过100KiB的是独立延迟精细模型包条目，已人工核对。",
+    "css": "仅为使用的现代布局加局部回退；新增flex间距具有margin基线；顶部安全区采用JS数值测量，不依赖CSS max。",
+    "inventory": "260种商品元数据，不是大型业务数据库；商店每页20项，仓库列表虚拟化。",
+    "render": "不设家具数量硬上限。多件同款家具/接触阴影合批，原动态低档和静态兜底保留；真实设备性能未实测。"
+  }
+}

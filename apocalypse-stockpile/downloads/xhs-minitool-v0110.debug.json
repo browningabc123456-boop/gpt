@@ -1,0 +1,33 @@
+{
+  "checks": [
+    {
+      "name": "最终ZIP在严格本地资源策略下首次进入商店",
+      "pass": true
+    },
+    {
+      "name": "最终ZIP购买和结算金额一致",
+      "pass": true
+    },
+    {
+      "name": "最终ZIP结算刷新不重复扣款",
+      "pass": true
+    },
+    {
+      "name": "最终ZIP库存和仓库衔接",
+      "pass": true
+    },
+    {
+      "name": "最终ZIP可进入客户报价条",
+      "pass": true
+    },
+    {
+      "name": "最终ZIP没有CSP资源错误、外部请求或脚本异常",
+      "pass": true
+    }
+  ],
+  "errors": [],
+  "missing": [],
+  "external": [],
+  "zip_sha256": "223dabcbb136be631cab04d58819be91fafe68ac140dddc70650f9875fb94921",
+  "scope": "最终ZIP解压后在普通浏览器中的代码调试；不作为小红书平台、Android/iOS真机或Chrome61验收"
+}

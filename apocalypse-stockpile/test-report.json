@@ -1,231 +1,370 @@
 {
-  "version": "0.10.4",
+  "version": "0.11.0",
   "changes": [
-    "新用户默认第四个场景「海边物资站」，白天浅色仓库。",
-    "首次进入0件物资，所有货架、柜子、冰箱和箱子均为空。",
-    "初始12件常用家具分三列紧凑排列在左半边，右半边留空；仍可自由新增、移动、转向家具。",
-    "全仓库镜头正面俯视，避免初始布局斜向挤占右侧空间。",
-    "右上角垃圾桶图标改为「清空」文字；清空确认与撤销功能保留。",
-    "初始布局自动保存；已有玩家库存、堆叠、位置和场景不因本次默认值调整而重置。"
+    "初始300,000金币，首次进入物资商店；逐件设置数量，可用加减、输入和+5/+10快捷键。",
+    "购买后单独展示购物清单：商品、件数、购入单价、小计、总支出、结算后余额。刷新清单不重复扣款。",
+    "购买物资进入待摆库存；仓库卡片显示待摆和总拥有数量。摆放消耗库存，收回、清空和移除家具返还库存。",
+    "邻居求购，页面只显示购入单价、实际售价和成交金额。拖动绝对价格条，客人可能接受或拒绝；一次降价重谈机会，无倒计时。",
+    "架上出售需明确许可，只从堆叠顶端取物。买卖提交后清除旧摆放撤销记录，防止恢复已出售物资或复制金币。",
+    "家具可自定义名字、搜索并定位；不再限制24件。60件空家具存档正常进入，远景家具和接触阴影采用实例合批。",
+    "顶部竖屏至少预留48px、横屏至少36px，采用更大的宿主安全区，清空文字按钮避开状态栏。",
+    "旧仓库和已存物资保留，仅首次接入新经济系统时发放初始金币。批量收纳只用已购库存，金币与物资均不足时提供应急补给。"
   ],
-  "debug": {
+  "checks": {
     "checks": [
       {
-        "name": "代码回归：12件家具与空白初始库存",
+        "name": "dist 初次进入商店并发300000金币",
         "pass": true
       },
       {
-        "name": "代码回归：8张纹理补载",
-        "pass": true
-      },
-      {
-        "name": "默认资源预算调试记录",
+        "name": "dist 商品照片使用独立裁切，隐藏仓库不会遮掉图片",
         "pass": true,
         "detail": {
-          "calls": 33,
-          "triangles": 21737,
-          "geometries": 90,
-          "textures": 5,
-          "cpuRenderMs": 0.900000000372529,
-          "pixelRatio": 1.25,
-          "nearMode": false,
-          "stockNearMode": false,
-          "pixels": 300479,
-          "low": false
+          "clip": "foodclip-rice-69",
+          "duplicates": 1,
+          "image": "assets/food-0.webp?v=0.11.0"
         }
       },
       {
-        "name": "代码回归：场景切换",
+        "name": "dist 按件数购买、扣款和明细金额准确",
         "pass": true
       },
       {
-        "name": "代码回归：袋装摆放",
+        "name": "dist 独立结算页展示物品、件数与花费",
         "pass": true
       },
       {
-        "name": "收纳声使用PCM音频缓冲，不使用data媒体源",
+        "name": "dist 刷新结算页不重复扣款",
         "pass": true
       },
       {
-        "name": "瓶子音量保持0.48",
+        "name": "dist 仓库显示已购物资库存",
         "pass": true
       },
       {
-        "name": "代码回归：清空撤销",
+        "name": "dist 家具命名为纯文本，安全保存",
         "pass": true
       },
       {
-        "name": "代码回归：存档恢复",
+        "name": "dist 可按自定义名字查找家具",
         "pass": true
       },
       {
-        "name": "图形兜底静态界面存在",
+        "name": "dist 手机点放扣一件待摆库存，所有权守恒",
         "pass": true
       },
       {
-        "name": "手动恢复会先进入低档并替换精细几何",
+        "name": "dist 摆放后库存标签即时变化",
         "pass": true
       },
       {
-        "name": "低档资源预算调试记录",
+        "name": "dist 清空返还待摆库存，不丢已购物资",
+        "pass": true
+      },
+      {
+        "name": "dist 撤销清空同时恢复库存和货架",
+        "pass": true
+      },
+      {
+        "name": "dist 来客只显示购入单价和实际售价",
+        "pass": true
+      },
+      {
+        "name": "dist 高报价可被拒绝并保留一次议价机会",
+        "pass": true
+      },
+      {
+        "name": "dist 拒绝不增减金币",
+        "pass": true
+      },
+      {
+        "name": "dist 低报价可成交，按实际售价到账",
+        "pass": true
+      },
+      {
+        "name": "dist 成交后撤销不会复制金币或售出的物资",
+        "pass": true
+      },
+      {
+        "name": "dist 清空避开安全区 390×844 inset=0",
         "pass": true,
         "detail": {
-          "calls": 22,
-          "triangles": 21725,
-          "geometries": 92,
-          "textures": 6,
-          "cpuRenderMs": 0.6999999992549419,
+          "x": 286,
+          "y": 49,
+          "width": 44,
+          "height": 40
+        }
+      },
+      {
+        "name": "dist 清空按钮可命中 390×844",
+        "pass": true
+      },
+      {
+        "name": "dist 清空避开安全区 390×844 inset=24",
+        "pass": true,
+        "detail": {
+          "x": 286,
+          "y": 49,
+          "width": 44,
+          "height": 40
+        }
+      },
+      {
+        "name": "dist 清空按钮可命中 390×844",
+        "pass": true
+      },
+      {
+        "name": "dist 清空避开安全区 390×844 inset=59",
+        "pass": true,
+        "detail": {
+          "x": 286,
+          "y": 68,
+          "width": 44,
+          "height": 40
+        }
+      },
+      {
+        "name": "dist 清空按钮可命中 390×844",
+        "pass": true
+      },
+      {
+        "name": "dist 清空避开安全区 844×390 inset=0",
+        "pass": true,
+        "detail": {
+          "x": 745,
+          "y": 36,
+          "width": 44,
+          "height": 30
+        }
+      },
+      {
+        "name": "dist 清空按钮可命中 844×390",
+        "pass": true
+      },
+      {
+        "name": "dist 清空避开安全区 360×640 inset=0",
+        "pass": true,
+        "detail": {
+          "x": 260,
+          "y": 49,
+          "width": 44,
+          "height": 40
+        }
+      },
+      {
+        "name": "dist 清空按钮可命中 360×640",
+        "pass": true
+      },
+      {
+        "name": "dist 名称、成交余额和库存跨刷新保存",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist 初次进入商店并发300000金币",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist 商品照片使用独立裁切，隐藏仓库不会遮掉图片",
+        "pass": true,
+        "detail": {
+          "clip": "foodclip-rice-39",
+          "duplicates": 1,
+          "image": "assets/food-0.webp?v=0.11.0"
+        }
+      },
+      {
+        "name": "xhs-official-dist 按件数购买、扣款和明细金额准确",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist 独立结算页展示物品、件数与花费",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist 刷新结算页不重复扣款",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist 仓库显示已购物资库存",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist 家具命名为纯文本，安全保存",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist 可按自定义名字查找家具",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist 手机点放扣一件待摆库存，所有权守恒",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist 摆放后库存标签即时变化",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist 清空返还待摆库存，不丢已购物资",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist 撤销清空同时恢复库存和货架",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist 来客只显示购入单价和实际售价",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist 高报价可被拒绝并保留一次议价机会",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist 拒绝不增减金币",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist 低报价可成交，按实际售价到账",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist 成交后撤销不会复制金币或售出的物资",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist 清空避开安全区 390×844 inset=0",
+        "pass": true,
+        "detail": {
+          "x": 286,
+          "y": 49,
+          "width": 44,
+          "height": 40
+        }
+      },
+      {
+        "name": "xhs-official-dist 清空按钮可命中 390×844",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist 清空避开安全区 390×844 inset=24",
+        "pass": true,
+        "detail": {
+          "x": 286,
+          "y": 49,
+          "width": 44,
+          "height": 40
+        }
+      },
+      {
+        "name": "xhs-official-dist 清空按钮可命中 390×844",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist 清空避开安全区 390×844 inset=59",
+        "pass": true,
+        "detail": {
+          "x": 286,
+          "y": 68,
+          "width": 44,
+          "height": 40
+        }
+      },
+      {
+        "name": "xhs-official-dist 清空按钮可命中 390×844",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist 清空避开安全区 844×390 inset=0",
+        "pass": true,
+        "detail": {
+          "x": 745,
+          "y": 36,
+          "width": 44,
+          "height": 30
+        }
+      },
+      {
+        "name": "xhs-official-dist 清空按钮可命中 844×390",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist 清空避开安全区 360×640 inset=0",
+        "pass": true,
+        "detail": {
+          "x": 260,
+          "y": 49,
+          "width": 44,
+          "height": 40
+        }
+      },
+      {
+        "name": "xhs-official-dist 清空按钮可命中 360×640",
+        "pass": true
+      },
+      {
+        "name": "xhs-official-dist 名称、成交余额和库存跨刷新保存",
+        "pass": true
+      },
+      {
+        "name": ">24件家具存档可正常进入",
+        "pass": true
+      },
+      {
+        "name": "大量重复家具采用实例合批，避免逐件增加绘制调用",
+        "pass": true,
+        "detail": {
+          "calls": 10,
+          "triangles": 22090,
+          "geometries": 130,
+          "textures": 5,
+          "cpuRenderMs": 2.599999999627471,
           "pixelRatio": 1,
           "nearMode": false,
-          "stockNearMode": false,
-          "pixels": 192660,
-          "low": true
+          "stockNearMode": false
         }
       },
       {
-        "name": "尺寸变化回归 844×390",
-        "pass": true,
-        "detail": {
-          "bottom": 390,
-          "y": 258,
-          "viewBottom": 216
-        }
-      },
-      {
-        "name": "尺寸变化回归 360×640",
-        "pass": true,
-        "detail": {
-          "bottom": 640,
-          "y": 450,
-          "viewBottom": 402
-        }
-      },
-      {
-        "name": "没有WebGL时显示本地静态兜底",
-        "pass": true
-      },
-      {
-        "name": "本地调试无CSP资源错误或外部请求",
-        "pass": true,
-        "detail": {
-          "errors": [],
-          "missing": [],
-          "external": []
-        }
-      }
-    ],
-    "errors": [],
-    "missing": [],
-    "external": [],
-    "zip_sha256": "a4eea1aa7151545ea8eecd509f1a5580d7607b7e3f3db47aa61508e7162c59e8",
-    "scope": "仅用于代码调试；普通浏览器直运行不能作为小工具功能、兼容性或交付验收依据；平台模拟器、Android/iOS扫码与Chrome61 CSS均未实测"
-  },
-  "starter_checks": {
-    "checks": [
-      {
-        "name": "dist 首次进入第四个浅色白天场景",
-        "pass": true
-      },
-      {
-        "name": "dist 首次进入12件空家具，零物资，无重叠",
-        "pass": true
-      },
-      {
-        "name": "dist 初始家具显示在左半屏，右半屏留白",
-        "pass": true,
-        "detail": {
-          "right": 0.47313403291199246,
-          "left": 0.06807864877038883
-        }
-      },
-      {
-        "name": "dist 右上角显示清空文字",
-        "pass": true
-      },
-      {
-        "name": "dist 空仓点清空不弹多余确认",
-        "pass": true
-      },
-      {
-        "name": "dist 新初始布局自动保存",
-        "pass": true
-      },
-      {
-        "name": "dist 重开仍为空仓和第四场景",
-        "pass": true
-      },
-      {
-        "name": "dist 右侧留白区域可触摸新增货架",
-        "pass": true
-      },
-      {
-        "name": "xhs-official-dist 首次进入第四个浅色白天场景",
-        "pass": true
-      },
-      {
-        "name": "xhs-official-dist 首次进入12件空家具，零物资，无重叠",
-        "pass": true
-      },
-      {
-        "name": "xhs-official-dist 初始家具显示在左半屏，右半屏留白",
-        "pass": true,
-        "detail": {
-          "right": 0.47313403291199246,
-          "left": 0.06807864877038883
-        }
-      },
-      {
-        "name": "xhs-official-dist 右上角显示清空文字",
-        "pass": true
-      },
-      {
-        "name": "xhs-official-dist 空仓点清空不弹多余确认",
-        "pass": true
-      },
-      {
-        "name": "xhs-official-dist 新初始布局自动保存",
-        "pass": true
-      },
-      {
-        "name": "xhs-official-dist 重开仍为空仓和第四场景",
-        "pass": true
-      },
-      {
-        "name": "xhs-official-dist 右侧留白区域可触摸新增货架",
-        "pass": true
-      },
-      {
-        "name": "dist 已有玩家的位置、库存堆叠与场景完整保留",
-        "pass": true
-      },
-      {
-        "name": "dist 清空文字按钮仍可清除已有物品",
-        "pass": true
-      },
-      {
-        "name": "dist 清空后可撤销恢复",
-        "pass": true
-      },
-      {
-        "name": "xhs-official-dist 已有玩家的位置、库存堆叠与场景完整保留",
-        "pass": true
-      },
-      {
-        "name": "xhs-official-dist 清空文字按钮仍可清除已有物品",
-        "pass": true
-      },
-      {
-        "name": "xhs-official-dist 清空后可撤销恢复",
-        "pass": true
-      },
-      {
-        "name": "本地调试无脚本异常",
+        "name": "整条买卖收纳流程没有脚本错误",
         "pass": true,
         "detail": []
       }
     ],
     "errors": [],
-    "scope": "本机浏览器代码调试，不作为小红书平台、Android/iOS真机或Chrome61验收依据"
+    "scope": "本机 Chromium 代码调试，不作为小红书容器、Android/iOS真机或Chrome61验收"
   },
-  "limits": "普通浏览器仅用于代码调试，不能作为小红书功能、兼容性或交付验收。当前在线规范仍HTTP403，按skill随包基线保守适配。待用户用同一ZIP完成创服模拟器完整验证、Android扫码、iOS扫码；Chrome61 CSS和真实设备性能未实测。"
+  "final_zip_debug": {
+    "checks": [
+      {
+        "name": "最终ZIP在严格本地资源策略下首次进入商店",
+        "pass": true
+      },
+      {
+        "name": "最终ZIP购买和结算金额一致",
+        "pass": true
+      },
+      {
+        "name": "最终ZIP结算刷新不重复扣款",
+        "pass": true
+      },
+      {
+        "name": "最终ZIP库存和仓库衔接",
+        "pass": true
+      },
+      {
+        "name": "最终ZIP可进入客户报价条",
+        "pass": true
+      },
+      {
+        "name": "最终ZIP没有CSP资源错误、外部请求或脚本异常",
+        "pass": true
+      }
+    ],
+    "errors": [],
+    "missing": [],
+    "external": [],
+    "zip_sha256": "223dabcbb136be631cab04d58819be91fafe68ac140dddc70650f9875fb94921",
+    "scope": "最终ZIP解压后在普通浏览器中的代码调试；不作为小红书平台、Android/iOS真机或Chrome61验收"
+  },
+  "limits": "普通浏览器只作代码调试，不作为小红书功能、兼容性或交付验收。在线规范仍HTTP403，按官方skill随包基线适配，未完成在线核验。待用户用同一ZIP完成创服模拟器完整验证、Android扫码、iOS扫码；Chrome61 CSS与真实设备性能、音效未实测。"
 }
